@@ -23,25 +23,29 @@ public class RegionFieldDefController {
 
         @PostMapping("/create")
     @Operation(summary = "创建字段定义")
-    public CommonResult<Long> createFieldDef(@Valid @RequestBody RegionFieldDefDO req) {
-        return success(fieldDefService.createFieldDef(req));
+    public CommonResult<Long> createFieldDef(@RequestParam(value = "ownerType", defaultValue = "REGION") String ownerType,
+                                         @Valid @RequestBody RegionFieldDefDO req) {
+        return success(fieldDefService.createFieldDef(ownerType, req));
     }
 
     @PutMapping("/update")
     @Operation(summary = "更新字段定义")
-    public CommonResult<Boolean> updateFieldDef(@Valid @RequestBody RegionFieldDefDO req) {
-        return success(fieldDefService.updateFieldDef(req));
+    public CommonResult<Boolean> updateFieldDef(@RequestParam(value = "ownerType", defaultValue = "REGION") String ownerType,
+                                                @Valid @RequestBody RegionFieldDefDO req) {
+        return success(fieldDefService.updateFieldDef(ownerType, req));
     }
 
     @DeleteMapping("/delete")
     @Operation(summary = "删除字段定义")
-    public CommonResult<Boolean> deleteFieldDef(@RequestParam("id") Long id) {
-        return success(fieldDefService.deleteFieldDef(id));
+    public CommonResult<Boolean> deleteFieldDef(@RequestParam(value="ownerType", defaultValue="REGION") String ownerType,
+                                               @RequestParam("id") Long id) {
+        return success(fieldDefService.deleteFieldDef(ownerType, id));
     }
 
     @GetMapping("/list")
     @Operation(summary = "获得字段定义列表")
-    public CommonResult<List<RegionFieldDefDO>> getFieldDefList(@RequestParam(value = "regionType", required = false) Integer regionType) {
-        return success(fieldDefService.getFieldDefs(regionType));
+    public CommonResult<List<RegionFieldDefDO>> getFieldDefList(@RequestParam(value = "ownerType", defaultValue = "REGION") String ownerType,
+                                                            @RequestParam(value = "regionType", required = false) Integer regionType) {
+        return success(fieldDefService.getFieldDefs(ownerType, regionType));
     }
 }

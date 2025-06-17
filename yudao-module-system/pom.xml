@@ -140,10 +140,15 @@
             <groupId>com.anji-plus</groupId>
             <artifactId>captcha-spring-boot-starter</artifactId> <!-- 验证码，一般用于登录使用 -->
         </dependency>
-
+        <!-- 邮件 -->
         <dependency>
             <groupId>org.dromara.hutool</groupId>
-            <artifactId>hutool-extra</artifactId> <!-- 邮件 -->
+            <artifactId>hutool-extra</artifactId> 
+        </dependency>
+        <!-- Jakarta Annotation for @Resource etc. -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
 
     </dependencies>
