@@ -16,8 +16,9 @@ public class RegionFieldDefServiceImpl implements RegionFieldDefService {
     private RegionFieldDefMapper fieldDefMapper;
 
     @Override
-    public List<RegionFieldDefDO> getFieldDefs(Integer regionType) {
+    public List<RegionFieldDefDO> getFieldDefs(String ownerType, Integer regionType) {
         LambdaQueryWrapper<RegionFieldDefDO> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(RegionFieldDefDO::getOwnerType, ownerType);
         if (regionType != null && regionType != 0) {
             wrapper.eq(RegionFieldDefDO::getRegionType, regionType).or();
         }
@@ -26,18 +27,20 @@ public class RegionFieldDefServiceImpl implements RegionFieldDefService {
     }
 
     @Override
-    public Long createFieldDef(RegionFieldDefDO bean) {
+    public Long createFieldDef(String ownerType, RegionFieldDefDO bean) {
+        bean.setOwnerType(ownerType);
         fieldDefMapper.insert(bean);
         return bean.getId();
     }
 
     @Override
-    public Boolean updateFieldDef(RegionFieldDefDO bean) {
+    public Boolean updateFieldDef(String ownerType, RegionFieldDefDO bean) {
+        bean.setOwnerType(ownerType);
         return fieldDefMapper.updateById(bean) > 0;
     }
 
     @Override
-    public Boolean deleteFieldDef(Long id) {
+    public Boolean deleteFieldDef(String ownerType, Long id) {
         return fieldDefMapper.deleteById(id) > 0;
     }
 }

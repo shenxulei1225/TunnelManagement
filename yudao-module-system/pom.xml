@@ -114,6 +114,12 @@
             <artifactId>captcha-spring-boot-starter</artifactId> <!-- 验证码，一般用于登录使用 -->
         </dependency>
 
+        <!-- Jakarta Annotation for @Resource etc. -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
