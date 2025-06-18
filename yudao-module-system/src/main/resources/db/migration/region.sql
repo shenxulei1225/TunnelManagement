@@ -1,0 +1,23 @@
+CREATE TABLE IF NOT EXISTS `system_region` (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '区域ID',
+  `name` varchar(255) NOT NULL COMMENT '区域名称',
+  `parent_id` bigint NOT NULL DEFAULT '0' COMMENT '父区域ID',
+  `sort` int NOT NULL DEFAULT '0' COMMENT '显示顺序',
+  `leader_user_id` bigint DEFAULT NULL COMMENT '区域负责人ID',
+  `phone` varchar(20) DEFAULT NULL COMMENT '联系电话',
+  `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
+  `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `type` int NOT NULL COMMENT '区域类型',
+  `road_section` varchar(255) DEFAULT NULL COMMENT '所在路段',
+  `start_position` varchar(255) DEFAULT NULL COMMENT '起始位置',
+  `end_position` varchar(255) DEFAULT NULL COMMENT '结束位置',
+  `creator` varchar(64) DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updater` varchar(64) DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `tenant_id` bigint NOT NULL DEFAULT '0' COMMENT '租户编号',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `idx_parent_id` (`parent_id`) USING BTREE,
+  KEY `idx_tenant_id` (`tenant_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='区域信息表';
