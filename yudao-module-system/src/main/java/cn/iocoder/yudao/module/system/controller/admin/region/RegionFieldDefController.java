@@ -13,9 +13,9 @@ import java.util.List;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
-@Tag(name = "管理后台 - 区域自定义字段定义")
+@Tag(name = "管理后台 - 自定义字段定义")
 @RestController
-@RequestMapping("/system/region/field-def")
+@RequestMapping("/system/field-def")
 public class RegionFieldDefController {
 
     @Resource
@@ -45,7 +45,7 @@ public class RegionFieldDefController {
     @GetMapping("/list")
     @Operation(summary = "获得字段定义列表")
     public CommonResult<List<RegionFieldDefDO>> getFieldDefList(@RequestParam(value = "ownerType", defaultValue = "REGION") String ownerType,
-                                                            @RequestParam(value = "regionType", required = false) Integer regionType) {
-        return success(fieldDefService.getFieldDefs(ownerType, regionType));
+                                                            @RequestParam(value = "categoryId", required = false) Long categoryId) {
+        return success(fieldDefService.getFieldDefs(ownerType, categoryId));
     }
 }

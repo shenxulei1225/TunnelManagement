@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Accessors(chain = true)
-@TableName("system_region_field_def")
+@TableName("system_field_def")
 public class RegionFieldDefDO extends cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO {
 
     /** 主键 */
@@ -27,8 +27,8 @@ public class RegionFieldDefDO extends cn.iocoder.yudao.framework.mybatis.core.da
     /** 字段归属类型，REGION/DEVICE/ALARM */
     private String ownerType;
 
-    /** 适用区域类型，0 表示通用（仅当 ownerType=REGION 时有效） */
-    private Integer regionType;
+    /** 字段分类 ID，0 表示通用 */
+    private Long categoryId;
 
     /** 字段唯一标识 */
     private String fieldKey;
@@ -38,6 +38,9 @@ public class RegionFieldDefDO extends cn.iocoder.yudao.framework.mybatis.core.da
 
     /** 数据类型 string/number/date/enum */
     private String valueType;
+
+    /** 单位，仅当 valueType=number 时使用，如 m、km */
+    private String unit;
 
     /** 是否必填 */
     private Boolean required;

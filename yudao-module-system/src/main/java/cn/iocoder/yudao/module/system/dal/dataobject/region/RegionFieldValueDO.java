@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("system_region_field_value")
+@TableName("system_field_value")
 public class RegionFieldValueDO extends cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO {
 
     /** 主键 */

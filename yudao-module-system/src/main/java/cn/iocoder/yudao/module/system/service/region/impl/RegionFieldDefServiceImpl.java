@@ -16,13 +16,13 @@ public class RegionFieldDefServiceImpl implements RegionFieldDefService {
     private RegionFieldDefMapper fieldDefMapper;
 
     @Override
-    public List<RegionFieldDefDO> getFieldDefs(String ownerType, Integer regionType) {
+    public List<RegionFieldDefDO> getFieldDefs(String ownerType, Long categoryId) {
         LambdaQueryWrapper<RegionFieldDefDO> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(RegionFieldDefDO::getOwnerType, ownerType);
-        if (regionType != null && regionType != 0) {
-            wrapper.eq(RegionFieldDefDO::getRegionType, regionType).or();
+        if (categoryId != null && categoryId != 0) {
+            wrapper.eq(RegionFieldDefDO::getCategoryId, categoryId).or();
         }
-        wrapper.eq(RegionFieldDefDO::getRegionType, 0).orderByAsc(RegionFieldDefDO::getSort);
+        wrapper.eq(RegionFieldDefDO::getCategoryId, 0L).orderByAsc(RegionFieldDefDO::getSort);
         return fieldDefMapper.selectList(wrapper);
     }
 
