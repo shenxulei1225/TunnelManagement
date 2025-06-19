@@ -1,18 +1,20 @@
 package cn.iocoder.yudao.module.system.dal.dataobject.region;
 
 import lombok.*;
-import java.util.*;
-import java.time.LocalDateTime;
+import java.util.Map;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.*;
 import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
+import java.util.Map;
+
 
 /**
  * 区域 DO
  *
  * @author 芋道源码
  */
-@TableName("system_region")
+@TableName(value = "system_region", autoResultMap = true)
 @KeySequence("system_region_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -37,6 +39,10 @@ public class RegionDO extends BaseDO {
      * 父区域id
      */
     private Long parentId;
+    /**
+     * 分类 ID (字段: category_id)
+     */
+    private Long categoryId;
     /**
      * 显示顺序
      */
@@ -77,5 +83,11 @@ public class RegionDO extends BaseDO {
      * 结束位置
      */
     private String endPosition;
+
+    /**
+     * 动态扩展属性(JSON)
+     */
+    @TableField(value = "extra_attrs", typeHandler = JacksonTypeHandler.class)
+    private Map<String, Object> extraAttrs;
 
 }

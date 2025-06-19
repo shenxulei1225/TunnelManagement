@@ -95,7 +95,10 @@ public class RegionController {
         try {
             RegionDO region = regionService.getRegion(id);
             log.info("[getRegion][查询成功] 结果: {}", region);
-            return success(BeanUtils.toBean(region, RegionRespVO.class));
+            RegionRespVO vo = BeanUtils.toBean(region, RegionRespVO.class);
+        // 手动拷贝 Map，BeanUtils 对泛型 Map 可能不生效
+        vo.setExtraAttrs(region.getExtraAttrs());
+        return success(vo);
         } catch (Exception e) {
             log.error("[getRegion][查询异常]", e);
             throw e;

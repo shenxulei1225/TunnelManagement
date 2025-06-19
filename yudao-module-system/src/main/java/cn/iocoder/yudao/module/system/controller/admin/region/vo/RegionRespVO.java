@@ -1,6 +1,7 @@
 package cn.iocoder.yudao.module.system.controller.admin.region.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.Map;
 import lombok.*;
 import java.util.*;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -14,6 +15,12 @@ import cn.iocoder.yudao.framework.excel.core.convert.DictConvert;
 @ExcelIgnoreUnannotated
 public class RegionRespVO {
 
+    /**
+     * 动态扩展属性(JSON)
+     */
+    private Map<String, Object> extraAttrs;
+
+
     @Schema(description = "区域id", requiredMode = Schema.RequiredMode.REQUIRED, example = "5985")
     @ExcelProperty("区域id")
     private Long id;
@@ -25,6 +32,10 @@ public class RegionRespVO {
     @Schema(description = "父区域id", requiredMode = Schema.RequiredMode.REQUIRED, example = "27311")
     @ExcelProperty("父区域id")
     private Long parentId;
+
+    @Schema(description = "分类ID")
+    @ExcelProperty("分类ID")
+    private Long categoryId;
 
     @Schema(description = "显示顺序", requiredMode = Schema.RequiredMode.REQUIRED)
     @ExcelProperty("显示顺序")

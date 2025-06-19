@@ -11,10 +11,12 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class RegionServiceImpl implements RegionService {
 
     @Resource
@@ -22,14 +24,24 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Long createRegion(RegionSaveReqVO createReqVO) {
+        log.info("[createRegion] request.extraAttrs = {}", createReqVO.getExtraAttrs());
         RegionDO region = BeanUtils.toBean(createReqVO, RegionDO.class);
+        log.info("[createRegion] converted RegionDO = {}", region);
+        if (region.getType() == null) {
+            region.setType(0);
+        }
         regionMapper.insert(region);
         return region.getId();
     }
 
     @Override
     public Boolean updateRegion(RegionSaveReqVO updateReqVO) {
+        log.info("[updateRegion] request.extraAttrs = {}", updateReqVO.getExtraAttrs());
         RegionDO region = BeanUtils.toBean(updateReqVO, RegionDO.class);
+        log.info("[updateRegion] converted RegionDO = {}", region);
+        if (region.getType() == null) {
+            region.setType(0);
+        }
         return regionMapper.updateById(region) > 0;
     }
 
