@@ -1,0 +1,3 @@
+[submodule "tunnel-management-ui"]
+	path = tunnel-management-ui
+	url = https://gitee.com/shenxulei/tunnel-management-ui.git
