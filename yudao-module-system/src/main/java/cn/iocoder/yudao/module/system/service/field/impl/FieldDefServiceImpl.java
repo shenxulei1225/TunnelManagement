@@ -13,10 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import cn.hutool.core.util.IdUtil;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class FieldDefServiceImpl extends ServiceImpl<FieldDefMapper, FieldDefDO> implements FieldDefService {
 
     private final FieldDefMapper fieldDefMapper;
@@ -25,7 +28,9 @@ public class FieldDefServiceImpl extends ServiceImpl<FieldDefMapper, FieldDefDO>
     @Override
     @Transactional
     public Long createFieldDef(FieldDefCreateReqVO reqVO) {
+        log.info("Create FieldDef request: {}", reqVO);
         FieldDefDO def = BeanUtils.toBean(reqVO, FieldDefDO.class);
+        def.setFieldKey(IdUtil.fastSimpleUUID());
         fieldDefMapper.insert(def);
         // 关联分类
         if (reqVO.getCategoryIds() != null) {
@@ -34,19 +39,26 @@ public class FieldDefServiceImpl extends ServiceImpl<FieldDefMapper, FieldDefDO>
                     .collect(Collectors.toList());
             relList.forEach(relMapper::insert);
         }
+        log.info("Create FieldDef success, id={}", def.getId());
         return def.getId();
     }
 
     @Override
     @Transactional
     public boolean updateFieldDef(FieldDefUpdateReqVO reqVO) {
+        log.info("Update FieldDef request: {}", reqVO);
         FieldDefDO def = BeanUtils.toBean(reqVO, FieldDefDO.class);
+        FieldDefDO origin = fieldDefMapper.selectById(reqVO.getId());
+        if (origin != null) {
+            def.setFieldKey(origin.getFieldKey());
+        }
         int updated = fieldDefMapper.updateById(def);
         // 更新关联
         relMapper.delete(new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<FieldDefCategoryRelDO>().eq("field_def_id", reqVO.getId()));
         if (reqVO.getCategoryIds() != null) {
             reqVO.getCategoryIds().forEach(cid -> relMapper.insert(new FieldDefCategoryRelDO().setFieldDefId(reqVO.getId()).setCategoryId(cid)));
         }
+        log.info("Update FieldDef [{}] success: {}", reqVO.getId(), updated > 0);
         return updated > 0;
     }
 
@@ -65,8 +77,25 @@ public class FieldDefServiceImpl extends ServiceImpl<FieldDefMapper, FieldDefDO>
 
     @Override
     public List<FieldDefDO> getFieldDefListByCategory(Long categoryId) {
-        // 查询指定分类字段 + 通用字段（无关联记录）
-        return fieldDefMapper.selectList(new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<FieldDefDO>());
+        // 1. 取所有字段定义
+        List<FieldDefDO> defs = fieldDefMapper.selectList(new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<>());
+        if (defs.isEmpty()) {
+            return defs;
+        }
+        // 2. 查询关联
+        List<Long> defIds = defs.stream().map(FieldDefDO::getId).toList();
+        List<FieldDefCategoryRelDO> rels = relMapper.selectList(new com.baomidou.mybatisplus.core.conditions.query.QueryWrapper<FieldDefCategoryRelDO>().in("field_def_id", defIds));
+        // 3. 按字段分组收集全部分类
+        java.util.Map<Long, java.util.List<Long>> catMap = rels.stream()
+                .collect(java.util.stream.Collectors.groupingBy(FieldDefCategoryRelDO::getFieldDefId,
+                        java.util.stream.Collectors.mapping(FieldDefCategoryRelDO::getCategoryId, java.util.stream.Collectors.toList())));
+        // 4. 填充 categoryIds 字段
+        defs.forEach(d -> d.setCategoryIds(catMap.getOrDefault(d.getId(), java.util.Collections.emptyList())));
 
+        // 5. 按需过滤
+        if (categoryId != null && categoryId > 0) {
+            return defs.stream().filter(d -> d.getCategoryIds() != null && d.getCategoryIds().contains(categoryId)).toList();
+        }
+        return defs;
     }
 }

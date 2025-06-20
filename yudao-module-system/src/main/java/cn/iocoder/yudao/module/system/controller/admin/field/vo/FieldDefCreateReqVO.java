@@ -9,8 +9,6 @@ import java.util.List;
 public class FieldDefCreateReqVO {
 
     @NotBlank
-    private String fieldKey;
-    @NotBlank
     private String fieldLabel;
     @NotBlank
     private String valueType;

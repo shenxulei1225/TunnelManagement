@@ -13,8 +13,7 @@ import lombok.experimental.Accessors;
  *
  * 对应表 system_field_def
  * 说明：
- *   1. 取消 owner_type、type 等业务耦合字段，专注字段本身定义
- *   2. 通过关联表 (field_def_category_rel) 将字段分配给 0-N 个分类；若关联记录为空则视为通用字段
+ *   通过关联表 (field_def_category_rel) 将字段分配给 0-N 个分类；若关联记录为空则视为通用字段
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -47,4 +46,8 @@ public class FieldDefDO extends cn.iocoder.yudao.framework.mybatis.core.dataobje
 
     /** 显示排序 */
     private Integer sort;
+
+    /** 关联的全部分类，用于列表/表单展示，不持久化 */
+    @com.baomidou.mybatisplus.annotation.TableField(exist = false)
+    private java.util.List<Long> categoryIds;
 }

@@ -12,8 +12,6 @@ public class FieldDefUpdateReqVO {
     private Long id;
 
     @NotBlank
-    private String fieldKey;
-    @NotBlank
     private String fieldLabel;
     @NotBlank
     private String valueType;
