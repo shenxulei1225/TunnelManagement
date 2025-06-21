@@ -26,4 +26,10 @@ public class FieldDefCategoryRelDO extends cn.iocoder.yudao.framework.mybatis.co
     private Long fieldDefId;
 
     private Long categoryId;
+
+    /** 是否必填 */
+    private Boolean required;
+
+    /** 排序 */
+    private Integer sort;
 }

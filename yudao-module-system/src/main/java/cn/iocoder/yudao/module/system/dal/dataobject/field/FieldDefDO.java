@@ -38,8 +38,6 @@ public class FieldDefDO extends cn.iocoder.yudao.framework.mybatis.core.dataobje
     /** 单位，仅当 valueType=number 时使用 */
     private String unit;
 
-    /** 是否必填 */
-    private Boolean required;
 
     /** 枚举值 JSON，value-label 数组，用于 enum 类型 */
     private String enumJson;

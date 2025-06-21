@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS system_field_def (
   field_label  VARCHAR(64)  NOT NULL COMMENT '字段名称',
   value_type   VARCHAR(16)  NOT NULL COMMENT '数据类型 string/number/date/enum',
   unit         VARCHAR(16)           DEFAULT NULL COMMENT '单位（仅 number 类型使用）',
-  required     TINYINT      NOT NULL DEFAULT 0 COMMENT '是否必填 0=否 1=是',
   enum_json    TEXT                  COMMENT '枚举值 JSON，value-label 数组，用于 enum 类型',
   sort         INT          NOT NULL DEFAULT 0 COMMENT '显示排序',
   creator      VARCHAR(64)           DEFAULT NULL,
