@@ -40,4 +40,7 @@ public class FieldCategoryDO extends cn.iocoder.yudao.framework.mybatis.core.dat
 
     /** 排序 */
     private Integer sort;
+
+    /** 是否系统只读，1=只读（禁止删除/改名） */
+    private Boolean readonly;
 }

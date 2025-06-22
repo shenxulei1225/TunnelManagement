@@ -18,15 +18,54 @@ public class FieldCategoryServiceImpl implements FieldCategoryService {
     private FieldCategoryMapper categoryMapper;
 
     @Override
-    public List<FieldCategoryDO> getCategoryTree() {
+    public List<FieldCategoryDO> getCategoryTree(String bizType) {
+        // 确保每个 BizTypeEnum 都有一个根节点
+        ensureBizRoots();
         LambdaQueryWrapper<FieldCategoryDO> wrapper = new LambdaQueryWrapper<>();
         wrapper.orderByAsc(FieldCategoryDO::getSort);
+        if (cn.hutool.core.util.StrUtil.isNotBlank(bizType)) {
+            // 找到业务根节点
+            FieldCategoryDO root = categoryMapper.selectOne(new LambdaQueryWrapper<FieldCategoryDO>()
+                    .eq(FieldCategoryDO::getParentId, 0L)
+                    .eq(FieldCategoryDO::getCode, bizType)
+                    .eq(FieldCategoryDO::getDeleted, false));
+            if (root == null) {
+                return java.util.Collections.emptyList();
+            }
+            wrapper.and(w -> w.eq(FieldCategoryDO::getId, root.getId())
+                    .or().likeRight(FieldCategoryDO::getTreePath, root.getTreePath() + "/" + root.getId()));
+        }
         return categoryMapper.selectList(wrapper);
+    }
+
+    /**
+     * 自动补齐各业务类型的根节点（只读）
+     */
+    private void ensureBizRoots() {
+        for (cn.iocoder.yudao.module.system.enums.BizTypeEnum bt : cn.iocoder.yudao.module.system.enums.BizTypeEnum.values()) {
+            long count = categoryMapper.selectCount(new LambdaQueryWrapper<FieldCategoryDO>()
+                    .eq(FieldCategoryDO::getParentId, 0L)
+                    .eq(FieldCategoryDO::getCode, bt.name())
+                    .eq(FieldCategoryDO::getDeleted, false));
+            if (count == 0) {
+                FieldCategoryDO root = new FieldCategoryDO()
+                        .setParentId(0L)
+                        .setCode(bt.name())
+                        .setName(bt.getLabel())
+                        .setTreePath("0")
+                        .setLevel(1)
+                        .setSort(0)
+                        .setReadonly(true);
+                categoryMapper.insert(root);
+            }
+        }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long createCategory(FieldCategoryDO bean) {
+        // 只读节点禁止新增子节点修改名称？ 子节点可以，所以仅检查自身 readonly
+
         fillTree(bean);
         if (StrUtil.isBlank(bean.getCode())) {
             bean.setCode(null);
@@ -38,6 +77,11 @@ public class FieldCategoryServiceImpl implements FieldCategoryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateCategory(FieldCategoryDO bean) {
+        FieldCategoryDO origin = categoryMapper.selectById(bean.getId());
+        if (origin != null && Boolean.TRUE.equals(origin.getReadonly())) {
+            throw new IllegalStateException("系统只读分类禁止修改");
+        }
+
         fillTree(bean);
         if (StrUtil.isBlank(bean.getCode())) {
             bean.setCode(null);
@@ -47,6 +91,11 @@ public class FieldCategoryServiceImpl implements FieldCategoryService {
 
     @Override
     public Boolean deleteCategory(Long id) {
+        FieldCategoryDO origin = categoryMapper.selectById(id);
+        if (origin != null && Boolean.TRUE.equals(origin.getReadonly())) {
+            throw new IllegalStateException("系统只读分类禁止删除");
+        }
+
         return categoryMapper.deleteById(id) > 0;
     }
 

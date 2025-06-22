@@ -6,7 +6,10 @@ import java.util.List;
 
 public interface FieldCategoryService {
 
-    List<FieldCategoryDO> getCategoryTree();
+    /**
+     * 获取分类树；若 bizType 为空返回全部
+     */
+    List<FieldCategoryDO> getCategoryTree(String bizType);
 
     Long createCategory(FieldCategoryDO bean);
 

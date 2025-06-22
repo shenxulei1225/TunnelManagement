@@ -23,8 +23,8 @@ public class FieldCategoryController {
 
     @GetMapping("/tree")
     @Operation(summary = "获得分类树")
-    public CommonResult<List<FieldCategoryDO>> getCategoryTree() {
-        return success(categoryService.getCategoryTree());
+    public CommonResult<List<FieldCategoryDO>> getCategoryTree(@RequestParam(value = "bizType", required = false) String bizType) {
+        return success(categoryService.getCategoryTree(bizType));
     }
 
     @PostMapping("/create")

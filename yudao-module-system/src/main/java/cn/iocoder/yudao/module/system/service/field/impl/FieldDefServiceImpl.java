@@ -24,6 +24,7 @@ public class FieldDefServiceImpl extends ServiceImpl<FieldDefMapper, FieldDefDO>
 
     private final FieldDefMapper fieldDefMapper;
     private final FieldDefCategoryRelMapper relMapper;
+    private final cn.iocoder.yudao.module.system.dal.mysql.region.FieldCategoryMapper categoryMapper;
 
     @Override
     @Transactional
@@ -97,5 +98,29 @@ public class FieldDefServiceImpl extends ServiceImpl<FieldDefMapper, FieldDefDO>
             return defs.stream().filter(d -> d.getCategoryIds() != null && d.getCategoryIds().contains(categoryId)).toList();
         }
         return defs;
+    }
+
+    @Override
+    public List<FieldDefDO> getFieldDefListByBizType(String bizType) {
+        if (cn.hutool.core.util.StrUtil.isBlank(bizType)) {
+            return getFieldDefListByCategory(null);
+        }
+        // 找到业务根分类
+        cn.iocoder.yudao.module.system.dal.dataobject.region.FieldCategoryDO root = categoryMapper.selectOne(new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<cn.iocoder.yudao.module.system.dal.dataobject.region.FieldCategoryDO>()
+                .eq(cn.iocoder.yudao.module.system.dal.dataobject.region.FieldCategoryDO::getParentId, 0L)
+                .eq(cn.iocoder.yudao.module.system.dal.dataobject.region.FieldCategoryDO::getCode, bizType)
+                .eq(cn.iocoder.yudao.module.system.dal.dataobject.region.FieldCategoryDO::getDeleted, false));
+        if (root == null) {
+            return java.util.Collections.emptyList();
+        }
+        // 获取该业务所有分类 id
+        List<cn.iocoder.yudao.module.system.dal.dataobject.region.FieldCategoryDO> cats = categoryMapper.selectList(new com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper<cn.iocoder.yudao.module.system.dal.dataobject.region.FieldCategoryDO>()
+                .and(w -> w.eq(cn.iocoder.yudao.module.system.dal.dataobject.region.FieldCategoryDO::getId, root.getId())
+                        .or().likeRight(cn.iocoder.yudao.module.system.dal.dataobject.region.FieldCategoryDO::getTreePath, root.getTreePath() + "/" + root.getId())));
+        java.util.Set<Long> catIds = cats.stream().map(c -> c.getId()).collect(java.util.stream.Collectors.toSet());
+
+        // 复用已有逻辑
+        List<FieldDefDO> all = getFieldDefListByCategory(null);
+        return all.stream().filter(d -> d.getCategoryIds() != null && d.getCategoryIds().stream().anyMatch(catIds::contains)).toList();
     }
 }

@@ -16,4 +16,9 @@ public interface FieldDefService {
     FieldDefDO getFieldDef(Long id);
 
     List<FieldDefDO> getFieldDefListByCategory(Long categoryId);
+
+    /**
+     * 按业务类型获取字段列表（包含共享字段）
+     */
+    List<FieldDefDO> getFieldDefListByBizType(String bizType);
 }
