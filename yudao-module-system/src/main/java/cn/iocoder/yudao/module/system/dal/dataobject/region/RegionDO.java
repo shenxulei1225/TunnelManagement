@@ -51,38 +51,15 @@ public class RegionDO extends BaseDO {
      * 区域负责人
      */
     private Long leaderUserId;
-    /**
-     * 联系电话
-     */
-    private String phone;
-    /**
-     * 邮箱
-     */
-    private String email;
+
     /**
      * 区域状态（0正常 1停用）
      *
      * 枚举 {@link TODO common_status 对应的类}
      */
     private Integer status;
-    /**
-     * 区域类型
-     *
-     * 枚举 {@link TODO region_type 对应的类}
-     */
-    private Integer type;
-    /**
-     * 所在路段
-     */
-    private String roadSection;
-    /**
-     * 起始位置
-     */
-    private String startPosition;
-    /**
-     * 结束位置
-     */
-    private String endPosition;
+
+
 
     /**
      * 动态扩展属性(JSON)

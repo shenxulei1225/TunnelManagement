@@ -27,26 +27,11 @@ public class RegionListReqVO extends PageParam {
     @Schema(description = "区域负责人", example = "30178")
     private Long leaderUserId;
 
-    @Schema(description = "联系电话")
-    private String phone;
-
-    @Schema(description = "邮箱")
-    private String email;
 
     @Schema(description = "区域状态（0正常 1停用）", example = "1")
     private Integer status;
 
-    @Schema(description = "区域类型", example = "1")
-    private Integer type;
 
-    @Schema(description = "所在路段（模糊查询）")
-    private String roadSection;
-
-    @Schema(description = "起始位置（模糊查询）")
-    private String startPosition;
-
-    @Schema(description = "结束位置（模糊查询）")
-    private String endPosition;
 
     @Schema(description = "创建时间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)

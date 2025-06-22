@@ -23,13 +23,9 @@ public interface RegionMapper extends BaseMapperX<RegionDO> {
                 .eqIfPresent(RegionDO::getParentId, reqVO.getParentId())
                 .eqIfPresent(RegionDO::getSort, reqVO.getSort())
                 .eqIfPresent(RegionDO::getLeaderUserId, reqVO.getLeaderUserId())
-                .eqIfPresent(RegionDO::getPhone, reqVO.getPhone())
-                .eqIfPresent(RegionDO::getEmail, reqVO.getEmail())
                 .eqIfPresent(RegionDO::getStatus, reqVO.getStatus())
-                .eqIfPresent(RegionDO::getType, reqVO.getType())
-                .likeIfPresent(RegionDO::getRoadSection, reqVO.getRoadSection())
-                .likeIfPresent(RegionDO::getStartPosition, reqVO.getStartPosition())
-                .likeIfPresent(RegionDO::getEndPosition, reqVO.getEndPosition())
+                
+
                 .betweenIfPresent(RegionDO::getCreateTime, reqVO.getCreateTime())
                 .orderByAsc(RegionDO::getSort));
     }

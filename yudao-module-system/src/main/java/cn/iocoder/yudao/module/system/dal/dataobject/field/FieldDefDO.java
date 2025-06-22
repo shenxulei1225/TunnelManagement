@@ -32,8 +32,11 @@ public class FieldDefDO extends cn.iocoder.yudao.framework.mybatis.core.dataobje
     /** 字段显示名称 */
     private String fieldLabel;
 
-    /** 数据类型 string/number/date/enum */
+    /** 数据类型 STRING/NUMBER/DATE/ENUM/COMPUTED */
     private String valueType;
+
+    /** 公式表达式，仅当 valueType=COMPUTED 时使用 */
+    private String calcExpr;
 
     /** 单位，仅当 valueType=number 时使用 */
     private String unit;

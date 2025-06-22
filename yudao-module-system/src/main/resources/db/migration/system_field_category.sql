@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS system_field_category (
   parent_id     BIGINT       NOT NULL DEFAULT 0 COMMENT '父 ID',
   code          VARCHAR(32)  NOT NULL COMMENT '节点编码，同一父下唯一',
   name          VARCHAR(64)  NOT NULL COMMENT '名称',
+  readonly      TINYINT      NOT NULL DEFAULT 0 COMMENT '系统只读',
   tree_path     VARCHAR(256) NOT NULL COMMENT '完整路径 1/2/3',
   level         TINYINT      NOT NULL DEFAULT 1 COMMENT '层级深度',
   sort          INT          NOT NULL DEFAULT 0 COMMENT '排序',

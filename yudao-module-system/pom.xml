@@ -50,7 +50,12 @@
             <classifier>osx-aarch_64</classifier> <!-- Intel 芯片改成 osx-x86_64 -->
             <scope>runtime</scope>
         </dependency>
-        
+        <!-- 拼接数据 -->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.11.0</version>
+        </dependency>
         <!-- 业务组件 -->
         <dependency>
             <groupId>cn.iocoder.boot</groupId>
@@ -64,6 +69,8 @@
             <groupId>cn.iocoder.boot</groupId>
             <artifactId>yudao-spring-boot-starter-biz-ip</artifactId>
         </dependency>
+
+
 
         <!-- Web 相关 -->
         <dependency>

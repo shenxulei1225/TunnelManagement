@@ -17,6 +17,7 @@ public class FieldDefUpdateReqVO {
     private String valueType;
     private String unit;
     private Boolean required;
+    private String calcExpr;
     private String enumJson;
     private Integer sort;
 

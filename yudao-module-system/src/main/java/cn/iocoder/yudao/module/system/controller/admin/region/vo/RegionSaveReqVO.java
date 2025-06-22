@@ -37,26 +37,11 @@ public class RegionSaveReqVO {
     @Schema(description = "区域负责人", example = "30178")
     private Long leaderUserId;
 
-    @Schema(description = "联系电话")
-    private String phone;
-
-    @Schema(description = "邮箱")
-    private String email;
 
     @Schema(description = "状态,见 CommonStatusEnum 枚举", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @NotNull(message = "状态不能为空")
     private Integer status;
 
-    @Schema(description = "区域类型", example = "1")
-    private Integer type;
 
-    @Schema(description = "所在路段")
-    private String roadSection;
-
-    @Schema(description = "起始位置")
-    private String startPosition;
-
-    @Schema(description = "结束位置")
-    private String endPosition;
 
 }

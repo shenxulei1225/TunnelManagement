@@ -41,7 +41,7 @@ public class FieldDefController {
     }
 
     @GetMapping("/list-by-category")
-    public CommonResult<List<FieldDefDO>> getFieldDefListByCategory(@RequestParam("categoryId") Long categoryId) {
+    public CommonResult<List<FieldDefDO>> getFieldDefListByCategory(@RequestParam(value = "categoryId", required = false) Long categoryId) {
         return success(fieldDefService.getFieldDefListByCategory(categoryId));
     }
 

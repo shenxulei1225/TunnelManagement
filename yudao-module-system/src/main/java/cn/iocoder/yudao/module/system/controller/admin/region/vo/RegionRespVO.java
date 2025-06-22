@@ -45,33 +45,13 @@ public class RegionRespVO {
     @ExcelProperty("区域负责人")
     private Long leaderUserId;
 
-    @Schema(description = "联系电话")
-    @ExcelProperty("联系电话")
-    private String phone;
 
-    @Schema(description = "邮箱")
-    @ExcelProperty("邮箱")
-    private String email;
-
-    @Schema(description = "区域类型", example = "1")
-    private Integer type;
 
     @Schema(description = "状态,见 CommonStatusEnum 枚举", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     @ExcelProperty(value = "区域状态（0正常 1停用）", converter = DictConvert.class)
     @DictFormat("common_status") // TODO 代码优化：建议设置到对应的 DictTypeConstants 枚举类中
     private Integer status;
 
-    @Schema(description = "所在路段")
-    @ExcelProperty("所在路段")
-    private String roadSection;
-
-    @Schema(description = "起始位置")
-    @ExcelProperty("起始位置")
-    private String startPosition;
-
-    @Schema(description = "结束位置")
-    @ExcelProperty("结束位置")
-    private String endPosition;
 
     @Schema(description = "创建时间", requiredMode = Schema.RequiredMode.REQUIRED)
     @ExcelProperty("创建时间")

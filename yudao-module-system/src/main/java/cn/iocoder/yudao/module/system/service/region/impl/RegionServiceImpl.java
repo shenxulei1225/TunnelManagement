@@ -5,6 +5,9 @@ import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.module.system.controller.admin.region.vo.RegionListReqVO;
 import cn.iocoder.yudao.module.system.controller.admin.region.vo.RegionSaveReqVO;
 import cn.iocoder.yudao.module.system.dal.dataobject.region.RegionDO;
+import cn.iocoder.yudao.module.system.dal.dataobject.field.FieldDefDO;
+import cn.iocoder.yudao.module.system.service.field.FieldDefService;
+import cn.iocoder.yudao.module.system.util.FieldFormulaUtils;
 import cn.iocoder.yudao.module.system.dal.mysql.region.RegionMapper;
 import cn.iocoder.yudao.module.system.service.region.RegionService;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -22,14 +25,23 @@ public class RegionServiceImpl implements RegionService {
     @Resource
     private RegionMapper regionMapper;
 
+    @Resource
+    private FieldDefService fieldDefService;
+
+    private static final String BIZ_TYPE = "REGION";
+
+
+
     @Override
     public Long createRegion(RegionSaveReqVO createReqVO) {
         log.info("[createRegion] request.extraAttrs = {}", createReqVO.getExtraAttrs());
+        // 计算派生字段
+        List<FieldDefDO> defs = fieldDefService.getFieldDefListByBizType(BIZ_TYPE);
+        FieldFormulaUtils.applyComputedFields(createReqVO.getExtraAttrs(), defs);
+    
         RegionDO region = BeanUtils.toBean(createReqVO, RegionDO.class);
         log.info("[createRegion] converted RegionDO = {}", region);
-        if (region.getType() == null) {
-            region.setType(0);
-        }
+        
         regionMapper.insert(region);
         return region.getId();
     }
@@ -37,11 +49,13 @@ public class RegionServiceImpl implements RegionService {
     @Override
     public Boolean updateRegion(RegionSaveReqVO updateReqVO) {
         log.info("[updateRegion] request.extraAttrs = {}", updateReqVO.getExtraAttrs());
+        // 计算派生字段
+        List<FieldDefDO> defs = fieldDefService.getFieldDefListByBizType(BIZ_TYPE);
+        FieldFormulaUtils.applyComputedFields(updateReqVO.getExtraAttrs(), defs);
+    
         RegionDO region = BeanUtils.toBean(updateReqVO, RegionDO.class);
         log.info("[updateRegion] converted RegionDO = {}", region);
-        if (region.getType() == null) {
-            region.setType(0);
-        }
+        
         return regionMapper.updateById(region) > 0;
     }
 
