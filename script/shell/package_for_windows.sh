@@ -137,38 +137,49 @@ set DB_USER=root
 set DB_PASSWORD=Coolhomer
 set DB_NAME=tunnel_management
 
-REM 获取当前时间戳
-for /f "tokens=2 delims==" %%a in ('wmic OS Get localdatetime /value') do set "dt=%%a"
-set "YY=%dt:~2,2%" & set "YYYY=%dt:~0,4%" & set "MM=%dt:~4,2%" & set "DD=%dt:~6,2%"
-set "HH=%dt:~8,2%" & set "Min=%dt:~10,2%" & set "Sec=%dt:~12,2%"
-set "DATE_TIME=%YYYY%%MM%%DD%_%HH%%Min%%Sec%"
+REM 获取当前时间戳 - 使用更兼容的方法
+set DATE_TIME=%date:~10,4%%date:~4,2%%date:~7,2%_%time:~0,2%%time:~3,2%%time:~6,2%
+set DATE_TIME=%DATE_TIME: =0%
 
-echo [%date% %time%] [INFO] 开始数据库恢复操作...
+REM 如果上述方法失败，使用PowerShell获取时间戳
+if "%DATE_TIME%"=="" (
+    for /f "tokens=*" %%i in ('powershell -Command "Get-Date -Format 'yyyyMMdd_HHmmss'"') do set DATE_TIME=%%i
+)
+
+REM 如果仍然失败，使用简单的时间戳
+if "%DATE_TIME%"=="" (
+    set DATE_TIME=backup_%random%
+)
+
+echo [INFO] 开始数据库恢复操作 - %DATE_TIME%
 
 REM 检查MySQL是否安装
-mysql --version >nul 2>&1
+where mysql >nul 2>&1
 if errorlevel 1 (
     echo [ERROR] MySQL客户端未找到，请安装MySQL并添加到PATH
+    echo.
+    echo 下载地址: https://dev.mysql.com/downloads/mysql/
     pause
     exit /b 1
 )
 
 REM 测试数据库连接
-echo [%date% %time%] [INFO] 测试数据库连接...
+echo [INFO] 测试数据库连接...
 mysql -h%DB_HOST% -P%DB_PORT% -u%DB_USER% -p%DB_PASSWORD% -e "SELECT 1;" >nul 2>&1
 if errorlevel 1 (
     echo [ERROR] 数据库连接失败，请检查连接参数
     pause
     exit /b 1
 )
-echo [%date% %time%] [INFO] 数据库连接测试成功
+echo [INFO] 数据库连接测试成功
 
 REM 列出可用的备份文件
 echo.
 echo 可用的备份文件:
 echo.
+setlocal enabledelayedexpansion
 set /a count=0
-for %%f in (backup\database\full\*\*.sql.gz) do (
+for /r "backup\database\full" %%f in (*.sql.gz) do (
     set /a count+=1
     echo !count!^) %%~nxf
     set "file!count!=%%f"
@@ -189,7 +200,7 @@ if %choice% GTR %count% goto :invalid_choice
 
 call set selected_file=%%file%choice%%%
 echo.
-echo [%date% %time%] [INFO] 选择的备份文件: %selected_file%
+echo [INFO] 选择的备份文件: %selected_file%
 echo.
 echo 警告: 恢复操作将完全覆盖现有数据库！
 set /p confirm="确认继续？(Y/N): "
@@ -200,23 +211,24 @@ if /i not "%confirm%"=="Y" (
 )
 
 REM 创建安全备份
-echo [%date% %time%] [INFO] 创建安全备份...
+echo [INFO] 创建安全备份...
 if not exist "backup\database\safety" mkdir "backup\database\safety"
-mysqldump -h%DB_HOST% -P%DB_PORT% -u%DB_USER% -p%DB_PASSWORD% --single-transaction --routines --triggers --events --set-gtid-purged=OFF --default-character-set=utf8mb4 --lock-tables=false --add-drop-database --databases %DB_NAME% | gzip > "backup\database\safety\%DB_NAME%_safety_before_restore_%DATE_TIME%.sql.gz"
+set safety_backup_file=backup\database\safety\%DB_NAME%_safety_before_restore_%DATE_TIME%.sql.gz
+mysqldump -h%DB_HOST% -P%DB_PORT% -u%DB_USER% -p%DB_PASSWORD% --single-transaction --routines --triggers --events --set-gtid-purged=OFF --default-character-set=utf8mb4 --lock-tables=false --add-drop-database --databases %DB_NAME% 2>nul | gzip > "%safety_backup_file%"
 
 if errorlevel 1 (
     echo [ERROR] 安全备份失败
     pause
     exit /b 1
 )
-echo [%date% %time%] [INFO] 安全备份完成
+echo [INFO] 安全备份完成
 
 REM 删除现有数据库
-echo [%date% %time%] [INFO] 删除现有数据库...
+echo [INFO] 删除现有数据库...
 mysql -h%DB_HOST% -P%DB_PORT% -u%DB_USER% -p%DB_PASSWORD% -e "DROP DATABASE IF EXISTS `%DB_NAME%`;"
 
 REM 恢复数据库
-echo [%date% %time%] [INFO] 恢复数据库...
+echo [INFO] 恢复数据库...
 gunzip -c "%selected_file%" | mysql -h%DB_HOST% -P%DB_PORT% -u%DB_USER% -p%DB_PASSWORD%
 
 if errorlevel 1 (
@@ -225,12 +237,12 @@ if errorlevel 1 (
     exit /b 1
 )
 
-echo [%date% %time%] [SUCCESS] 数据库恢复完成！
+echo [SUCCESS] 数据库恢复完成！
 echo.
 echo 恢复信息:
 echo - 备份文件: %selected_file%
 echo - 目标数据库: %DB_NAME%
-echo - 安全备份: backup\database\safety\%DB_NAME%_safety_before_restore_%DATE_TIME%.sql.gz
+echo - 安全备份: %safety_backup_file%
 echo.
 pause
 exit /b 0
@@ -245,6 +257,12 @@ EOF
     if [ -f "./script/shell/restore_database_flexible.bat" ]; then
         cp "./script/shell/restore_database_flexible.bat" "$PACKAGE_DIR/scripts/"
         log_info "添加灵活数据库恢复脚本"
+    fi
+
+    # 复制简化恢复脚本
+    if [ -f "./script/shell/restore_database_simple.bat" ]; then
+        cp "./script/shell/restore_database_simple.bat" "$PACKAGE_DIR/scripts/"
+        log_info "添加简化数据库恢复脚本"
     fi
 
     # 创建简化的PowerShell脚本
