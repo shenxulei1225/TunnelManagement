@@ -40,9 +40,9 @@ nbdist/
 # 保留目录结构和脚本，排除大型备份文件
 
 # 排除实际的备份数据文件（.sql.gz）
-backup/database/full/**/*.sql.gz
-backup/database/incremental/**/*.sql.gz
-backup/database/safety/**/*.sql.gz
+# backup/database/full/**/*.sql.gz
+# backup/database/incremental/**/*.sql.gz
+# backup/database/safety/**/*.sql.gz
 
 # 排除大型日志文件（保留最新的几个小日志文件用于参考）
 backup/database/logs/*.log
