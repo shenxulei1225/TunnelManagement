@@ -121,7 +121,7 @@ copy_backup_files() {
 create_windows_scripts() {
     log_info "创建Windows恢复脚本..."
     
-    # 创建Windows批处理脚本
+    # 创建Windows批处理脚本（原版）
     cat > "$PACKAGE_DIR/scripts/restore_database.bat" << 'EOF'
 @echo off
 chcp 65001 >nul
@@ -240,6 +240,12 @@ echo [ERROR] 无效的选择
 pause
 exit /b 1
 EOF
+
+    # 复制新的灵活恢复脚本
+    if [ -f "./script/shell/restore_database_flexible.bat" ]; then
+        cp "./script/shell/restore_database_flexible.bat" "$PACKAGE_DIR/scripts/"
+        log_info "添加灵活数据库恢复脚本"
+    fi
 
     # 创建简化的PowerShell脚本
     cat > "$PACKAGE_DIR/scripts/restore_database.ps1" << 'EOF'
@@ -429,23 +435,75 @@ EOF
 
 ## 快速开始
 
-### 方法1: 使用批处理脚本（推荐）
+### 🚀 方法1: 灵活恢复脚本（推荐 - 支持不同数据库名）
+
+```cmd
+# 使用默认配置（数据库名：tunnel_management）
+scripts\\restore_database_flexible.bat
+
+# 指定不同的数据库名称（解决Mac/Windows数据库名不同问题）
+scripts\\restore_database_flexible.bat --database tunnel_management_win
+
+# 完整自定义配置
+scripts\\restore_database_flexible.bat --host localhost --port 3307 --user admin --password mypass --database my_tunnel
+```
+
+### 📋 方法2: 标准恢复脚本
 
 1. 双击运行 \`scripts/restore_database.bat\`
 2. 按照提示选择备份文件
 3. 确认恢复操作
 
-### 方法2: 使用PowerShell脚本
+### 💻 方法3: PowerShell脚本
 
 1. 以管理员身份打开PowerShell
 2. 执行: \`Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser\`
 3. 运行: \`.\scripts\restore_database.ps1\`
 
-### 方法3: 手动恢复
+### ⚙️ 方法4: 手动恢复
 
 \`\`\`cmd
 REM 解压备份文件并恢复
-gunzip -c backup\database\full\202506\backup_file.sql.gz | mysql -h127.0.0.1 -uroot -p tunnel_management
+gunzip -c backup\\database\\full\\202506\\backup_file.sql.gz | mysql -h127.0.0.1 -uroot -p tunnel_management
+\`\`\`
+
+## 🔧 数据库名称配置
+
+### 常见场景
+
+| 场景 | 源数据库名 | 目标数据库名 | 推荐方法 |
+|------|-----------|-------------|----------|
+| 相同环境 | tunnel_management | tunnel_management | 标准脚本 |
+| 不同环境 | tunnel_management | tunnel_management_win | 灵活脚本 |
+| 开发/生产 | tunnel_dev | tunnel_prod | 灵活脚本 |
+
+### 参数说明
+
+灵活恢复脚本支持的参数：
+
+\`\`\`cmd
+--host <主机>       数据库主机地址 (默认: 127.0.0.1)
+--port <端口>       数据库端口 (默认: 3306)
+--user <用户名>     数据库用户名 (默认: root)
+--password <密码>   数据库密码 (默认: Coolhomer)
+--database <数据库名> 目标数据库名 (默认: tunnel_management)
+--help              显示帮助信息
+\`\`\`
+
+### 示例用法
+
+\`\`\`cmd
+REM 基本用法
+scripts\\restore_database_flexible.bat
+
+REM Windows环境使用不同数据库名
+scripts\\restore_database_flexible.bat --database tunnel_management_windows
+
+REM 连接远程数据库
+scripts\\restore_database_flexible.bat --host 192.168.1.100 --user backup_user --password mypass123
+
+REM 完全自定义
+scripts\\restore_database_flexible.bat --host localhost --port 3307 --database production_tunnel --user admin --password secure123
 \`\`\`
 
 ## 系统要求
@@ -463,20 +521,64 @@ gunzip -c backup\database\full\202506\backup_file.sql.gz | mysql -h127.0.0.1 -ur
 - \`scripts/restore_database.bat\` - 批处理脚本中的数据库参数
 - \`scripts/restore_database.ps1\` - PowerShell脚本中的数据库参数
 
+### 快速配置修改
+
+如果经常使用相同配置，可以直接修改脚本文件中的默认值：
+
+1. 编辑 \`scripts/restore_database_flexible.bat\`
+2. 修改顶部的默认配置：
+   \`\`\`cmd
+   set DB_HOST=你的主机地址
+   set DB_PORT=你的端口
+   set DB_USER=你的用户名
+   set DB_PASSWORD=你的密码
+   set DB_NAME=你的数据库名
+   \`\`\`
+
+## 🔍 自动检测功能
+
+灵活恢复脚本具有以下自动检测功能：
+
+- ✅ **备份文件分析** - 自动检测备份文件中的原数据库名称
+- ✅ **名称转换提示** - 当目标数据库名与源不同时给出明确提示
+- ✅ **连接验证** - 恢复前自动测试数据库连接
+- ✅ **安全备份** - 恢复前自动备份现有数据库
+- ✅ **恢复验证** - 恢复后验证数据完整性
+
 ## 注意事项
 
 ⚠️ **重要提醒**
 - 恢复操作将完全覆盖现有数据库
 - 脚本会自动创建安全备份
 - 建议在恢复前停止相关应用服务
+- 确保目标数据库名称符合MySQL命名规范
+
+🔒 **安全考虑**
+- 避免在脚本中硬编码敏感密码
+- 生产环境建议使用专用备份用户
+- 定期更新数据库密码
 
 ## 故障排除
 
 如果遇到问题，请查看：
-1. \`docs/database-management.md\` - 完整的管理指南
-2. \`backup/database/logs/\` - 操作日志
-3. 检查MySQL服务是否启动
-4. 确认数据库连接参数正确
+
+1. **连接问题**
+   - 检查MySQL服务是否启动
+   - 验证网络连接和防火墙设置
+   - 确认用户名密码正确
+
+2. **权限问题**
+   - 确保用户有CREATE、DROP、ALTER权限
+   - 检查数据库访问权限设置
+
+3. **文件问题**
+   - 验证备份文件完整性：\`gunzip -t backup_file.sql.gz\`
+   - 检查磁盘空间是否充足
+
+4. **参考文档**
+   - \`docs/database-management.md\` - 完整的管理指南
+   - \`docs/cross-platform-database-restore.md\` - 跨平台恢复指南
+   - \`backup/database/logs/\` - 操作日志
 
 ## 技术支持
 
@@ -485,6 +587,7 @@ gunzip -c backup\database\full\202506\backup_file.sql.gz | mysql -h127.0.0.1 -ur
 ---
 生成时间: $(date)
 包版本: ${PACKAGE_NAME}
+包含脚本: restore_database.bat, restore_database_flexible.bat, restore_database.ps1
 EOF
 
     log_info "配置文件创建完成"

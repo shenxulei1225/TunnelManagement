@@ -19,7 +19,7 @@ DB_HOST="127.0.0.1"
 DB_PORT="3306"
 DB_USER="root"
 DB_PASSWORD="Coolhomer"
-DB_NAME="tunnel_management"
+DB_NAME="tunnel_management"  # 默认数据库名，可通过参数覆盖
 
 # 备份路径配置
 BACKUP_BASE_DIR="./backup/database"
@@ -280,9 +280,24 @@ restore_from_backup() {
     
     log_info "开始从备份文件恢复数据库..."
     log_info "备份文件: $(basename "$backup_file")"
+    log_info "目标数据库: $DB_NAME"
     
-    # 解压并导入数据库
-    gunzip -c "$backup_file" | mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASSWORD" 2>/dev/null
+    # 检查备份文件中的数据库名称
+    local backup_db_name=$(gunzip -c "$backup_file" | head -20 | grep -oP "CREATE DATABASE.*?\K\`[^`]+\`" | head -1 | tr -d '`' || echo "")
+    
+    if [ -n "$backup_db_name" ] && [ "$backup_db_name" != "$DB_NAME" ]; then
+        log_warn "备份文件中的数据库名称: $backup_db_name"
+        log_warn "目标数据库名称: $DB_NAME"
+        log_info "将自动进行数据库名称转换"
+        
+        # 使用sed替换数据库名称并导入
+        gunzip -c "$backup_file" | sed "s/\`$backup_db_name\`/\`$DB_NAME\`/g" | \
+        sed "s/Database: $backup_db_name/Database: $DB_NAME/g" | \
+        mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASSWORD" 2>/dev/null
+    else
+        # 直接解压并导入数据库
+        gunzip -c "$backup_file" | mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASSWORD" 2>/dev/null
+    fi
     
     if [ $? -eq 0 ]; then
         log_success "数据库恢复成功"
@@ -471,9 +486,9 @@ show_help() {
     cat << EOF
 TunnelManagement 数据库恢复脚本
 
-用法: $0 [选项] [备份文件]
+用法: $0 [选项] [恢复模式] [数据库参数]
 
-选项:
+恢复模式:
     interactive     交互式恢复（默认）- 选择备份文件进行恢复
     latest          从最新备份恢复
     file <路径>     从指定备份文件恢复
@@ -481,12 +496,30 @@ TunnelManagement 数据库恢复脚本
     test            测试数据库连接
     help            显示此帮助信息
 
-示例:
-    $0 interactive                                    # 交互式选择备份文件
+数据库参数:
+    --host <主机>       数据库主机地址 (默认: 127.0.0.1)
+    --port <端口>       数据库端口 (默认: 3306)
+    --user <用户名>     数据库用户名 (默认: root)
+    --password <密码>   数据库密码 (默认: Coolhomer)
+    --database <数据库名> 目标数据库名 (默认: tunnel_management)
+    --backup-dir <路径> 备份目录路径 (默认: ./backup/database)
+
+基本示例:
+    $0 interactive                                    # 使用默认配置交互式恢复
     $0 latest                                        # 从最新备份恢复
     $0 file ./backup/database/full/202506/backup.sql.gz  # 从指定文件恢复
     $0 list                                          # 列出可用备份
     $0 test                                          # 测试连接
+
+跨平台示例:
+    # Windows环境（不同数据库名）
+    $0 interactive --database tunnel_management_win
+    
+    # 远程数据库
+    $0 latest --host 192.168.1.100 --user backup_user --password mypass
+    
+    # 自定义所有参数
+    $0 interactive --host localhost --port 3307 --database my_tunnel --user admin --password secret123
 
 恢复过程:
     1. 验证备份文件完整性
@@ -497,16 +530,63 @@ TunnelManagement 数据库恢复脚本
 
 注意事项:
     ⚠️  恢复操作将完全覆盖现有数据库
+    ⚠️  如果目标数据库名与备份中的不同，会自动处理
     ✅  恢复前会自动创建安全备份
     ✅  恢复失败时会尝试从安全备份恢复
     ✅  建议在恢复前停止应用服务
 
-数据库配置:
+当前配置:
     主机: $DB_HOST:$DB_PORT
     数据库: $DB_NAME
     备份目录: $BACKUP_BASE_DIR
 
 EOF
+}
+
+# ===========================================
+# 参数解析函数
+# ===========================================
+
+parse_arguments() {
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            --host)
+                DB_HOST="$2"
+                shift 2
+                ;;
+            --port)
+                DB_PORT="$2"
+                shift 2
+                ;;
+            --user)
+                DB_USER="$2"
+                shift 2
+                ;;
+            --password)
+                DB_PASSWORD="$2"
+                shift 2
+                ;;
+            --database)
+                DB_NAME="$2"
+                shift 2
+                ;;
+            --backup-dir)
+                BACKUP_BASE_DIR="$2"
+                BACKUP_FULL_DIR="$BACKUP_BASE_DIR/full"
+                BACKUP_LOG_DIR="$BACKUP_BASE_DIR/logs"
+                RESTORE_LOG_FILE="$BACKUP_LOG_DIR/restore_${DATE}.log"
+                shift 2
+                ;;
+            *)
+                # 保存非选项参数
+                POSITIONAL_ARGS+=("$1")
+                shift
+                ;;
+        esac
+    done
+    
+    # 恢复位置参数
+    set -- "${POSITIONAL_ARGS[@]}"
 }
 
 # ===========================================
@@ -524,6 +604,9 @@ main() {
     init_directories
     check_dependencies
     test_connection
+    
+    # 解析参数
+    parse_arguments "$@"
     
     case "$action" in
         "interactive")
