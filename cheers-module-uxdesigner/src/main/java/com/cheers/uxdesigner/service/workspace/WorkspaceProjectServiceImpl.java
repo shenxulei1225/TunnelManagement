@@ -63,16 +63,7 @@ public class WorkspaceProjectServiceImpl implements WorkspaceProjectService {
 
     @Override
     public PageResult<WorkspaceProjectDO> getProjectPage(WorkspaceProjectPageReqVO pageReqVO) {
-        return projectMapper.selectPage(pageReqVO, query -> {
-            query.likeIfPresent(WorkspaceProjectDO::getName, pageReqVO.getName())
-                 .eqIfPresent(WorkspaceProjectDO::getType, pageReqVO.getType())
-                 .eqIfPresent(WorkspaceProjectDO::getStarred, pageReqVO.getStarred())
-                 .eqIfPresent(WorkspaceProjectDO::getUserId, pageReqVO.getUserId())
-                 .eqIfPresent(WorkspaceProjectDO::getTeamId, pageReqVO.getTeamId())
-                 .eqIfPresent(WorkspaceProjectDO::getStatus, pageReqVO.getStatus())
-                 .betweenIfPresent(WorkspaceProjectDO::getCreateTime, pageReqVO.getCreateTime())
-                 .orderByDesc(WorkspaceProjectDO::getId);
-        });
+        return projectMapper.selectPage(pageReqVO);
     }
 
     @Override

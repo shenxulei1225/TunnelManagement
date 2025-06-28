@@ -14,13 +14,13 @@ ALTER TABLE `uxd_workspace_file` AUTO_INCREMENT = 1;
 -- 插入项目数据
 -- ----------------------------
 INSERT INTO `uxd_workspace_project` (`name`, `description`, `cover`, `type`, `status`, `user_id`, `team_id`, `starred`, `remark`, `creator`) VALUES 
-('Universal X Designer 主项目', '品牌核心设计项目，体验一切，导出无界。包含主要的用户界面设计、品牌视觉系统和交互规范。', 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop', 'web', 1, 1, 1, 1, '核心设计项目，优先级最高', 'admin'),
+('UX Designer 主项目', '品牌核心设计项目，体验一切，导出无界。包含主要的用户界面设计、品牌视觉系统和交互规范。', 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400&h=300&fit=crop', 'web', 1, 1, 1, 1, '核心设计项目，优先级最高', 'admin'),
 
-('电商平台设计系统', '现代化电商平台的完整设计系统，包含购物流程、支付界面、商品展示等核心功能模块。', 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop', 'web', 1, 1, 1, 0, '电商项目设计规范', 'admin'),
+('电商平台设计', '现代化电商平台的完整设计系统，包含购物流程、支付界面、商品展示等核心功能模块。', 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=300&fit=crop', 'web', 1, 1, 1, 0, '电商项目设计规范', 'admin'),
 
 ('移动端设计规范', '移动端设计系统和组件库，支持iOS和Android平台，包含完整的UI组件和交互动效。', 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400&h=300&fit=crop', 'mobile', 1, 1, 1, 1, '移动端项目，跨平台设计', 'admin'),
 
-('企业级管理后台', '面向B端用户的企业级管理系统界面设计，包含数据可视化、表单设计、权限管理等功能。', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop', 'web', 1, 1, 1, 0, '企业级后台管理系统', 'admin'),
+('企业管理后台', '面向B端用户的企业级管理系统界面设计，包含数据可视化、表单设计、权限管理等功能。', 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=300&fit=crop', 'web', 1, 1, 1, 0, '企业级后台管理系统', 'admin'),
 
 ('社交媒体应用', '新一代社交媒体应用的界面设计，注重用户体验和社交互动，支持多媒体内容分享。', 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop', 'mobile', 1, 1, 1, 1, '社交类应用设计', 'admin'),
 
@@ -35,7 +35,7 @@ INSERT INTO `uxd_workspace_project` (`name`, `description`, `cover`, `type`, `st
 -- ----------------------------
 INSERT INTO `uxd_workspace_file` (`name`, `type`, `thumbnail`, `content`, `category`, `starred`, `file_size`, `project_id`, `user_id`, `team_id`, `status`, `remark`, `creator`) VALUES 
 
--- Universal X Designer 主项目文件
+-- UX Designer 主项目文件
 ('品牌首页设计', 'design', 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=300&h=200&fit=crop', '{"version":"1.0","type":"design","elements":[],"artboards":[{"name":"首页","width":1440,"height":900}]}', 'drafts', 1, 2048, 1, 1, 1, 1, '品牌主页设计，体现Experience Everything理念', 'admin'),
 
 ('用户旅程地图', 'figjam', 'https://images.unsplash.com/photo-1559028006-448665bd7c7f?w=300&h=200&fit=crop', '{"version":"1.0","type":"figjam","elements":[],"boards":[{"name":"用户旅程","type":"journey_map"}]}', 'drafts', 1, 1536, 1, 1, 1, 1, '用户体验旅程分析', 'admin'),

@@ -8,7 +8,7 @@
 DROP TABLE IF EXISTS `uxd_workspace_file`;
 CREATE TABLE `uxd_workspace_file` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '文件ID',
-  `name` varchar(100) NOT NULL COMMENT '文件名称',
+  `name` varchar(255) NOT NULL COMMENT '文件名称',
   `type` varchar(50) NOT NULL COMMENT '文件类型',
   `thumbnail` varchar(500) DEFAULT NULL COMMENT '缩略图URL',
   `content` longtext COMMENT '文件内容',
@@ -41,7 +41,7 @@ CREATE TABLE `uxd_workspace_file` (
 DROP TABLE IF EXISTS `uxd_workspace_project`;
 CREATE TABLE `uxd_workspace_project` (
   `id` bigint NOT NULL AUTO_INCREMENT COMMENT '项目ID',
-  `name` varchar(100) NOT NULL COMMENT '项目名称',
+  `name` varchar(255) NOT NULL COMMENT '项目名称',
   `description` varchar(500) DEFAULT NULL COMMENT '项目描述',
   `cover` varchar(500) DEFAULT NULL COMMENT '项目封面',
   `type` varchar(50) NOT NULL COMMENT '项目类型',
