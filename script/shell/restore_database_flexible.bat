@@ -9,7 +9,7 @@ REM 默认数据库连接参数 - 可通过命令行参数修改
 set DB_HOST=127.0.0.1
 set DB_PORT=3306
 set DB_USER=root
-set DB_PASSWORD=Coolhomer
+set DB_PASSWORD=123456
 set DB_NAME=tunnel_management
 
 REM 解析命令行参数
@@ -104,7 +104,7 @@ echo [INFO] 数据库连接测试成功
 echo.
 
 REM 检查是否存在备份文件
-if not exist "backup\database\full" (
+if not exist "..\..\backup\database\full" (
     echo [ERROR] 备份目录不存在: backup\database\full
     echo 请确保解压了完整的恢复包
     pause

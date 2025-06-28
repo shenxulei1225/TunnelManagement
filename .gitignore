@@ -80,3 +80,5 @@ application-my.yaml
 
 /yudao-ui-app/unpackage/
 **/.DS_Store
+yudao-server/src/main/resources/application-dev.yaml
+yudao-server/src/main/resources/application-local.yaml
