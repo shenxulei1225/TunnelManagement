@@ -57,7 +57,10 @@ spring:
   data:
     redis:
       host: 127.0.0.1 # 地址
-      port: 6379 # 端口
+      port: 6379 # 端口index.ts:9 
+            
+            
+           GET http://localhost:48080/admin-api/system/dict-data/simple-list net::ERR_CONNECTION_REFUSED
       database: 1 # 数据库索引
       password: 123456 # 密码，建议生产环境开启
 
