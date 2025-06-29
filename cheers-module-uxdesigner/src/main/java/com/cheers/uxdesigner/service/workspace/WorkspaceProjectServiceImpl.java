@@ -63,7 +63,28 @@ public class WorkspaceProjectServiceImpl implements WorkspaceProjectService {
 
     @Override
     public PageResult<WorkspaceProjectDO> getProjectPage(WorkspaceProjectPageReqVO pageReqVO) {
-        return projectMapper.selectPage(pageReqVO);
+        try {
+            System.out.println("DEBUG Service: 开始查询项目分页，参数：" + pageReqVO);
+            PageResult<WorkspaceProjectDO> result = projectMapper.selectPage(pageReqVO);
+            System.out.println("DEBUG Service: 查询结果 - 总数：" + result.getTotal());
+            if (result.getList() != null && !result.getList().isEmpty()) {
+                System.out.println("DEBUG Service: 查询到 " + result.getList().size() + " 个项目");
+                for (int i = 0; i < Math.min(result.getList().size(), 2); i++) {
+                    WorkspaceProjectDO project = result.getList().get(i);
+                    System.out.println("DEBUG Service: 项目" + (i+1) + " - ID:" + project.getId() + 
+                                     ", Name:" + project.getName() + 
+                                     ", Starred:" + project.getStarred() +
+                                     ", Status:" + project.getStatus());
+                }
+            } else {
+                System.out.println("DEBUG Service: 查询结果为空");
+            }
+            return result;
+        } catch (Exception e) {
+            System.err.println("DEBUG Service: 查询异常：" + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Override
