@@ -80,7 +80,7 @@ public class WorkspaceFileController {
     @PreAuthorize("@ss.hasPermission('uxdesigner:workspace-file:export')")
     public void exportWorkspaceFileExcel(@Valid WorkspaceFilePageReqVO pageReqVO,
               HttpServletResponse response) throws IOException {
-        pageReqVO.setPageSize(Integer.MAX_VALUE); // 导出所有数据
+        pageReqVO.setPageSize(PageResult.PAGE_SIZE_NONE);
         List<WorkspaceFileDO> list = workspaceFileService.getWorkspaceFilePage(pageReqVO).getList();
         // 导出 Excel
         ExcelUtils.write(response, "工作台文件.xls", "数据", WorkspaceFileRespVO.class,

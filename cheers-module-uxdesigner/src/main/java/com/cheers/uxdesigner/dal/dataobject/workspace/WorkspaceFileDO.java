@@ -4,9 +4,7 @@ import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
 import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.*;
-import org.apache.ibatis.type.JdbcType;
 
 /**
  * 工作台文件 DO
@@ -51,7 +49,6 @@ public class WorkspaceFileDO extends BaseDO {
     /**
      * 是否收藏
      */
-    @TableField(jdbcType = JdbcType.BIT)
     private Boolean starred;
     /**
      * 文件大小
