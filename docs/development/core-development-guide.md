@@ -476,6 +476,38 @@ ${docs.map(d => `- ✅ ${d}`).join('\n')}
 - [UI转换器菜单设置](ui-converter-menu-setup.md)
 - [权限配置参数说明](../sql/mysql/converter_menu.sql)
 
+### 开发工具
+
+#### 开发建议工具
+项目内置了智能的开发建议工具，帮助开发者发现页面中的潜在问题：
+
+```vue
+<template>
+  <div>
+    <!-- 页面内容 -->
+    
+    <!-- 添加开发建议组件 -->
+    <DevSuggestions 
+      :page-name="'your-page-name'"
+      :auto-check="true"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { DevSuggestions } from '@/components/DevTools'
+</script>
+```
+
+详细使用方法请参考：[开发建议工具文档](./dev-suggestions-tool.md)
+
+#### 全局开发工具
+在开发环境中，右上角会显示开发工具按钮，提供：
+- 环境信息查看
+- 配置管理
+- 页面分析
+- 快捷操作
+
 ---
 
 ## 🎯 总结

@@ -6,6 +6,7 @@
 
 ### 🎨 用户界面设计
 - [标签颜色系统设计](./tag-color-system-design.md) - 统一的标签颜色管理系统
+- [操作日志控件设计](./operation-log-design.md) - 通用操作日志控件的设计规范
 - [Figma样式系统集成](./figma-style-system-integration.md) - 与Figma设计系统的集成方案
 - [UX设计师架构](./figma-style-ux-designer-architecture.md) - UX设计工具的架构设计
 

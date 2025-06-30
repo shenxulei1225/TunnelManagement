@@ -11,7 +11,9 @@
 
 ### 🎨 UI/UX 开发规范
 - [标签颜色系统开发文档](./tag-color-system-development.md) - 统一标签颜色管理系统实现
+- [操作日志控件开发文档](./operation-log-development.md) - 通用操作日志控件的技术实现
 - [标签颜色系统设计文档](../design/tag-color-system-design.md) - 标签颜色系统的设计理念
+- [操作日志控件设计文档](../design/operation-log-design.md) - 操作日志控件的设计规范
 
 ### 📋 核心开发指南
 - [核心开发指南](./core-development-guide.md) - 项目核心功能开发指导

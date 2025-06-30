@@ -290,13 +290,289 @@ const menuConfig = generateMenuConfig({
 console.log('菜单配置：', JSON.stringify(menuConfig, null, 2))
 ```
 
-## 📝 使用说明
+## 🚀 JavaScript自动创建工具
 
-1. **创建主菜单**：先创建 type=1 的目录菜单
-2. **创建子菜单**：在主菜单下创建 type=2 的页面菜单
-3. **创建权限按钮**：为页面菜单创建 type=3 的操作权限
-4. **设置排序**：使用合理的 sort 值确保菜单顺序
-5. **权限标识**：遵循 `模块:功能:操作` 的命名规范
+### 菜单创建工具类
+```javascript
+/**
+ * 菜单自动创建工具类
+ */
+export class MenuCreator {
+  
+  /**
+   * 创建完整的页面菜单配置（包含主菜单、子页面、权限按钮）
+   * @param {Object} config - 配置对象
+   * @returns {Promise<Object>} 创建结果
+   */
+  static async createPageMenuComplete(config) {
+    const {
+      // 主菜单配置
+      mainMenuName,
+      mainMenuIcon = 'ep:menu',
+      mainMenuSort = Date.now(),
+      mainMenuParentId = 0,
+      
+      // 页面配置
+      pageName,
+      pagePath,
+      pageIcon = 'ep:document',
+      pageComponent,
+      pageComponentName,
+      modulePrefix,
+      
+      // 权限配置
+      permissions = ['query', 'create', 'update', 'delete', 'export']
+    } = config
+    
+    try {
+      // 1. 创建主菜单（目录）
+      const mainMenuId = await MenuApi.createMenu({
+        name: mainMenuName,
+        type: 1, // 目录
+        sort: mainMenuSort,
+        parentId: mainMenuParentId,
+        path: pagePath.split('/')[1] || pagePath,
+        icon: mainMenuIcon,
+        component: '',
+        componentName: '',
+        permission: '',
+        status: 0,
+        visible: true,
+        keepAlive: false,
+        alwaysShow: true
+      })
+      
+      console.log(`✅ 主菜单创建成功: ${mainMenuName} (ID: ${mainMenuId})`)
+      
+      // 2. 创建页面菜单
+      const pageMenuId = await MenuApi.createMenu({
+        name: pageName,
+        type: 2, // 菜单
+        sort: mainMenuSort + 10,
+        parentId: mainMenuId,
+        path: pagePath.split('/').pop() || pagePath,
+        icon: pageIcon,
+        component: pageComponent,
+        componentName: pageComponentName,
+        permission: `${modulePrefix}:${pagePath.split('/').pop()}:query`,
+        status: 0,
+        visible: true,
+        keepAlive: true,
+        alwaysShow: false
+      })
+      
+      console.log(`✅ 页面菜单创建成功: ${pageName} (ID: ${pageMenuId})`)
+      
+      // 3. 创建权限按钮
+      const permissionIds = []
+      const permissionNames = {
+        query: '查询',
+        create: '新增', 
+        update: '编辑',
+        delete: '删除',
+        export: '导出'
+      }
+      
+      for (let i = 0; i < permissions.length; i++) {
+        const perm = permissions[i]
+        const permId = await MenuApi.createMenu({
+          name: permissionNames[perm] || perm,
+          type: 3, // 按钮
+          sort: i + 1,
+          parentId: pageMenuId,
+          path: '',
+          icon: '',
+          component: '',
+          componentName: '',
+          permission: `${modulePrefix}:${pagePath.split('/').pop()}:${perm}`,
+          status: 0,
+          visible: true,
+          keepAlive: false,
+          alwaysShow: false
+        })
+        permissionIds.push(permId)
+        console.log(`✅ 权限按钮创建成功: ${permissionNames[perm]} (ID: ${permId})`)
+      }
+      
+      return {
+        success: true,
+        data: {
+          mainMenuId,
+          pageMenuId,
+          permissionIds
+        },
+        message: '菜单创建完成'
+      }
+      
+    } catch (error) {
+      console.error('❌ 菜单创建失败:', error)
+      return {
+        success: false,
+        error: error.message
+      }
+    }
+  }
+  
+  /**
+   * 快速创建单个页面菜单
+   * @param {Object} config - 页面配置
+   */
+  static async createSinglePage(config) {
+    const {
+      name,
+      parentId = 0,
+      path,
+      icon = 'ep:document',
+      component,
+      componentName,
+      permission,
+      sort = Date.now()
+    } = config
+    
+    return await MenuApi.createMenu({
+      name,
+      type: 2,
+      sort,
+      parentId,
+      path,
+      icon,
+      component,
+      componentName,
+      permission,
+      status: 0,
+      visible: true,
+      keepAlive: true,
+      alwaysShow: false
+    })
+  }
+}
+
+// 使用示例
+const example = async () => {
+  // 创建完整的用户管理菜单
+  await MenuCreator.createPageMenuComplete({
+    mainMenuName: '系统管理',
+    mainMenuIcon: 'ep:setting',
+    pageName: '用户管理', 
+    pagePath: '/system/user',
+    pageIcon: 'ep:user',
+    pageComponent: 'system/user/index',
+    pageComponentName: 'SystemUser',
+    modulePrefix: 'system'
+  })
+  
+  // 创建单个页面
+  await MenuCreator.createSinglePage({
+    name: '个人资料',
+    parentId: 1000,
+    path: 'profile',
+    component: 'system/user/profile',
+    componentName: 'UserProfile',
+    permission: 'system:user:profile'
+  })
+}
+```
+
+### 批量菜单创建工具
+```javascript
+/**
+ * 批量创建菜单工具
+ */
+export const batchCreateMenus = async (menuConfigs) => {
+  const results = []
+  
+  for (const config of menuConfigs) {
+    try {
+      const menuId = await MenuApi.createMenu(config)
+      results.push({
+        success: true,
+        config,
+        menuId,
+        message: `菜单 ${config.name} 创建成功`
+      })
+      console.log(`✅ ${config.name} 创建成功 (ID: ${menuId})`)
+    } catch (error) {
+      results.push({
+        success: false,
+        config,
+        error: error.message,
+        message: `菜单 ${config.name} 创建失败`
+      })
+      console.error(`❌ ${config.name} 创建失败:`, error)
+    }
+  }
+  
+  return results
+}
+```
+
+## 📋 每个新增页面的菜单参数清单
+
+**🔴 每次生成新页面时，请提供以下菜单创建参数：**
+
+```javascript
+// 页面菜单参数模板
+const pageMenuParams = {
+  // 【必填】基础信息
+  name: '页面显示名称',           // 例：'用户管理'
+  type: 2,                      // 固定值：菜单类型
+  sort: 时间戳或序号,            // 例：Date.now()
+  parentId: 父菜单ID,           // 例：1000
+  
+  // 【必填】路由信息  
+  path: '路由路径',              // 例：'user' 或 '/system/user'
+  component: '组件路径',         // 例：'system/user/index'
+  componentName: '组件名称',     // 例：'SystemUser'
+  
+  // 【必填】权限信息
+  permission: '权限标识',        // 例：'system:user:query'
+  
+  // 【可选】显示配置
+  icon: '图标名称',              // 例：'ep:user'
+  status: 0,                    // 固定值：启用状态
+  visible: true,                // 固定值：显示
+  keepAlive: true,              // 固定值：缓存页面
+  alwaysShow: false            // 固定值：不总是显示
+}
+```
+
+## ⚡ 快速配置生成器
+
+```javascript
+/**
+ * 根据页面信息快速生成菜单配置
+ */
+export const generateMenuConfig = (pageName, modulePath, parentId = 0) => {
+  const timestamp = Date.now()
+  const pathParts = modulePath.split('/')
+  const module = pathParts[0]
+  const page = pathParts[pathParts.length - 1]
+  
+  return {
+    name: pageName,
+    type: 2,
+    sort: timestamp,
+    parentId: parentId,
+    path: pathParts.length > 1 ? page : modulePath,
+    icon: 'ep:document',
+    component: `${modulePath}/index`,
+    componentName: pathParts.map(p => 
+      p.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()).replace(/\s/g, '')
+    ).join(''),
+    permission: `${module}:${page}:query`,
+    status: 0,
+    visible: true,
+    keepAlive: true,
+    alwaysShow: false
+  }
+}
+
+// 使用示例
+const userMenuConfig = generateMenuConfig('用户管理', 'system/user', 1000)
+console.log('菜单配置:', userMenuConfig)
+```
+
+**📌 记住：每次生成页面后，都要调用菜单管理API创建对应的菜单项！**
 
 ## 🎯 每次生成页面时的提示模板
 
