@@ -1,7 +1,175 @@
-# Universal X Designer - UX设计器文档中心
+# 📚 项目文档中心
 
-> **Experience Everything, Export Everywhere**  
-> 让用户体验设计师成为真正的产品创造者
+> **Tunnel Management System - 完整文档体系**  
+> 基于文档持续更新机制的项目知识管理中心
+
+---
+
+## 🚀 首要开发标准
+
+### 📋 核心原则
+**文档持续更新机制**是本项目开发的**首要标准**，所有开发工作必须严格遵循以下规范：
+
+| 文档类型 | 更新频率 | 责任人 | 质量标准 |
+|----------|----------|--------|----------|
+| **进度跟踪** | 每日更新 | 各模块开发者 | 状态与代码同步 |
+| **问题记录** | 实时更新 | 发现问题者 | 详细描述和解决方案 |
+| **版本日志** | 版本发布时 | 项目负责人 | 完整记录所有变更 |
+| **架构设计** | 重大变更时 | 架构师 | 保持架构图和代码一致 |
+
+### 🎯 必读文档
+- [🚀 核心开发指南 - 首要开发标准](development/core-development-guide.md) **⭐ 必读**
+- [📋 规范性文档体系总结](standards/documentation-standards-summary.md) **⭐ 规范梳理**
+- [📖 文档使用说明 - 快速上手指南](development/documentation-usage-guide.md) **⭐ 新手必读**
+
+---
+
+## 📊 当前项目状态概览
+
+### 🎯 资源导入功能项目
+- **总体进度**: 15% 完成
+- **当前阶段**: 🔧 核心模块开发（60%）
+- **下一里程碑**: 2025-01-15 完成导入器完善
+- **详细跟踪**: [资源导入功能 - 完整设计方案](design/resource-import-master-plan.md)
+
+### 🔧 核心模块状态
+| 模块 | 状态 | 完成度 | 负责人 |
+|------|------|--------|--------|
+| 导入管理器 | ✅ 已实现 | 90% | 架构师 |
+| Element导入器 | ✅ 已实现 | 85% | 前端开发 |
+| 墨刀导入器 | 🔄 进行中 | 60% | 前端开发 |
+| 用户界面 | 🔄 进行中 | 70% | UI开发 |
+
+### 🐛 当前问题跟踪
+- **ISS-001**: MockPlusImporter.ts文件创建失败 (🟡 中等)
+- **ISS-002**: ResourceImport.vue界面未完全集成 (🟡 中等)
+
+---
+
+## 📁 文档体系结构
+
+### 🎯 设计与规划
+```
+design/
+├── 📋 resource-import-master-plan.md       # 资源导入功能完整设计方案 ⭐
+├── 🎨 figma-style-system-integration.md    # Figma样式系统集成
+├── 🏗️ figma-style-ux-designer-architecture.md  # UX设计器架构
+└── 📐 universal-component-system.md        # 通用组件系统设计
+```
+
+### 📋 规范标准
+```
+standards/
+└── 📋 documentation-standards-summary.md  # 规范性文档体系总结 ⭐
+```
+
+### 🛠️ 开发指南
+```
+development/
+├── 🚀 core-development-guide.md            # 核心开发指南 ⭐ 必读
+├── 📖 documentation-usage-guide.md         # 文档使用说明 ⭐ 新手必读
+├── 🔧 common-issues-guide.md               # 常见问题指导
+├── 📋 complete-workflow-guide.md           # 完整工作流程指南
+├── 🏗️ multi-entry-import-architecture.md  # 多入口导入架构
+├── 🎯 platform-compatibility-design.md    # 平台兼容性设计
+├── 📱 umg-file-formats-guide.md            # UMG文件格式指南
+└── 🔗 universal-x-designer-integration.md # Universal X Designer整合
+```
+
+### 📊 项目总结
+```
+summary/
+├── 📈 platform-compatibility-summary.md   # 平台兼容性总结
+├── 🎨 ui-converter-concept-summary.md     # UI转换器概念总结
+└── 🧩 universal-component-system-implementation.md  # 通用组件系统实现
+```
+
+### 🏗️ 项目结构
+```
+structure/
+└── 📁 project-structure.md                # 项目结构说明
+```
+
+---
+
+## 🎯 功能模块文档
+
+### 🔄 资源导入系统
+**状态**: 🔧 开发中 (15%)
+
+#### 核心文档
+- [📋 完整设计方案](design/resource-import-master-plan.md) - 项目主控文档
+- [🚀 核心开发标准](development/core-development-guide.md) - 开发规范
+- [🏗️ 多入口导入架构](development/multi-entry-import-architecture.md) - 技术架构
+
+#### 支持格式
+| 格式 | 状态 | 完成度 | 特性支持 |
+|------|------|--------|----------|
+| **Figma** | ✅ 支持 | 95% | 完整样式、组件树、资产提取 |
+| **Element UI** | ✅ 支持 | 85% | Vue模板、组件配置 |
+| **UMG** | ✅ 支持 | 90% | UE组件、蓝图支持 |
+| **墨刀** | 🔄 开发中 | 60% | 基础样式、页面结构 |
+
+#### 菜单配置
+每个新增页面的菜单配置参数：
+```javascript
+{
+  name: "资源导入中心",
+  type: 1,
+  path: "/resource",
+  icon: "ep:upload",
+  permission: "resource:view"
+}
+```
+
+### 🎨 UX设计器系统  
+**状态**: 🔧 持续完善
+
+#### 核心功能
+- **设计画布**: 可视化编辑界面
+- **组件库**: 丰富的UI组件集合  
+- **样式系统**: 统一的设计语言
+- **多端导出**: Vue、React、UMG支持
+
+#### 相关文档
+- [Universal X Designer 产品概述](design/universal-x-designer-product-overview.md)
+- [Universal X Designer 品牌指南](design/universal-x-designer-brand.md)
+- [UX设计器视窗实现](development/ue-designer-viewport-implementation.md)
+
+---
+
+## 🔧 开发工作流程
+
+### 🎯 标准开发流程
+1. **项目启动**
+   - [ ] 创建项目主文档
+   - [ ] 建立菜单配置记录  
+   - [ ] 初始化问题跟踪表
+   - [ ] 设定里程碑时间表
+
+2. **开发实施**
+   - [ ] 每日更新模块状态
+   - [ ] 实时记录遇到的问题
+   - [ ] 及时更新完成度百分比
+   - [ ] 提供菜单配置参数
+
+3. **测试验证**
+   - [ ] 单元测试覆盖率 >90%
+   - [ ] 集成测试场景验证
+   - [ ] 性能基准测试
+   - [ ] 兼容性测试记录
+
+4. **发布部署**
+   - [ ] 文档完整性检查
+   - [ ] 问题解决验证
+   - [ ] 版本日志编写
+   - [ ] 菜单配置验证
+
+### 🛠️ 开发工具
+- **进度跟踪**: [updateModuleStatus()函数](development/core-development-guide.md#进度更新函数)
+- **菜单生成**: [generateAndRecordMenuConfig()函数](development/core-development-guide.md#菜单配置生成器)
+- **问题记录**: [recordIssue()函数](development/core-development-guide.md#问题跟踪记录器)
+- **版本日志**: [generateVersionLog()函数](development/core-development-guide.md#版本日志生成器)
 
 ---
 
