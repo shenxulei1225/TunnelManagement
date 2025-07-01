@@ -256,16 +256,25 @@ public class MenuServiceImpl implements MenuService {
         if (StrUtil.isBlank(componentName)) {
             return;
         }
+        
         MenuDO menu = menuMapper.selectByComponentName(componentName);
         if (menu == null) {
             return;
         }
-        // 如果 id 为空，说明不用比较是否为相同 id 的菜单
+        
+        // 如果 id 为空，说明是新建菜单
         if (id == null) {
+            log.warn("组件名称重复警告：新建菜单使用组件名 '{}' 与现有菜单 '{}' (ID:{}) 重复。" +
+                    "这可能导致Vue缓存冲突，请确认是否为同一组件的不同入口。", 
+                    componentName, menu.getName(), menu.getId());
             return;
         }
+        
+        // 如果是更新菜单，但使用了其他菜单的组件名
         if (!menu.getId().equals(id)) {
-            throw exception(MENU_COMPONENT_NAME_DUPLICATE);
+            log.warn("组件名称重复警告：菜单更新使用组件名 '{}' 与现有菜单 '{}' (ID:{}) 重复。" +
+                    "这可能导致Vue缓存冲突，请确认是否为同一组件的不同入口。", 
+                    componentName, menu.getName(), menu.getId());
         }
     }
 

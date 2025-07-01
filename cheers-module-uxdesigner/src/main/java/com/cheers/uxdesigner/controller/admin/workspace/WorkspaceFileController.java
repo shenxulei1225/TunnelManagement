@@ -8,6 +8,7 @@ import com.cheers.uxdesigner.dal.dataobject.workspace.WorkspaceFileDO;
 import com.cheers.uxdesigner.service.workspace.WorkspaceFileService;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import cn.iocoder.yudao.framework.common.pojo.PageParam;
 import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
 import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -80,7 +81,7 @@ public class WorkspaceFileController {
     @PreAuthorize("@ss.hasPermission('uxdesigner:workspace-file:export')")
     public void exportWorkspaceFileExcel(@Valid WorkspaceFilePageReqVO pageReqVO,
               HttpServletResponse response) throws IOException {
-        pageReqVO.setPageSize(PageResult.PAGE_SIZE_NONE);
+        pageReqVO.setPageSize(PageParam.PAGE_SIZE_NONE);
         List<WorkspaceFileDO> list = workspaceFileService.getWorkspaceFilePage(pageReqVO).getList();
         // 导出 Excel
         ExcelUtils.write(response, "工作台文件.xls", "数据", WorkspaceFileRespVO.class,
