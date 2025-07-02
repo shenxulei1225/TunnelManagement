@@ -8,6 +8,8 @@
     <version>${revision}</version>
     <packaging>pom</packaging>
     <modules>
+        <module>cheers-module-uxdesigner</module>
+        <module>cheers-module-system</module>
         <module>yudao-dependencies</module>
         <module>yudao-framework</module>
         <!-- Server 主项目 -->
@@ -15,7 +17,6 @@
         <!-- 各种 module 拓展 -->
         <module>yudao-module-system</module>
         <module>yudao-module-infra</module>
-        <module>cheers-module-uxdesigner</module>
 <!--        <module>yudao-module-member</module>-->
 <!--        <module>yudao-module-bpm</module>-->
 <!--        <module>yudao-module-report</module>-->

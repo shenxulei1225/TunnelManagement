@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.io.IOException;
 import java.util.List;
@@ -35,6 +36,7 @@ import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 @RestController
 @RequestMapping("/system/region")
 @Validated
+@ConditionalOnProperty(prefix = "system.region.controller", name = "enabled", havingValue = "true", matchIfMissing = false)
 public class RegionController {
 
     @Resource

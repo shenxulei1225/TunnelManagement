@@ -15,11 +15,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import java.util.List;
 
 @Service
 @Slf4j
+@ConditionalOnProperty(prefix = "system.region.service", name = "enabled", havingValue = "true", matchIfMissing = false)
 public class RegionServiceImpl implements RegionService {
 
     @Resource

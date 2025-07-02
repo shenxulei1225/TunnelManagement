@@ -6,9 +6,9 @@
 
 ## 🎯 必读文档
 
+- [📖 文档使用说明 - 快速上手指南](documentation-usage-guide.md) **⭐ 新手必读**
 - [🚀 核心开发指南 - 首要开发标准](development/core-development-guide.md) **⭐ 必读**
 - [📋 项目结构文档](../structure/project-structure.md) **⭐ 必读**
-- [📖 文档使用说明 - 快速上手指南](documentation-usage-guide.md) **⭐ 新手必读**
 - [📱 Element Plus 组件使用规范](element-plus-components-reference.md) **🚨 强制执行标准 - 每次开发前必须阅读**
 
 ## 📋 规范标准

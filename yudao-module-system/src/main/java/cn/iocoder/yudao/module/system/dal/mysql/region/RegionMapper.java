@@ -7,6 +7,7 @@ import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
 import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
 import cn.iocoder.yudao.module.system.dal.dataobject.region.RegionDO;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import cn.iocoder.yudao.module.system.controller.admin.region.vo.*;
 
 /**
@@ -15,6 +16,7 @@ import cn.iocoder.yudao.module.system.controller.admin.region.vo.*;
  * @author 芋道源码
  */
 @Mapper
+@ConditionalOnProperty(prefix = "system.region.mapper", name = "enabled", havingValue = "true", matchIfMissing = false)
 public interface RegionMapper extends BaseMapperX<RegionDO> {
 
     default List<RegionDO> selectList(RegionListReqVO reqVO) {
