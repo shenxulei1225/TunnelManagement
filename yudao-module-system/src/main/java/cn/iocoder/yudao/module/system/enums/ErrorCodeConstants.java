@@ -168,4 +168,11 @@ public interface ErrorCodeConstants {
     // ========== 站内信发送 1-002-028-000 ==========
     ErrorCode NOTIFY_SEND_TEMPLATE_PARAM_MISS = new ErrorCode(1_002_028_000, "模板参数({})缺失");
 
+    // ========== 设备档案 1-002-029-000 ==========
+    ErrorCode DEVICE_NOT_EXISTS = new ErrorCode(1_002_029_000, "设备不存在");
+    ErrorCode DEVICE_CODE_DUPLICATE = new ErrorCode(1_002_029_001, "已经存在编号为【{}】的设备");
+    ErrorCode DEVICE_PARENT_NOT_EXISTS = new ErrorCode(1_002_029_002, "父设备不存在");
+    ErrorCode DEVICE_PARENT_ERROR = new ErrorCode(1_002_029_003, "不能设置自己为父设备");
+    ErrorCode DEVICE_EXITS_CHILDREN = new ErrorCode(1_002_029_004, "存在子设备，无法删除");
+
 }
