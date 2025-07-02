@@ -15,7 +15,7 @@ docs/
 │   ├── 🚀 core-development-guide.md      # 首要开发标准 ⭐ 必读
 │   └── 📖 documentation-usage-guide.md   # 本文档 (使用指南)
 └── design/
-    └── 📋 resource-import-master-plan.md # 项目主控文档
+    └── 📋 feature-list.md # 项目设计文档目录
 ```
 
 ### 🎯 文档使用优先级
@@ -69,33 +69,14 @@ docs/
 ```
 
 #### 2. 如果创建了新页面，提供菜单配置
-```javascript
-// 使用标准菜单配置模板
-{
-  name: "[你的页面名称]",
-  type: 2,
-  sort: [排序号],
-  parentId: [父菜单ID],
-  path: "[路由路径]",
-  icon: "[图标名称]",
-  component: "[组件路径]",
-  componentName: "[组件名]",
-  permission: "[权限标识]",
-  status: 0,
-  visible: true,
-  keepAlive: true,
-  alwaysShow: false
-}
-```
 
 #### 3. 更新总体进度
+
 ```markdown
 # 如果你的模块完成，相应调整总体进度百分比
 ### 总体进度：18% (从15%更新到18%)
 ████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░ 18%
 ```
-
----
 
 ## 🛠️ 实用模板和示例
 
@@ -117,18 +98,8 @@ docs/
 - **ISS-XXX**: [问题描述] - ✅ 已解决
 - **解决方案**: [具体解决方法]
 
-### 📝 菜单配置 (如适用)
-```javascript
-{
-  name: "[页面名称]",
-  // ... 完整配置参数
-}
-```
-```
-
 ### 🐛 问题记录模板
 
-```markdown
 ## 问题记录 - ISS-[编号]
 
 ### 📝 问题描述
@@ -214,10 +185,7 @@ docs/
 - 🟡 **中等** - 影响功能完整性，需要及时处理
 - 🟢 **轻微** - 不影响核心功能，可以延后处理
 
-### 📂 快速链接
-- [📋 项目主文档](../design/resource-import-master-plan.md)
-- [🚀 核心开发指南](core-development-guide.md)
-- [📚 文档中心](../README.md)
+
 
 ---
 

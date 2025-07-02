@@ -4,18 +4,19 @@
 > 项目开发的首要标准和核心流程规范  
 > 最后更新：2024-12-28
 
-### 🎯 必读文档
+## 🎯 必读文档
+
 - [🚀 核心开发指南 - 首要开发标准](development/core-development-guide.md) **⭐ 必读**
-- [📋 规范性文档体系总结](standards/documentation-standards-summary.md) **⭐ 规范梳理**
-- [📖 文档使用说明 - 快速上手指南](development/documentation-usage-guide.md) **⭐ 新手必读**
+- [📋 项目结构文档](../structure/project-structure.md) **⭐ 必读**
+- [📖 文档使用说明 - 快速上手指南](documentation-usage-guide.md) **⭐ 新手必读**
+- [📱 Element Plus 组件使用规范](element-plus-components-reference.md) **🚨 强制执行标准 - 每次开发前必须阅读**
 
-
-### 📋 规范标准
+## 📋 规范标准
 
 standards/
 └── 📋 documentation-standards-summary.md  # 规范性文档体系总结 ⭐
 
-### 🛠️ 开发指南
+## 🛠️ 开发指南
 
 ├── 🚀 core-development-guide.md            # 核心开发指南 ⭐ 必读
 ├── 📖 documentation-usage-guide.md         # 文档使用说明 ⭐ 新手必读
@@ -23,12 +24,11 @@ standards/
 ├── 📋 complete-workflow-guide.md           # 完整工作流程指南
 ├── 🏗️ multi-entry-import-architecture.md  # 多入口导入架构
 
-
 ## 🎯 首要原则：文档持续更新机制
 
 ### 📋 动态跟踪系统规范
 
-**文档持续更新**是本项目开发的**首要标准**，所有开发工作必须遵循以下机制：
+**文档持续更新**是本项目开发的**首要标准**，所有开发工作必须遵循文档与代码同步更新的机制：
 
 #### 1. 状态更新标准 🔄
 
@@ -174,7 +174,15 @@ standards/
   alwaysShow: false
 }
 ```
-
+菜单配置按照下方示例填写：
+示例：
+- 组件名称：分类管理优化测试
+- 组件路径：system/field/FieldCategory/ComponentTest-Fixed
+- 路由路径：field/FieldCategory/ComponentTest-Fixed
+- 权限标识：system:field-category:list
+- 图标：ep:cpu
+- 排序：2
+- 状态：启用
 **菜单创建状态跟踪表：**
 
 ```markdown
@@ -578,3 +586,185 @@ Text → 'content'       // 内容组件
 **📋 文档状态：** ✅ 已发布  
 **🔄 维护责任：** 全体开发团队  
 **📅 下次更新：** 随开发进展持续更新 
+
+## 📁 文件组织和架构原则
+
+### 🎨 组件文件组织原则
+
+#### 🏗️ 页面级组件管理
+**重要规则**: 为避免引用混乱，所有从页面抽取的组件都必须放在该页面同级的 `components` 目录下
+
+**文件结构示例**:
+```
+src/views/
+├── system/
+│   ├── field/
+│   │   ├── FieldCategory/
+│   │   │   ├── components/           ← 页面级组件目录
+│   │   │   │   ├── CategoryTreePanel.vue
+│   │   │   │   ├── CategoryAttributePanel.vue  
+│   │   │   │   └── CategoryTreePanelOptimized.vue
+│   │   │   ├── index.vue             ← 主页面
+│   │   │   ├── CategoryOptimized.vue ← 优化版页面
+│   │   │   └── ComponentTest.vue     ← 测试页面
+│   │   └── FieldDef/
+│   │       ├── components/           ← 独立的页面级组件目录
+│   │       └── index.vue
+└── src/components/                   ← 全局通用组件
+    ├── DictTag/
+    ├── Dialog/
+    └── ...
+```
+
+#### 📋 组件引用规范
+- **页面引用页面级组件**: 使用相对路径
+  ```vue
+  // ✅ 正确：页面引用同级components
+  import CategoryTreePanel from './components/CategoryTreePanel.vue'
+  
+  // ❌ 错误：不要从全局components引用页面级组件
+  import CategoryTreePanel from '@/components/CategoryTreePanel.vue'
+  ```
+
+- **全局组件引用**: 使用绝对路径
+  ```vue
+  // ✅ 正确：引用全局通用组件
+  import { DictTag } from '@/components'
+  ```
+
+#### 🎯 组织原则优势
+- **依赖关系清晰**: 页面和其专用组件放在一起，依赖关系一目了然
+- **避免引用混乱**: 不会出现全局组件和页面组件混淆的情况
+- **便于维护**: 修改页面时，相关组件都在同一目录下
+- **便于重构**: 移动或删除页面时，组件跟随移动，不会遗漏
+- **团队协作**: 多人开发时减少文件冲突和引用错误
+
+#### 🛠️ 实施要求
+1. **新页面开发**: 创建页面时同时创建 `components` 目录
+2. **组件抽取**: 从现有页面抽取组件时，必须放到页面级 `components` 目录
+3. **代码审查**: 所有涉及组件引用的代码必须检查引用路径是否符合规范
+4. **文档更新**: 每次组件重构后必须更新相关文档和菜单配置
+
+---
+
+## 📋 标准开发流程
+
+### Phase 1: 项目启动
+- **设计最优先**: 每个模块开发前需要梳理功能模块的需求整理出整体的功能分析、设计思路、实现步骤等完善的模块化开发指导意见，记录到docs的design目录下，文件以`模块名称-plan.md`命名
+- **文档创建优先**: 创建项目主文档、菜单配置记录、问题跟踪表、里程碑时间表
+- **技术架构设计**: 完成架构图设计、定义核心模块接口、规划文件结构、确定技术栈
+- **组件目录规划**: 创建合理的页面级 `components` 目录结构
+
+不要随意单独形成文档，创建文档时需要检查是否有该功能所属的上级文档，避免文档过于分散
+
+### Phase 2: 开发实施
+- **组件开发**: 严格按照文件组织原则开发页面和组件
+- **引用规范**: 确保所有组件引用符合规范要求
+- **实时更新**: 开发过程中实时更新文档和状态
+
+### Phase 3: 测试验证
+- **功能测试**: 验证页面和组件功能正确性
+- **引用检查**: 检查所有组件引用路径是否正确
+- **文档验证**: 确保文档和实际代码一致
+
+### Phase 4: 发布部署
+- **菜单配置**: 提供标准格式的菜单配置参数
+- **文档发布**: 更新所有相关文档
+- **版本记录**: 完整记录版本变更内容
+
+---
+
+## 🎛️ 菜单管理集成规范
+
+### 📋 菜单配置参数标准格式
+根据系统菜单管理界面格式，每个新增页面文档必须按以下格式提供菜单配置参数：
+
+**格式要求**：
+```
+菜单配置参数：
+- 组件名称：[页面显示名称]
+- 组件路径：[Vue组件文件路径，如：/field/FieldCategory/ComponentName]
+- 路由路径：[路由配置路径，不含前导斜杠，如：field/FieldCategory/ComponentName]
+- 权限标识：[权限控制标识，如：system:field-category:list]
+- 图标：[Element Plus图标名，如：ep:document]
+- 排序：[数字排序，如：1]
+- 状态：[启用/禁用]
+```
+
+**示例**：
+```
+菜单配置参数：
+- 组件名称：分类管理优化版
+- 组件路径：/field/FieldCategory/CategoryOptimized
+- 路由路径：field/FieldCategory/CategoryOptimized
+- 权限标识：system:field-category:list
+- 图标：ep:tree-table
+- 排序：1
+- 状态：启用
+```
+
+**注意事项**：
+- 组件路径必须以 `/` 开头，对应 `src/views` 目录下的实际组件路径
+- 路由路径不能以 `/` 开头，用于系统内部路由配置
+- 权限标识需要遵循现有权限体系命名规范
+- 图标名称必须是 Element Plus 支持的图标
+
+---
+
+## 🛠️ 工具和辅助函数
+
+### 📊 进度管理工具
+- 进度更新函数: `updateModuleStatus()`
+- 完成度计算器: `calculateProgress()`
+- 状态同步器: `syncDocumentStatus()`
+
+### 🎛️ 菜单管理工具
+- 菜单配置生成器: `generateAndRecordMenuConfig()`
+- 路由验证器: `validateRouterPath()`
+- 组件路径检查器: `checkComponentPath()`
+
+### 📝 文档管理工具
+- 问题跟踪记录器: `recordIssue()`
+- 版本日志生成器: `generateVersionLog()`
+- 文档一致性检查器: `checkDocumentConsistency()`
+
+### 🏗️ 组件管理工具
+- 组件引用检查器: `checkComponentReferences()`
+- 文件组织验证器: `validateFileStructure()`
+- 依赖关系分析器: `analyzeDependencies()`
+
+---
+
+## ✅ 开发检查清单
+
+### 每日开始工作前
+- [ ] 阅读核心开发指南了解首要标准
+- [ ] 查看项目主控文档确认当前模块状态
+- [ ] 检查是否有分配给自己的问题需要处理
+- [ ] 更新模块状态为"🔄 进行中"
+
+### 开发过程中
+- [ ] 遇到问题立即记录到问题跟踪表
+- [ ] 完成子功能时更新完成度百分比
+- [ ] 重大决策和变更及时更新相关文档
+- [ ] 组件开发时严格遵循文件组织原则
+- [ ] 组件引用时使用正确的路径规范
+
+### 完成开发后
+- [ ] 更新模块状态为"✅ 已完成"
+- [ ] 提供标准格式的菜单配置参数（如适用）
+- [ ] 更新总体进度百分比
+- [ ] 关闭或更新相关问题记录
+- [ ] 验证组件引用路径正确性
+- [ ] 确认页面级 `components` 目录结构规范
+
+### 代码审查检查项
+- [ ] 文件组织是否符合页面级组件管理原则
+- [ ] 组件引用路径是否正确（相对路径 vs 绝对路径）
+- [ ] 菜单配置参数是否按标准格式提供
+- [ ] 文档是否与实际代码保持一致
+- [ ] 版本更新日志是否完整记录
+
+---
+
+**注意**: 本指南是所有开发工作的首要标准，任何违反本指南的代码都不应该合并到主分支。所有团队成员都有责任确保代码质量和规范一致性。 

@@ -6,15 +6,65 @@
 
 ## 📋 目录
 
+- [Element Plus开发规范](#element-plus开发规范-)
 - [版本兼容性](#版本兼容性)
-- [Button 按钮](#button-按钮)
-- [Link 链接](#link-链接)
-- [Form 表单](#form-表单)
-- [Table 表格](#table-表格)
-- [Dialog 对话框](#dialog-对话框)
-- [Message 消息提示](#message-消息提示)
+- [核心组件使用规范](#核心组件使用规范)
+  - [组件使用标准和示例](#组件使用标准和示例)
+  - [Button 按钮](#button-按钮)
+  - [Link 链接](#link-链接)
+  - [Form 表单](#form-表单)
+  - [Table 表格](#table-表格)
+  - [Dialog 对话框](#dialog-对话框)
+  - [Message 消息提示](#message-消息提示)
 - [常见错误与解决方案](#常见错误与解决方案)
 - [最佳实践](#最佳实践)
+
+## ⚡ Element Plus开发规范 ⚠️ **每次开发前必须阅读**
+
+> **核心原则：优先使用官方方法，禁止重复造轮子**  
+> **每次开发前必须阅读本章节，确保使用官方最佳实践**
+
+### 🔴 强制性开发原则
+
+#### 1. 官方优先规则
+
+**🚨 绝对禁止：**
+- **如果Element Plus官方有对应功能，禁止自定义实现**
+- **禁止重复造轮子，必须使用官方方法增加组件通用性**
+- **只有官方控件不具备的功能，才开发自定义功能，且需要客户确认方案**
+
+#### 2. 强制性开发前检查流程
+
+**在实现任何Element Plus相关功能前，必须按序执行：**
+
+1. **📖 查阅官方文档** - 确认是否有对应的官方方法
+2. **🔍 方法验证** - 测试官方方法是否满足需求  
+3. **📋 记录决策** - 记录选择官方方法或自定义的原因
+4. **✅ 客户确认** - 自定义功能需要客户明确确认方案
+
+### 📋 强制性检查清单
+
+**每个组件使用前必须确认：**
+
+- [ ] **官方文档查阅** - 已检查Element Plus官方文档
+- [ ] **API完整性** - 已确认官方API能否满足需求
+- [ ] **最佳实践** - 已按照官方推荐方式实现
+- [ ] **性能考虑** - 已考虑官方方法的性能影响
+- [ ] **类型支持** - 已确认TypeScript类型支持
+
+### 🔧 违规检查和纠正机制
+
+**代码审查必须检查项：**
+- 是否使用了官方已有功能的自定义实现
+- 是否遵循了官方推荐的最佳实践
+- 是否正确使用了官方TypeScript类型
+
+**违规代码处理流程：**
+1. **立即重构** - 发现违规代码立即按官方方式重构
+2. **记录问题** - 在问题跟踪表中记录违规问题
+3. **经验分享** - 将正确方法分享给团队
+
+---
 
 ## 🔄 版本兼容性
 
@@ -33,9 +83,114 @@
 | 2.10.0 | 新增 Splitter 组件 | - |
 | 3.0.0 | 将移除 `type="text"` | 计划中的重大变更 |
 
-## 🔘 Button 按钮
+## 📋 核心组件使用规范
 
-### 基本属性 (Attributes)
+### 🎯 组件使用标准和示例
+
+#### 核心组件使用规范
+
+**Tree组件展开状态管理：**
+```typescript
+// ✅ 正确：使用官方推荐方式
+const expandedKeys = ref<number[]>([])
+
+// ✅ 官方方法
+treeRef.value.setCurrentKey(nodeId)
+
+// ✅ 官方事件
+@node-expand="handleNodeExpand"
+@node-collapse="handleNodeCollapse" 
+:default-expanded-keys="expandedKeys"
+
+// ❌ 严格禁止：自定义实现官方已有功能
+// 不允许自行实现展开状态管理
+```
+
+**Menu组件高亮控制：**
+```typescript
+// ✅ 正确：使用官方属性
+:default-active="activeMenuId"
+@select="handleSelect"
+
+// ❌ 严格禁止：手动CSS类控制
+// 不允许自行添加active类名
+```
+
+#### 官方标准实现示例
+
+**Tree组件完整示例：**
+```vue
+<template>
+  <el-tree
+    ref="treeRef"
+    :data="treeData"
+    :default-expanded-keys="expandedKeys"
+    node-key="id"
+    @node-expand="handleNodeExpand"
+    @node-collapse="handleNodeCollapse"
+    @node-click="handleNodeClick"
+  />
+</template>
+
+<script setup lang="ts">
+// ✅ 使用官方推荐的响应式状态管理
+const expandedKeys = ref<number[]>([])
+const treeRef = ref()
+
+// ✅ 使用官方事件处理器
+const handleNodeExpand = (data: any) => {
+  if (!expandedKeys.value.includes(data.id)) {
+    expandedKeys.value.push(data.id)
+  }
+}
+
+const handleNodeCollapse = (data: any) => {
+  const index = expandedKeys.value.indexOf(data.id)
+  if (index > -1) {
+    expandedKeys.value.splice(index, 1)
+  }
+}
+
+// ✅ 使用官方方法设置当前节点
+const focusNode = (nodeId: number) => {
+  treeRef.value?.setCurrentKey(nodeId)
+}
+</script>
+```
+
+**Form表单验证示例：**
+```vue
+<template>
+  <el-form ref="formRef" :model="form" :rules="rules">
+    <!-- ✅ 正确：必须添加 prop 属性进行验证 -->
+    <el-form-item label="用户名" prop="username">
+      <el-input v-model="form.username" />
+    </el-form-item>
+    
+    <!-- ❌ 错误：缺少 prop 属性 -->
+    <!-- <el-form-item label="用户名">
+      <el-input v-model="form.username" />
+    </el-form-item> -->
+  </el-form>
+</template>
+
+<script setup lang="ts">
+const formRef = ref<FormInstance>()
+const form = reactive({
+  username: ''
+})
+
+const rules: FormRules = {
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' }
+  ]
+}
+</script>
+```
+
+### 🔘 Button 按钮
+
+#### 基本属性 (Attributes)
 
 | 属性 | 说明 | 类型 | 可选值 | 默认值 | 版本 |
 |------|------|------|--------|--------|------|
@@ -56,13 +211,13 @@
 | dark | 暗色模式 | boolean | - | false | - |
 | tag | 自定义元素标签 | string / Component | - | button | 2.3.4+ |
 
-### 事件 (Events)
+#### 事件 (Events)
 
 | 事件名 | 说明 | 回调参数 |
 |--------|------|----------|
 | click | 点击时触发 | (event: Event) |
 
-### 插槽 (Slots)
+#### 插槽 (Slots)
 
 | 插槽名 | 说明 |
 |--------|------|
@@ -70,7 +225,7 @@
 | loading | 自定义加载图标 |
 | icon | 自定义图标 |
 
-### 使用示例
+#### 使用示例
 
 ```vue
 <template>
@@ -94,7 +249,7 @@
   <el-button :loading="loading" @click="handleClick">提交</el-button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Edit, Search } from '@element-plus/icons-vue'
 
 const loading = ref(false)
@@ -105,9 +260,9 @@ const handleClick = () => {
 </script>
 ```
 
-## 🔗 Link 链接
+### 🔗 Link 链接
 
-### 基本属性 (Attributes)
+#### 基本属性 (Attributes)
 
 | 属性 | 说明 | 类型 | 可选值 | 默认值 | 版本 |
 |------|------|------|--------|--------|------|
@@ -118,7 +273,7 @@ const handleClick = () => {
 | target | 链接打开方式 | string | _blank / _self / _parent / _top | _self | - |
 | icon | 图标组件 | string / Component | - | - | - |
 
-### 使用示例
+#### 使用示例
 
 ```vue
 <template>
@@ -141,9 +296,9 @@ const handleClick = () => {
 </template>
 ```
 
-## 📝 Form 表单
+### 📝 Form 表单
 
-### Form 属性
+#### Form 属性
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
@@ -155,7 +310,7 @@ const handleClick = () => {
 | size | 组件尺寸 | string | - |
 | disabled | 是否禁用 | boolean | false |
 
-### FormItem 属性
+#### FormItem 属性
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
@@ -167,7 +322,7 @@ const handleClick = () => {
 | error | 表单域验证错误信息 | string | - |
 | size | 组件尺寸 | string | - |
 
-### 使用示例
+#### 使用示例
 
 ```vue
 <template>
@@ -192,7 +347,7 @@ const handleClick = () => {
   </el-form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const formRef = ref()
 const form = reactive({
   username: '',
@@ -223,9 +378,9 @@ const resetForm = () => {
 </script>
 ```
 
-## 📊 Table 表格
+### 📊 Table 表格
 
-### 基本属性
+#### 基本属性
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
@@ -239,7 +394,7 @@ const resetForm = () => {
 | show-header | 是否显示表头 | boolean | true |
 | row-key | 行数据的Key | string / function | - |
 
-### TableColumn 属性
+#### TableColumn 属性
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
@@ -253,7 +408,7 @@ const resetForm = () => {
 | sortable | 是否可排序 | boolean / string | false |
 | formatter | 格式化函数 | function | - |
 
-### 使用示例
+#### 使用示例
 
 ```vue
 <template>
@@ -273,9 +428,9 @@ const resetForm = () => {
 </template>
 ```
 
-## 📱 Dialog 对话框
+### 📱 Dialog 对话框
 
-### 基本属性
+#### 基本属性
 
 | 属性 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|
@@ -290,7 +445,7 @@ const resetForm = () => {
 | before-close | 关闭前的回调 | function | - |
 | draggable | 是否可拖拽 | boolean | false |
 
-### 事件
+#### 事件
 
 | 事件名 | 说明 | 回调参数 |
 |--------|------|----------|
@@ -299,7 +454,7 @@ const resetForm = () => {
 | close | 关闭时触发 | - |
 | closed | 关闭动画结束时触发 | - |
 
-### 使用示例
+#### 使用示例
 
 ```vue
 <template>
@@ -334,9 +489,9 @@ const handleClose = (done) => {
 </script>
 ```
 
-## 💬 Message 消息提示
+### 💬 Message 消息提示
 
-### 基本用法
+#### 基本用法
 
 ```javascript
 // 基本消息
@@ -358,7 +513,7 @@ ElMessage({
 })
 ```
 
-### 配置选项
+#### 配置选项
 
 | 选项 | 说明 | 类型 | 默认值 |
 |------|------|------|--------|

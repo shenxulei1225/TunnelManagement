@@ -83,6 +83,39 @@ graph TD
 - **标准菜单配置模板**: 每个新增页面必须提供完整菜单配置参数
 - **菜单创建状态跟踪表**: 实时跟踪菜单创建状态
 
+###### 📋 菜单配置参数标准格式
+根据系统菜单管理界面格式，每个新增页面文档必须按以下格式提供菜单配置参数：
+
+**格式要求**：
+```
+菜单配置参数：
+- 组件名称：[页面显示名称]
+- 组件路径：[Vue组件文件路径，如：/field/FieldCategory/ComponentName]
+- 路由路径：[路由配置路径，不含前导斜杠，如：field/FieldCategory/ComponentName]
+- 权限标识：[权限控制标识，如：system:field-category:list]
+- 图标：[Element Plus图标名，如：ep:document]
+- 排序：[数字排序，如：1]
+- 状态：[启用/禁用]
+```
+
+**示例**：
+```
+菜单配置参数：
+- 组件名称：分类管理优化版
+- 组件路径：/field/FieldCategory/CategoryOptimized
+- 路由路径：field/FieldCategory/CategoryOptimized
+- 权限标识：system:field-category:list
+- 图标：ep:tree-table
+- 排序：1
+- 状态：启用
+```
+
+**注意事项**：
+- 组件路径必须以 `/` 开头，对应 `src/views` 目录下的实际组件路径
+- 路由路径不能以 `/` 开头，用于系统内部路由配置
+- 权限标识需要遵循现有权限体系命名规范
+- 图标名称必须是 Element Plus 支持的图标
+
 ##### 🛠️ 工具和辅助函数
 - 进度更新函数: `updateModuleStatus()`
 - 菜单配置生成器: `generateAndRecordMenuConfig()`
