@@ -10,6 +10,7 @@ import com.cheers.uxdesigner.dal.mysql.workspace.WorkspaceProjectMapper;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;
+import java.time.LocalDateTime;
 
 /**
  * 工作台项目 Service 实现类
@@ -68,18 +69,21 @@ public class WorkspaceProjectServiceImpl implements WorkspaceProjectService {
 
     @Override
     public Long duplicateProject(Long id) {
-        // 校验存在
-        WorkspaceProjectDO project = validateProjectExists(id);
+        // 校验项目存在
+        WorkspaceProjectDO originalProject = validateProjectExists(id);
         
-        // 复制项目
-        WorkspaceProjectDO newProject = BeanUtils.toBean(project, WorkspaceProjectDO.class);
-        newProject.setId(null);
-        newProject.setName(project.getName() + " 副本");
-        newProject.setCreateTime(null);
-        newProject.setUpdateTime(null);
+        // 创建副本
+        WorkspaceProjectDO duplicateProject = BeanUtils.toBean(originalProject, WorkspaceProjectDO.class);
+        duplicateProject.setId(null); // 清空ID，让数据库自动生成
+        duplicateProject.setName(originalProject.getName() + " (副本)");
+        duplicateProject.setStarred(false); // 副本默认不收藏
+        duplicateProject.setCreateTime(LocalDateTime.now());
+        duplicateProject.setUpdateTime(LocalDateTime.now());
         
-        projectMapper.insert(newProject);
-        return newProject.getId();
+        // 插入副本
+        projectMapper.insert(duplicateProject);
+        
+        return duplicateProject.getId();
     }
 
     @Override
@@ -91,31 +95,10 @@ public class WorkspaceProjectServiceImpl implements WorkspaceProjectService {
         WorkspaceProjectDO updateObj = new WorkspaceProjectDO();
         updateObj.setId(id);
         updateObj.setStarred(starred);
+        updateObj.setUpdateTime(LocalDateTime.now());
+        
         projectMapper.updateById(updateObj);
     }
 
-    @Override
-    public void moveProjectToTrash(Long id) {
-        // 校验存在
-        validateProjectExists(id);
-        
-        // 更新状态为回收站
-        WorkspaceProjectDO updateObj = new WorkspaceProjectDO();
-        updateObj.setId(id);
-        updateObj.setStatus(0); // 0表示回收站
-        projectMapper.updateById(updateObj);
-    }
-
-    @Override
-    public void restoreProjectFromTrash(Long id) {
-        // 校验存在
-        validateProjectExists(id);
-        
-        // 恢复状态为正常
-        WorkspaceProjectDO updateObj = new WorkspaceProjectDO();
-        updateObj.setId(id);
-        updateObj.setStatus(1); // 1表示正常
-        projectMapper.updateById(updateObj);
-    }
 
 }

@@ -53,6 +53,7 @@ public interface WorkspaceProjectService {
 
     /**
      * 复制工作台项目
+     * 用于设计版本管理、模板创建、实验性设计等场景
      *
      * @param id 项目编号
      * @return 新项目编号
@@ -66,19 +67,5 @@ public interface WorkspaceProjectService {
      * @param starred 是否收藏
      */
     void starProject(Long id, Boolean starred);
-
-    /**
-     * 移动项目到回收站
-     *
-     * @param id 项目编号
-     */
-    void moveProjectToTrash(Long id);
-
-    /**
-     * 从回收站恢复项目
-     *
-     * @param id 项目编号
-     */
-    void restoreProjectFromTrash(Long id);
 
 } 

@@ -1,0 +1,90 @@
+{
+  "backup": {
+    "base_path": "E:\\TunnelManagement\\backup",
+    "retention_days": 30,
+    "compress": true
+  },
+  "database": {
+    "enabled": true,
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "backup_user",
+    "password": "your_password_here",
+    "databases": [
+      "tunnel_management",
+      "tunnel_management_test"
+    ],
+    "backup_path": "database"
+  },
+  "files": {
+    "enabled": true,
+    "backup_path": "files",
+    "sources": [
+      {
+        "name": "应用配置",
+        "path": "yudao-server\\src\\main\\resources",
+        "exclude": [
+          "*.log",
+          "*.tmp",
+          "*.cache"
+        ]
+      },
+      {
+        "name": "前端构建产物",
+        "path": "tunnel-management-ui\\dist",
+        "exclude": [
+          "*.map",
+          "*.tmp"
+        ]
+      },
+      {
+        "name": "上传文件",
+        "path": "upload",
+        "exclude": [
+          "*.tmp",
+          "*.temp"
+        ]
+      },
+      {
+        "name": "重要脚本",
+        "path": "script",
+        "exclude": [
+          "*.log",
+          "node_modules",
+          "target",
+          "*.tmp"
+        ]
+      },
+      {
+        "name": "SQL脚本",
+        "path": "sql",
+        "exclude": [
+          "*.log",
+          "*.tmp"
+        ]
+      },
+      {
+        "name": "文档",
+        "path": "docs",
+        "exclude": [
+          "*.tmp",
+          ".git"
+        ]
+      }
+    ]
+  },
+  "notification": {
+    "enabled": false,
+    "email": {
+      "smtp_server": "smtp.qq.com",
+      "smtp_port": 587,
+      "username": "backup@example.com",
+      "password": "your_email_password",
+      "to": [
+        "admin@example.com",
+        "dev@example.com"
+      ]
+    }
+  }
+} 
