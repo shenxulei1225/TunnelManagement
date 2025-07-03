@@ -30,19 +30,19 @@ goto invalid_choice
 :full_backup
 echo.
 echo Starting full backup...
-powershell -ExecutionPolicy Bypass -File "%~dp0backup_data_windows_en.ps1" -BackupType full
+powershell -ExecutionPolicy Bypass -File "%~dp0backup_data_windows.ps1" -BackupType full
 goto end
 
 :database_backup
 echo.
 echo Starting database backup...
-powershell -ExecutionPolicy Bypass -File "%~dp0backup_data_windows_en.ps1" -BackupType database
+powershell -ExecutionPolicy Bypass -File "%~dp0backup_data_windows.ps1" -BackupType database
 goto end
 
 :files_backup
 echo.
 echo Starting files backup...
-powershell -ExecutionPolicy Bypass -File "%~dp0backup_data_windows_en.ps1" -BackupType files
+powershell -ExecutionPolicy Bypass -File "%~dp0backup_data_windows.ps1" -BackupType files
 goto end
 
 :test_config

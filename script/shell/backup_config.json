@@ -9,8 +9,8 @@
     "type": "mysql",
     "host": "localhost",
     "port": 3306,
-    "username": "backup_user",
-    "password": "your_password_here",
+    "username": "root",
+    "password": "123456",
     "databases": [
       "tunnel_management",
       "tunnel_management_test"
