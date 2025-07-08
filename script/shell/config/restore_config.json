@@ -1,0 +1,36 @@
+{
+  "backup": {
+    "base_path": "E:\\TunnelManagement\\backup"
+  },
+  "database": {
+    "enabled": true,
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "Coolhomer",
+    "databases": [
+      "tunnel_management"
+    ],
+    "backup_path": "database",
+    "create_safety_backup": true
+  },
+  "files": {
+    "enabled": true,
+    "backup_path": "files",
+    "restore_targets": [
+      {
+        "name": "Application Config",
+        "target_path": "yudao-server\\src\\main\\resources"
+      },
+      {
+        "name": "Upload Files",
+        "target_path": "upload"
+      },
+      {
+        "name": "Important Scripts",
+        "target_path": "script"
+      }
+    ]
+  }
+} 

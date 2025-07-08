@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "pinia": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/vue": "^1.0.31"
+  }
+}

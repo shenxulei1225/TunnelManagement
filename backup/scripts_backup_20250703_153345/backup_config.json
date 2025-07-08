@@ -1,0 +1,60 @@
+{
+  "backup": {
+    "base_path": "E:\\TunnelManagement\\backup",
+    "retention_days": 30,
+    "compress": true
+  },
+  "database": {
+    "enabled": true,
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3306,
+    "username": "root",
+    "password": "Coolhomer",
+    "databases": [
+      "tunnel_management"
+    ],
+    "backup_path": "database"
+  },
+  "files": {
+    "enabled": true,
+    "backup_path": "files",
+    "sources": [
+      {
+        "name": "Application Config",
+        "path": "yudao-server\\src\\main\\resources",
+        "exclude": [
+          "*.log",
+          "*.tmp"
+        ]
+      },
+      {
+        "name": "Upload Files",
+        "path": "upload",
+        "exclude": [
+          "*.tmp"
+        ]
+      },
+      {
+        "name": "Important Scripts",
+        "path": "script",
+        "exclude": [
+          "*.log",
+          "node_modules"
+        ]
+      }
+    ]
+  },
+  "notification": {
+    "enabled": false,
+    "email": {
+      "smtp_server": "smtp.example.com",
+      "smtp_port": 587,
+      "username": "backup@example.com",
+      "password": "",
+      "to": [
+        "admin@example.com"
+      ]
+    }
+  }
+} 

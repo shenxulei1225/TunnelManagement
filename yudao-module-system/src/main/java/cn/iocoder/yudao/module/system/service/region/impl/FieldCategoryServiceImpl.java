@@ -10,6 +10,9 @@ import jakarta.annotation.Resource;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 
 @Service
 public class FieldCategoryServiceImpl implements FieldCategoryService {
@@ -22,7 +25,8 @@ public class FieldCategoryServiceImpl implements FieldCategoryService {
         // 确保每个 BizTypeEnum 都有一个根节点
         ensureBizRoots();
         LambdaQueryWrapper<FieldCategoryDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.orderByAsc(FieldCategoryDO::getSort);
+        wrapper.eq(FieldCategoryDO::getDeleted, false)
+                .orderByAsc(FieldCategoryDO::getSort);
         if (cn.hutool.core.util.StrUtil.isNotBlank(bizType)) {
             // 找到业务根节点
             FieldCategoryDO root = categoryMapper.selectOne(new LambdaQueryWrapper<FieldCategoryDO>()
@@ -90,13 +94,33 @@ public class FieldCategoryServiceImpl implements FieldCategoryService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean deleteCategory(Long id) {
+        // 1. 检查是否为只读节点
         FieldCategoryDO origin = categoryMapper.selectById(id);
         if (origin != null && Boolean.TRUE.equals(origin.getReadonly())) {
             throw new IllegalStateException("系统只读分类禁止删除");
         }
 
-        return categoryMapper.deleteById(id) > 0;
+        // 2. 查找所有子节点
+        List<FieldCategoryDO> children = categoryMapper.selectList(
+            new LambdaQueryWrapper<FieldCategoryDO>()
+                .likeRight(FieldCategoryDO::getTreePath, origin.getTreePath() + "/" + origin.getId())
+                .eq(FieldCategoryDO::getDeleted, false)
+        );
+        
+        // 3. 软删除当前节点和所有子节点
+        List<Long> ids = new ArrayList<>();
+        ids.add(id);
+        if (!children.isEmpty()) {
+            ids.addAll(children.stream().map(FieldCategoryDO::getId).collect(Collectors.toList()));
+        }
+        
+        return categoryMapper.update(null,
+            new LambdaUpdateWrapper<FieldCategoryDO>()
+                .set(FieldCategoryDO::getDeleted, true)
+                .in(FieldCategoryDO::getId, ids)
+        ) > 0;
     }
 
     /**

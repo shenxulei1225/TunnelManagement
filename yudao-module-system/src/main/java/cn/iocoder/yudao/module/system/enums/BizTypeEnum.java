@@ -6,7 +6,7 @@ package cn.iocoder.yudao.module.system.enums;
  */
 public enum BizTypeEnum {
     REGION("区域"),
-    DEVICE("设备"),
+    FACILITY("设施"),
     MAINTAIN("维护"),
     ENV_MONITOR("环境")
     ;

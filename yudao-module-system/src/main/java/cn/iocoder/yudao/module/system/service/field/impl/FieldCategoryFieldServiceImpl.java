@@ -41,6 +41,7 @@ public class FieldCategoryFieldServiceImpl implements FieldCategoryFieldService 
     public List<FieldDefCategoryRelDO> listByCategory(Long categoryId) {
         return mapper.selectList(new LambdaQueryWrapper<FieldDefCategoryRelDO>()
                 .eq(FieldDefCategoryRelDO::getCategoryId, categoryId)
+                .eq(FieldDefCategoryRelDO::getDeleted, false)
                 .orderByAsc(FieldDefCategoryRelDO::getSort));
     }
 
