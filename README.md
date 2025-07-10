@@ -389,3 +389,14 @@
 | ![](/.image/admin-uniapp/07.png) | ![](/.image/admin-uniapp/08.png) | ![](/.image/admin-uniapp/09.png) |
 
 目前已经实现登录、我的、工作台、编辑资料、头像修改、密码修改、常见问题、关于我们等基础功能。
+
+# 隧道管理系统
+
+## 系统设计文档
+
+- [动态树形结构设计方案](docs/design/dynamic-tree-structure-design.md) - 支持动态创建和管理树形结构的设计方案
+- [其他文档...]
+
+## 开发指南
+
+[其他内容保持不变...]

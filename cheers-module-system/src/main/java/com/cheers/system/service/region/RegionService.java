@@ -5,6 +5,7 @@ import com.cheers.system.controller.admin.region.vo.RegionListReqVO;
 import com.cheers.system.controller.admin.region.vo.RegionPageReqVO;
 import com.cheers.system.controller.admin.region.vo.RegionSaveReqVO;
 import com.cheers.system.controller.admin.region.vo.RegionImportResultVO;
+import com.cheers.system.controller.admin.region.vo.TreeRegionVO;
 import com.cheers.system.dal.dataobject.region.RegionDO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -64,6 +65,14 @@ public interface RegionService {
      * @return 区域列表
      */
     List<RegionDO> getRegionList(RegionListReqVO listReqVO);
+
+    /**
+     * 获取区域树形结构
+     *
+     * @param status 状态
+     * @return 区域树形列表
+     */
+    List<TreeRegionVO> getRegionTree(Integer status);
 
     // ==================== 批量导入相关方法 ====================
 

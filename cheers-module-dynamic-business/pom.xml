@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>tunnel-management</artifactId>
+        <groupId>com.cheers</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>cheers-module-dynamic-business</artifactId>
+    <packaging>jar</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>
+        动态业务系统模块，提供业务模型的动态定义、配置和管理功能：
+        1. 业务模型定义：支持动态定义业务实体、字段、关系等
+        2. 数据结构管理：支持树形结构、列表结构等多种数据组织形式
+        3. 界面配置：支持表单、列表、树形等界面的动态配置
+        4. 权限管理：支持细粒度的数据权限和操作权限控制
+        5. 扩展机制：提供插件机制支持业务逻辑扩展
+    </description>
+
+    <dependencies>
+        <!-- 业务组件 -->
+        <dependency>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-common</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-mybatis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-web</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        
+        <!-- 数据缓存 -->
+        <dependency>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- 数据权限 -->
+        <dependency>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-data-permission</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- DB 相关 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+</project> 
