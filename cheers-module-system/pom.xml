@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>cn.iocoder.boot</groupId>
-        <artifactId>yudao</artifactId>
+        <groupId>com.cheers</groupId>
+        <artifactId>tunnel-management</artifactId>
         <version>${revision}</version>
     </parent>
 
@@ -34,39 +34,38 @@
 
         <!-- 业务组件 -->
         <dependency>
-            <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-spring-boot-starter-biz-tenant</artifactId>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-tenant</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-spring-boot-starter-mybatis</artifactId>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-mybatis</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-spring-boot-starter-security</artifactId>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-security</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-spring-boot-starter-excel</artifactId>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-excel</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- DB 相关 -->
         <dependency>
-            <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-spring-boot-starter-redis</artifactId>
-        </dependency>
-
-        <!-- Test 测试相关 -->
-        <dependency>
-            <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-spring-boot-starter-test</artifactId>
-            <scope>test</scope>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-redis</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- 工具类相关 -->
         <dependency>
-            <groupId>cn.iocoder.boot</groupId>
-            <artifactId>yudao-common</artifactId>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-common</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <!-- Lombok -->

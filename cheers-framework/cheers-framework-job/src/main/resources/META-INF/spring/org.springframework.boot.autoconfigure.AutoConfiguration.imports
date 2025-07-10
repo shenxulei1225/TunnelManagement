@@ -1,0 +1,2 @@
+com.cheers.framework.job.config.CheersQuartzAutoConfiguration
+com.cheers.framework.job.config.CheersAsyncAutoConfiguration 
