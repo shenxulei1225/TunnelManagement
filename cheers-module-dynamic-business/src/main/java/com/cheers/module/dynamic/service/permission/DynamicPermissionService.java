@@ -1,7 +1,7 @@
-package com.cheers.module.dynamic.service.permission;
+package com.cheers.arch.module.dynamic.service.permission;
 
 import com.cheers.framework.common.pojo.PageResult;
-import com.cheers.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
 
 import java.util.List;
 import java.util.Set;

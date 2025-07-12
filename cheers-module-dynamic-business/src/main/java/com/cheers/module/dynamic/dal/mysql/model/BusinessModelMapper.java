@@ -1,7 +1,7 @@
-package com.cheers.module.dynamic.dal.mysql.model;
+package com.cheers.arch.module.dynamic.dal.mysql.model;
 
 import com.cheers.framework.mybatis.core.mapper.BaseMapperX;
-import com.cheers.module.dynamic.dal.dataobject.model.BusinessModelDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.model.BusinessModelDO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

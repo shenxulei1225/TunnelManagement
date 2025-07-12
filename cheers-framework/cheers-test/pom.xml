@@ -35,7 +35,6 @@
         <dependency>
             <groupId>com.cheers.arch</groupId>
             <artifactId>cheers-datasource</artifactId>
-            <version>${revision}</version>
         </dependency>
 
         <!-- Test 测试相关 -->

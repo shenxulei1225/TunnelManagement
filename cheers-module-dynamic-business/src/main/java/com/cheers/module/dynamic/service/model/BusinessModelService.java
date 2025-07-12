@@ -1,6 +1,6 @@
-package com.cheers.module.dynamic.service.model;
+package com.cheers.arch.module.dynamic.service.model;
 
-import com.cheers.module.dynamic.dal.dataobject.model.BusinessModelDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.model.BusinessModelDO;
 import com.cheers.framework.common.pojo.PageResult;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.cheers.uxdesigner.config;
+package com.cheers.arch.module.uxdesigner.config;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.mybatis.spring.annotation.MapperScan;
@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * @author UX Designer
  */
 @Configuration
-@MapperScan(value = "com.cheers.uxdesigner.dal.mysql", annotationClass = Mapper.class)
+@MapperScan(value = "com.cheers.arch.module.uxdesigner.dal.mysql", annotationClass = Mapper.class)
 public class UXDesignerMybatisConfig {
 } 

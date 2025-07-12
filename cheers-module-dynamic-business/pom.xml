@@ -9,7 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.cheers.arch</groupId>
     <artifactId>cheers-module-dynamic-business</artifactId>
     <packaging>jar</packaging>
 
@@ -19,34 +18,24 @@
     <dependencies>
         <!-- 业务组件 -->
         <dependency>
-            <groupId>com.cheers</groupId>
-            <artifactId>cheers-framework-common</artifactId>
-            <version>${revision}</version>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.cheers</groupId>
-            <artifactId>cheers-framework-mybatis</artifactId>
-            <version>${revision}</version>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-mybatis</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.cheers</groupId>
-            <artifactId>cheers-framework-web</artifactId>
-            <version>${revision}</version>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.cheers</groupId>
-            <artifactId>cheers-framework-security</artifactId>
-            <version>${revision}</version>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-security-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.cheers</groupId>
-            <artifactId>cheers-framework-redis</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.cheers</groupId>
-            <artifactId>cheers-framework-tree</artifactId>
-            <version>${revision}</version>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-redis</artifactId>
         </dependency>
 
         <!-- 工具类相关 -->
@@ -58,16 +47,26 @@
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct-processor</artifactId>
         </dependency>
+
+        <!-- Jakarta EE API -->
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
 
         <!-- Test 测试相关 -->
         <dependency>
-            <groupId>com.cheers</groupId>
-            <artifactId>cheers-framework-test</artifactId>
-            <version>${revision}</version>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

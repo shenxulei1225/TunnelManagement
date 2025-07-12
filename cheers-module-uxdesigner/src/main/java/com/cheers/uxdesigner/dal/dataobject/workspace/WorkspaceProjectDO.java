@@ -1,6 +1,6 @@
-package com.cheers.uxdesigner.dal.dataobject.workspace;
+package com.cheers.arch.module.uxdesigner.dal.dataobject.workspace;
 
-import cn.iocoder.yudao.framework.mybatis.core.dataobject.BaseDO;
+import com.cheers.arch.framework.mybatis.core.dataobject.BaseDO;
 import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;

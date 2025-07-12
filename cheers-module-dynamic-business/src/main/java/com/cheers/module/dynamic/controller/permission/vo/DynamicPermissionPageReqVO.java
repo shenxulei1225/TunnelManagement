@@ -1,4 +1,4 @@
-package com.cheers.module.dynamic.controller.permission.vo;
+package com.cheers.arch.module.dynamic.controller.permission.vo;
 
 import com.cheers.framework.common.pojo.PageParam;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,7 +1,7 @@
-package com.cheers.module.dynamic.dal.mysql.field;
+package com.cheers.arch.module.dynamic.dal.mysql.field;
 
 import com.cheers.framework.mybatis.core.mapper.BaseMapperX;
-import com.cheers.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

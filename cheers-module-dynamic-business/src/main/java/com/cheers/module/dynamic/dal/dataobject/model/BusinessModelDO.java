@@ -1,10 +1,10 @@
-package com.cheers.module.dynamic.dal.dataobject.model;
+package com.cheers.arch.module.dynamic.dal.dataobject.model;
 
 import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cheers.module.dynamic.dal.dataobject.base.TenantBaseDO;
-import com.cheers.module.dynamic.enums.BusinessModelStatusEnum;
+import com.cheers.arch.module.dynamic.dal.dataobject.base.TenantBaseDO;
+import com.cheers.arch.module.dynamic.enums.BusinessModelStatusEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

@@ -1,12 +1,12 @@
-package com.cheers.module.dynamic.dal.dataobject.field;
+package com.cheers.arch.module.dynamic.dal.dataobject.field;
 
 import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cheers.module.dynamic.dal.dataobject.base.TenantBaseDO;
-import com.cheers.module.dynamic.enums.field.DisplayTypeEnum;
-import com.cheers.module.dynamic.enums.field.FieldStatusEnum;
-import com.cheers.module.dynamic.enums.field.FieldTypeEnum;
+import com.cheers.arch.module.dynamic.dal.dataobject.base.TenantBaseDO;
+import com.cheers.arch.module.dynamic.enums.field.DisplayTypeEnum;
+import com.cheers.arch.module.dynamic.enums.field.FieldStatusEnum;
+import com.cheers.arch.module.dynamic.enums.field.FieldTypeEnum;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;

@@ -1,2 +1,2 @@
-cn.iocoder.yudao.framework.tracer.config.CheersTracerAutoConfiguration
-cn.iocoder.yudao.framework.tracer.config.CheersMetricsAutoConfiguration
+com.cheers.arch.framework.tracer.config.CheersTracerAutoConfiguration
+com.cheers.arch.framework.tracer.config.CheersMetricsAutoConfiguration

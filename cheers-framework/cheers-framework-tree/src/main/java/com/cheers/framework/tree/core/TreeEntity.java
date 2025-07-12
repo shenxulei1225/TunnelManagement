@@ -1,4 +1,4 @@
-package com.cheers.framework.tree.core;
+package com.cheers.arch.framework.tree.core;
 
 /**
  * 树形实体接口

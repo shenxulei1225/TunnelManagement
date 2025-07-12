@@ -1,11 +1,11 @@
-package com.cheers.module.dynamic.controller.permission;
+package com.cheers.arch.module.dynamic.controller.permission;
 
 import com.cheers.arch.common.pojo.CommonResult;
 import com.cheers.arch.common.pojo.PageResult;
-import com.cheers.module.dynamic.controller.permission.vo.*;
-import com.cheers.module.dynamic.convert.permission.DynamicPermissionConvert;
-import com.cheers.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
-import com.cheers.module.dynamic.service.permission.DynamicPermissionService;
+import com.cheers.arch.module.dynamic.controller.permission.vo.*;
+import com.cheers.arch.module.dynamic.convert.permission.DynamicPermissionConvert;
+import com.cheers.arch.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
+import com.cheers.arch.module.dynamic.service.permission.DynamicPermissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

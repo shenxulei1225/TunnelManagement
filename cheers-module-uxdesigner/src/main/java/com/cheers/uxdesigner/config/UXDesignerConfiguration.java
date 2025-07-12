@@ -1,4 +1,4 @@
-package com.cheers.uxdesigner.config;
+package com.cheers.arch.module.uxdesigner.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
  * @author UX Designer
  */
 @Configuration
-@ComponentScan("com.cheers.uxdesigner")
+@ComponentScan("com.cheers.arch.module.uxdesigner")
 public class UXDesignerConfiguration {
-    // 这个配置类确保 Spring Boot 能够扫描到 com.cheers.uxdesigner 包下的所有组件
+    // 这个配置类确保 Spring Boot 能够扫描到 com.cheers.arch.module.uxdesigner 包下的所有组件
 } 

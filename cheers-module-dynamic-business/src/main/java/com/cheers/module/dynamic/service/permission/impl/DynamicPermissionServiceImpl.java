@@ -1,14 +1,14 @@
-package com.cheers.module.dynamic.service.permission.impl;
+package com.cheers.arch.module.dynamic.service.permission.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cheers.framework.common.pojo.PageResult;
 import com.cheers.framework.common.util.collection.CollectionUtils;
 import com.cheers.framework.mybatis.core.query.LambdaQueryWrapperX;
 import com.cheers.framework.security.core.util.SecurityFrameworkUtils;
-import com.cheers.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
-import com.cheers.module.dynamic.dal.mysql.permission.DynamicPermissionMapper;
-import com.cheers.module.dynamic.enums.permission.PermissionLevelEnum;
-import com.cheers.module.dynamic.service.permission.DynamicPermissionService;
+import com.cheers.arch.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
+import com.cheers.arch.module.dynamic.dal.mysql.permission.DynamicPermissionMapper;
+import com.cheers.arch.module.dynamic.enums.permission.PermissionLevelEnum;
+import com.cheers.arch.module.dynamic.service.permission.DynamicPermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

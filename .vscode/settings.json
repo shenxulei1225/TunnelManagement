@@ -1,6 +1,24 @@
 {
-    "java.configuration.updateBuildConfiguration": "disabled",
-    "java.compile.nullAnalysis.mode": "disabled",
+    "java.configuration.exclusions": [
+        
+    ],
+    "java.import.maven.enabled": true,
+    "java.compile.nullAnalysis.mode": "automatic",
+    "maven.executable.path": "mvn",
+    "maven.pomfile.autoUpdate": false,
+    "java.configuration.maven.userSettings": null,
+    "java.import.exclusions": [
+        
+    ],
+    "java.project.sourcePaths": [
+        "cheers-framework",
+        "cheers-module-system",
+        "cheers-module-uxdesigner", 
+        "cheers-module-dynamic-business"
+    ],
     "maven.view": "flat",
-    
+    "java.configuration.maven.globalSettings": null,
+    "files.exclude": {
+        
+    }
 }

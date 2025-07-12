@@ -1,6 +1,6 @@
-package com.cheers.framework.tree.utils;
+package com.cheers.arch.framework.tree.utils;
 
-import com.cheers.framework.tree.core.TreeNode;
+import com.cheers.arch.framework.tree.core.TreeNode;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 

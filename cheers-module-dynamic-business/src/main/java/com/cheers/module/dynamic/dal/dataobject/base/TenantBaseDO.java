@@ -1,4 +1,4 @@
-package com.cheers.module.dynamic.dal.dataobject.base;
+package com.cheers.arch.module.dynamic.dal.dataobject.base;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.cheers.framework.mybatis.core.dataobject.BaseDO;

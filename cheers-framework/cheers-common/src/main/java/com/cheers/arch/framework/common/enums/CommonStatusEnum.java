@@ -35,4 +35,14 @@ public enum CommonStatusEnum implements ArrayValuable<Integer> {
         return ARRAYS;
     }
 
+    /**
+     * 判断是否为禁用状态
+     *
+     * @param status 状态值
+     * @return 是否禁用
+     */
+    public static boolean isDisable(Integer status) {
+        return DISABLE.getStatus().equals(status);
+    }
+
 }

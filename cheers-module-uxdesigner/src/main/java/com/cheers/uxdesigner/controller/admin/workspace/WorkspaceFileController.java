@@ -1,16 +1,16 @@
-package com.cheers.uxdesigner.controller.admin.workspace;
+package com.cheers.arch.module.uxdesigner.controller.admin.workspace;
 
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFileCreateReqVO;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFilePageReqVO;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFileRespVO;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFileUpdateReqVO;
-import com.cheers.uxdesigner.dal.dataobject.workspace.WorkspaceFileDO;
-import com.cheers.uxdesigner.service.workspace.WorkspaceFileService;
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.pojo.PageParam;
-import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import cn.iocoder.yudao.framework.excel.core.util.ExcelUtils;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFileCreateReqVO;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFilePageReqVO;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFileRespVO;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFileUpdateReqVO;
+import com.cheers.arch.module.uxdesigner.dal.dataobject.workspace.WorkspaceFileDO;
+import com.cheers.arch.module.uxdesigner.service.workspace.WorkspaceFileService;
+import com.cheers.arch.framework.common.pojo.CommonResult;
+import com.cheers.arch.framework.common.pojo.PageResult;
+import com.cheers.arch.framework.common.pojo.PageParam;
+import com.cheers.arch.framework.common.util.object.BeanUtils;
+import com.cheers.arch.framework.excel.core.util.ExcelUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 import java.io.IOException;
 import java.util.List;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static com.cheers.arch.framework.common.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 工作台文件")
 @RestController

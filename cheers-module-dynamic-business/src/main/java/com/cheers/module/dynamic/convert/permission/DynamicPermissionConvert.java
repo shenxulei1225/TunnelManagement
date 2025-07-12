@@ -1,10 +1,10 @@
-package com.cheers.module.dynamic.convert.permission;
+package com.cheers.arch.module.dynamic.convert.permission;
 
 import com.cheers.framework.common.pojo.PageResult;
-import com.cheers.module.dynamic.controller.permission.vo.DynamicPermissionCreateReqVO;
-import com.cheers.module.dynamic.controller.permission.vo.DynamicPermissionRespVO;
-import com.cheers.module.dynamic.controller.permission.vo.DynamicPermissionUpdateReqVO;
-import com.cheers.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
+import com.cheers.arch.module.dynamic.controller.permission.vo.DynamicPermissionCreateReqVO;
+import com.cheers.arch.module.dynamic.controller.permission.vo.DynamicPermissionRespVO;
+import com.cheers.arch.module.dynamic.controller.permission.vo.DynamicPermissionUpdateReqVO;
+import com.cheers.arch.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

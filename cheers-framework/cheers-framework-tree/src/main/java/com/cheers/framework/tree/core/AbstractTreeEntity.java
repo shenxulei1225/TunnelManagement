@@ -1,4 +1,4 @@
-package com.cheers.framework.tree.core;
+package com.cheers.arch.framework.tree.core;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;

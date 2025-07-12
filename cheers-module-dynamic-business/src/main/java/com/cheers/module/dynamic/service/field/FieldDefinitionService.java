@@ -1,7 +1,7 @@
-package com.cheers.module.dynamic.service.field;
+package com.cheers.arch.module.dynamic.service.field;
 
 import com.cheers.framework.common.pojo.PageResult;
-import com.cheers.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
 
 import java.util.List;
 

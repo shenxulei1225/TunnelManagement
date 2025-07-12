@@ -1,0 +1,3 @@
+com.cheers.arch.framework.security.config.CheersSecurityAutoConfiguration
+com.cheers.arch.framework.security.config.CheersWebSecurityConfigurerAdapter
+com.cheers.arch.framework.operatelog.config.CheersOperateLogConfiguration 

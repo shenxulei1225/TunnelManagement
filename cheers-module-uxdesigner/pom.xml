@@ -37,6 +37,10 @@
             <groupId>com.cheers.arch</groupId>
             <artifactId>cheers-redis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-excel</artifactId>
+        </dependency>
 
         <!-- 工具类相关 -->
         <dependency>

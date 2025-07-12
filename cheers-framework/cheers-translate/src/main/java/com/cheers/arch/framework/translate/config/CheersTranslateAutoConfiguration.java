@@ -14,8 +14,9 @@ import org.springframework.context.annotation.Bean;
 public class CheersTranslateAutoConfiguration {
 
     @Bean
-    public void translateUtils(TransService transService) {
+    public TransService translateUtils(TransService transService) {
         TranslateUtils.init(transService);
+        return transService;
     }
 
 }

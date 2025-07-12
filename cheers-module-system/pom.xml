@@ -13,9 +13,18 @@
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
-    <description>系统管理模块</description>
+    <description>
+        system 模块下，我们放通用业务，支撑上层的核心业务。
+        例如说：用户、部门、权限、数据字典等等
+    </description>
 
     <dependencies>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-module-infra</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
         <!-- 业务组件 -->
         <dependency>
             <groupId>com.cheers.arch</groupId>
@@ -37,15 +46,42 @@
             <groupId>com.cheers.arch</groupId>
             <artifactId>cheers-redis</artifactId>
         </dependency>
-
-        <!-- 工具类相关 -->
         <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-excel</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-tenant</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-biz-data-permission</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-biz-ip</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-job</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-mq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-translate</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-dict</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-test</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!-- Jakarta EE API -->
@@ -62,5 +98,50 @@
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
         </dependency>
+
+        <!-- 工具类相关 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>1.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-resolver-dns-native-macos</artifactId>
+            <version>4.1.116.Final</version>
+            <classifier>osx-aarch_64</classifier>
+            <scope>runtime</scope>
+        </dependency>
+
+
+
+        <!-- 第三方登录相关 -->
+
+
+        <!-- 邮件相关 -->
+        <dependency>
+            <groupId>org.dromara.hutool</groupId>
+            <artifactId>hutool-extra</artifactId>
+            <version>6.0.0-M14</version>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
+            <id>maven-central</id>
+            <url>https://repo1.maven.org/maven2/</url>
+        </repository>
+    </repositories>
 </project>

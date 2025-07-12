@@ -1,4 +1,4 @@
-package com.cheers.module.dynamic.enums.permission;
+package com.cheers.arch.module.dynamic.enums.permission;
 
 import com.cheers.framework.common.core.ArrayValuable;
 import lombok.AllArgsConstructor;

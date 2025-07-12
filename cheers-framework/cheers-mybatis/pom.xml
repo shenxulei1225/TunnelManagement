@@ -21,6 +21,18 @@
             <artifactId>cheers-common</artifactId>
         </dependency>
 
+        <!-- 数据源相关 -->
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-datasource</artifactId>
+        </dependency>
+
+        <!-- 翻译相关 -->
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-translate</artifactId>
+        </dependency>
+
         <!-- Web 相关 -->
         <dependency>
             <groupId>com.cheers.arch</groupId>

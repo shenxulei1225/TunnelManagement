@@ -1,0 +1,3 @@
+com.cheers.arch.framework.mq.rabbitmq.config.CheersRabbitMQAutoConfiguration
+com.cheers.arch.framework.mq.redis.config.CheersRedisMQConsumerAutoConfiguration
+com.cheers.arch.framework.mq.redis.config.CheersRedisMQProducerAutoConfiguration 

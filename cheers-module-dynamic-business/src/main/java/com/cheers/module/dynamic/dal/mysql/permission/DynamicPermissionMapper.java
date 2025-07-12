@@ -1,7 +1,7 @@
-package com.cheers.module.dynamic.dal.mysql.permission;
+package com.cheers.arch.module.dynamic.dal.mysql.permission;
 
 import com.cheers.framework.mybatis.core.mapper.BaseMapperX;
-import com.cheers.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.permission.DynamicPermissionDO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

@@ -1,7 +1,7 @@
-package com.cheers.module.dynamic.service.table;
+package com.cheers.arch.module.dynamic.service.table;
 
-import com.cheers.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
-import com.cheers.module.dynamic.dal.dataobject.model.BusinessModelDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.model.BusinessModelDO;
 
 import java.util.List;
 

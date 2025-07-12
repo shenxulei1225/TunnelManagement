@@ -14,6 +14,10 @@
     <name>${project.artifactId}</name>
     <description>框架基础设施</description>
 
+    <properties>
+        <revision>1.0.0-snapshot</revision>
+    </properties>
+
     <modules>
         <module>cheers-common</module>
         <module>cheers-web</module>
@@ -33,6 +37,7 @@
         <module>cheers-protection</module>
         <module>cheers-biz-data-permission</module>
         <module>cheers-monitor</module>
+        <!-- <module>cheers-framework-tree</module> -->
     </modules>
 
     <dependencyManagement>

@@ -1,10 +1,10 @@
-package com.cheers.module.dynamic.service.table.impl;
+package com.cheers.arch.module.dynamic.service.table.impl;
 
 import com.cheers.framework.common.exception.ServiceException;
-import com.cheers.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
-import com.cheers.module.dynamic.dal.dataobject.model.BusinessModelDO;
-import com.cheers.module.dynamic.service.table.DynamicTableService;
-import com.cheers.module.dynamic.service.table.dialect.DatabaseDialect;
+import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.model.BusinessModelDO;
+import com.cheers.arch.module.dynamic.service.table.DynamicTableService;
+import com.cheers.arch.module.dynamic.service.table.dialect.DatabaseDialect;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.jdbc.core.JdbcTemplate;

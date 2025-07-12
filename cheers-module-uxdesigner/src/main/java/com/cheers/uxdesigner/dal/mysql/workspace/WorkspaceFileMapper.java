@@ -1,10 +1,10 @@
-package com.cheers.uxdesigner.dal.mysql.workspace;
+package com.cheers.arch.module.uxdesigner.dal.mysql.workspace;
 
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFilePageReqVO;
-import com.cheers.uxdesigner.dal.dataobject.workspace.WorkspaceFileDO;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.mybatis.core.mapper.BaseMapperX;
-import cn.iocoder.yudao.framework.mybatis.core.query.LambdaQueryWrapperX;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFilePageReqVO;
+import com.cheers.arch.module.uxdesigner.dal.dataobject.workspace.WorkspaceFileDO;
+import com.cheers.arch.framework.common.pojo.PageResult;
+import com.cheers.arch.framework.mybatis.core.mapper.BaseMapperX;
+import com.cheers.arch.framework.mybatis.core.query.LambdaQueryWrapperX;
 import org.apache.ibatis.annotations.Mapper;
 
 /**

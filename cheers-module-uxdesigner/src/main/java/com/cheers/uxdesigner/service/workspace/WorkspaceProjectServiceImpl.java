@@ -1,12 +1,12 @@
-package com.cheers.uxdesigner.service.workspace;
+package com.cheers.arch.module.uxdesigner.service.workspace;
 
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceProjectCreateReqVO;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceProjectPageReqVO;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceProjectUpdateReqVO;
-import com.cheers.uxdesigner.dal.dataobject.workspace.WorkspaceProjectDO;
-import com.cheers.uxdesigner.dal.mysql.workspace.WorkspaceProjectMapper;
+import com.cheers.arch.framework.common.pojo.PageResult;
+import com.cheers.arch.framework.common.util.object.BeanUtils;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceProjectCreateReqVO;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceProjectPageReqVO;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceProjectUpdateReqVO;
+import com.cheers.arch.module.uxdesigner.dal.dataobject.workspace.WorkspaceProjectDO;
+import com.cheers.arch.module.uxdesigner.dal.mysql.workspace.WorkspaceProjectMapper;
 import org.springframework.stereotype.Service;
 
 import jakarta.annotation.Resource;

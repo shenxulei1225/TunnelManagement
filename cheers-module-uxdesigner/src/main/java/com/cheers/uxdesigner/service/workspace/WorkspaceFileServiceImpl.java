@@ -1,13 +1,13 @@
-package com.cheers.uxdesigner.service.workspace;
+package com.cheers.arch.module.uxdesigner.service.workspace;
 
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFileCreateReqVO;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFilePageReqVO;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFileUpdateReqVO;
-import com.cheers.uxdesigner.dal.dataobject.workspace.WorkspaceFileDO;
-import com.cheers.uxdesigner.dal.mysql.workspace.WorkspaceFileMapper;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.security.core.util.SecurityFrameworkUtils;
-import cn.iocoder.yudao.framework.common.exception.ServiceException;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFileCreateReqVO;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFilePageReqVO;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFileUpdateReqVO;
+import com.cheers.arch.module.uxdesigner.dal.dataobject.workspace.WorkspaceFileDO;
+import com.cheers.arch.module.uxdesigner.dal.mysql.workspace.WorkspaceFileMapper;
+import com.cheers.arch.framework.common.pojo.PageResult;
+import com.cheers.arch.framework.security.core.util.SecurityFrameworkUtils;
+import com.cheers.arch.framework.common.exception.ServiceException;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 

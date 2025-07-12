@@ -1,4 +1,4 @@
-package com.cheers.module.dynamic.service.model.impl;
+package com.cheers.arch.module.dynamic.service.model.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -6,9 +6,9 @@ import com.cheers.framework.common.exception.ServiceException;
 import com.cheers.framework.common.pojo.PageResult;
 import com.cheers.framework.mybatis.core.query.LambdaQueryWrapperX;
 import com.cheers.framework.redis.core.RedisCache;
-import com.cheers.module.dynamic.dal.dataobject.model.BusinessModelDO;
-import com.cheers.module.dynamic.dal.mysql.model.BusinessModelMapper;
-import com.cheers.module.dynamic.service.model.BusinessModelService;
+import com.cheers.arch.module.dynamic.dal.dataobject.model.BusinessModelDO;
+import com.cheers.arch.module.dynamic.dal.mysql.model.BusinessModelMapper;
+import com.cheers.arch.module.dynamic.service.model.BusinessModelService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;

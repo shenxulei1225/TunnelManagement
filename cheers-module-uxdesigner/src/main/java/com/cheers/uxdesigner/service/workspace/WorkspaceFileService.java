@@ -1,10 +1,10 @@
-package com.cheers.uxdesigner.service.workspace;
+package com.cheers.arch.module.uxdesigner.service.workspace;
 
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFileCreateReqVO;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFilePageReqVO;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.WorkspaceFileUpdateReqVO;
-import com.cheers.uxdesigner.dal.dataobject.workspace.WorkspaceFileDO;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFileCreateReqVO;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFilePageReqVO;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.WorkspaceFileUpdateReqVO;
+import com.cheers.arch.module.uxdesigner.dal.dataobject.workspace.WorkspaceFileDO;
+import com.cheers.arch.framework.common.pojo.PageResult;
 
 import jakarta.validation.Valid;
 

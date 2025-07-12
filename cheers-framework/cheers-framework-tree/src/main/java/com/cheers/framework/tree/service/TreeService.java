@@ -1,6 +1,6 @@
-package com.cheers.framework.tree.service;
+package com.cheers.arch.framework.tree.service;
 
-import com.cheers.framework.tree.core.TreeNode;
+import com.cheers.arch.framework.tree.core.TreeNode;
 
 import java.util.List;
 

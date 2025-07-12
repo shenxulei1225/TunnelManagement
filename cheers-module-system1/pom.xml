@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.cheers.arch</groupId>
+        <artifactId>tunnel-management</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>cheers-module-system</artifactId>
+    <packaging>jar</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>系统管理模块</description>
+
+    <dependencies>
+        <!-- 业务组件 -->
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-mybatis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-security-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-excel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-tenant</artifactId>
+        </dependency>
+
+
+        <!-- 工具类相关 -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+
+        <!-- Jakarta EE API -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+    </dependencies>
+</project>

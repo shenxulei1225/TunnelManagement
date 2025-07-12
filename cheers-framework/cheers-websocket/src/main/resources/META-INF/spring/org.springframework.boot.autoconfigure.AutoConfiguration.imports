@@ -1,1 +1,1 @@
-cn.iocoder.yudao.framework.websocket.config.CheersWebSocketAutoConfiguration
+com.cheers.arch.framework.websocket.config.CheersWebSocketAutoConfiguration

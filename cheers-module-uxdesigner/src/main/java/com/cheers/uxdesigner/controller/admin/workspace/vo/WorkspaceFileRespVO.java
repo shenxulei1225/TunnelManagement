@@ -1,4 +1,4 @@
-package com.cheers.uxdesigner.controller.admin.workspace.vo;
+package com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

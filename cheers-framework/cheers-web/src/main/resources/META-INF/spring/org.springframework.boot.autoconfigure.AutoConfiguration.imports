@@ -1,0 +1,6 @@
+com.cheers.arch.framework.web.config.CheersWebAutoConfiguration
+com.cheers.arch.framework.jackson.config.CheersJacksonAutoConfiguration
+com.cheers.arch.framework.xss.config.CheersXssAutoConfiguration
+com.cheers.arch.framework.swagger.config.CheersSwaggerAutoConfiguration
+com.cheers.arch.framework.banner.config.CheersBannerAutoConfiguration
+com.cheers.arch.framework.apilog.config.CheersApiLogAutoConfiguration 

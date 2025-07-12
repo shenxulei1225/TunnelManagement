@@ -9,6 +9,8 @@ import com.cheers.arch.framework.web.core.handler.GlobalResponseBodyHandler;
 import com.cheers.arch.framework.web.core.util.WebFrameworkUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -31,6 +33,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @EnableConfigurationProperties(WebProperties.class)
 public class CheersWebAutoConfiguration implements WebMvcConfigurer {
 
+    private static final Logger log = LoggerFactory.getLogger(CheersWebAutoConfiguration.class);
     @Resource
     private WebProperties webProperties;
     /**
@@ -106,7 +109,7 @@ public class CheersWebAutoConfiguration implements WebMvcConfigurer {
      * 创建 DemoFilter Bean，演示模式
      */
     @Bean
-    @ConditionalOnProperty(value = "yudao.demo", havingValue = "true")
+    @ConditionalOnProperty(value = "cheers.demo", havingValue = "true")
     public FilterRegistrationBean<DemoFilter> demoFilter() {
         return createFilterBean(new DemoFilter(), WebFilterOrderEnum.DEMO_FILTER);
     }

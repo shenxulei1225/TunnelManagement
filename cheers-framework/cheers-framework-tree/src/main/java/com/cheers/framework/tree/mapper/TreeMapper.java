@@ -1,8 +1,8 @@
-package com.cheers.framework.tree.mapper;
+package com.cheers.arch.framework.tree.mapper;
 
-import com.cheers.framework.mybatis.core.mapper.BaseMapperX;
-import com.cheers.framework.mybatis.core.query.LambdaQueryWrapperX;
-import com.cheers.framework.tree.core.TreeEntity;
+import com.cheers.arch.framework.mybatis.core.mapper.BaseMapperX;
+import com.cheers.arch.framework.mybatis.core.query.LambdaQueryWrapperX;
+import com.cheers.arch.framework.tree.core.TreeEntity;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
 

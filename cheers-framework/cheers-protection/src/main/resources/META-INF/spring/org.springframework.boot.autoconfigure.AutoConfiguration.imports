@@ -1,4 +1,4 @@
-cn.iocoder.yudao.framework.idempotent.config.YudaoIdempotentConfiguration
-cn.iocoder.yudao.framework.lock4j.config.YudaoLock4jConfiguration
-cn.iocoder.yudao.framework.ratelimiter.config.YudaoRateLimiterConfiguration
-cn.iocoder.yudao.framework.signature.config.YudaoApiSignatureAutoConfiguration
+com.cheers.arch.framework.idempotent.config.CheersIdempotentConfiguration
+com.cheers.arch.framework.lock4j.config.CheersLock4jConfiguration
+com.cheers.arch.framework.ratelimiter.config.CheersRateLimiterConfiguration
+com.cheers.arch.framework.signature.config.CheersApiSignatureAutoConfiguration

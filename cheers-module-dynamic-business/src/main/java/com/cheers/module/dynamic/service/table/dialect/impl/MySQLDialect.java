@@ -1,8 +1,8 @@
-package com.cheers.module.dynamic.service.table.dialect.impl;
+package com.cheers.arch.module.dynamic.service.table.dialect.impl;
 
-import com.cheers.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
-import com.cheers.module.dynamic.enums.field.FieldTypeEnum;
-import com.cheers.module.dynamic.service.table.dialect.DatabaseDialect;
+import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
+import com.cheers.arch.module.dynamic.enums.field.FieldTypeEnum;
+import com.cheers.arch.module.dynamic.service.table.dialect.DatabaseDialect;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 

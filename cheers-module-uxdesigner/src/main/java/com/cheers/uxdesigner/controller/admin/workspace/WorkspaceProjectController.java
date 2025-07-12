@@ -1,11 +1,11 @@
-package com.cheers.uxdesigner.controller.admin.workspace;
+package com.cheers.arch.module.uxdesigner.controller.admin.workspace;
 
-import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import cn.iocoder.yudao.framework.common.pojo.PageResult;
-import cn.iocoder.yudao.framework.common.util.object.BeanUtils;
-import com.cheers.uxdesigner.controller.admin.workspace.vo.*;
-import com.cheers.uxdesigner.dal.dataobject.workspace.WorkspaceProjectDO;
-import com.cheers.uxdesigner.service.workspace.WorkspaceProjectService;
+import com.cheers.arch.framework.common.pojo.CommonResult;
+import com.cheers.arch.framework.common.pojo.PageResult;
+import com.cheers.arch.framework.common.util.object.BeanUtils;
+import com.cheers.arch.module.uxdesigner.controller.admin.workspace.vo.*;
+import com.cheers.arch.module.uxdesigner.dal.dataobject.workspace.WorkspaceProjectDO;
+import com.cheers.arch.module.uxdesigner.service.workspace.WorkspaceProjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 
-import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
+import static com.cheers.arch.framework.common.pojo.CommonResult.success;
 
 @Tag(name = "管理后台 - 工作台项目")
 @RestController

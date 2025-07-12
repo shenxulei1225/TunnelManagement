@@ -1,6 +1,6 @@
-package com.cheers.framework.tree.util;
+package com.cheers.arch.framework.tree.util;
 
-import com.cheers.framework.tree.core.TreeEntity;
+import com.cheers.arch.framework.tree.core.TreeEntity;
 
 import java.util.*;
 import java.util.function.Function;

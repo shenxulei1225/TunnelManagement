@@ -1,7 +1,7 @@
-package com.cheers.framework.tree.core;
+package com.cheers.arch.framework.tree.core;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.cheers.framework.mybatis.core.dataobject.BaseDO;
+import com.cheers.arch.framework.mybatis.core.dataobject.BaseDO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
