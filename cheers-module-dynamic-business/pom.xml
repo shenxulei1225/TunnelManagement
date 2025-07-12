@@ -3,24 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
+        <groupId>com.cheers.arch</groupId>
         <artifactId>tunnel-management</artifactId>
-        <groupId>com.cheers</groupId>
         <version>${revision}</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>com.cheers.arch</groupId>
     <artifactId>cheers-module-dynamic-business</artifactId>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
-    <description>
-        动态业务系统模块，提供业务模型的动态定义、配置和管理功能：
-        1. 业务模型定义：支持动态定义业务实体、字段、关系等
-        2. 数据结构管理：支持树形结构、列表结构等多种数据组织形式
-        3. 界面配置：支持表单、列表、树形等界面的动态配置
-        4. 权限管理：支持细粒度的数据权限和操作权限控制
-        5. 扩展机制：提供插件机制支持业务逻辑扩展
-    </description>
+    <description>动态业务模块</description>
 
     <dependencies>
         <!-- 业务组件 -->
@@ -39,26 +33,42 @@
             <artifactId>cheers-framework-web</artifactId>
             <version>${revision}</version>
         </dependency>
-        
-        <!-- 数据缓存 -->
+        <dependency>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-security</artifactId>
+            <version>${revision}</version>
+        </dependency>
         <dependency>
             <groupId>com.cheers</groupId>
             <artifactId>cheers-framework-redis</artifactId>
             <version>${revision}</version>
         </dependency>
-
-        <!-- 数据权限 -->
         <dependency>
             <groupId>com.cheers</groupId>
-            <artifactId>cheers-framework-data-permission</artifactId>
+            <artifactId>cheers-framework-tree</artifactId>
             <version>${revision}</version>
         </dependency>
 
-        <!-- DB 相关 -->
+        <!-- 工具类相关 -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <!-- Test 测试相关 -->
+        <dependency>
+            <groupId>com.cheers</groupId>
+            <artifactId>cheers-framework-test</artifactId>
+            <version>${revision}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

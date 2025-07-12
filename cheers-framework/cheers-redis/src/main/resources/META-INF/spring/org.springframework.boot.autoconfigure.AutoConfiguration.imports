@@ -1,0 +1,2 @@
+com.cheers.arch.framework.redis.config.CheersRedisAutoConfiguration
+com.cheers.arch.framework.redis.config.CheersCacheAutoConfiguration

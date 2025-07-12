@@ -20,7 +20,6 @@
         <dependency>
             <groupId>com.cheers</groupId>
             <artifactId>cheers-framework-mybatis</artifactId>
-            <version>${revision}</version>
         </dependency>
 
         <!-- Spring 核心 -->

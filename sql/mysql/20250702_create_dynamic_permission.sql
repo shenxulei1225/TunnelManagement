@@ -1,0 +1,23 @@
+CREATE TABLE `dynamic_permission` (
+    `id` bigint NOT NULL AUTO_INCREMENT COMMENT '权限ID',
+    `tenant_id` bigint NOT NULL COMMENT '租户ID',
+    `model_code` varchar(100) NOT NULL COMMENT '业务模型编码',
+    `type` tinyint NOT NULL COMMENT '权限类型（1:模型权限 2:字段权限 3:数据权限）',
+    `user_id` bigint DEFAULT NULL COMMENT '用户ID',
+    `role_id` bigint DEFAULT NULL COMMENT '角色ID',
+    `dept_id` bigint DEFAULT NULL COMMENT '部门ID',
+    `target` varchar(100) NOT NULL COMMENT '权限目标',
+    `level` tinyint NOT NULL COMMENT '权限级别（1:只读 2:读写 3:管理）',
+    `config` text COMMENT '权限配置（JSON格式）',
+    `status` tinyint NOT NULL DEFAULT '0' COMMENT '状态（0:禁用 1:启用）',
+    `creator` varchar(64) DEFAULT '' COMMENT '创建者',
+    `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updater` varchar(64) DEFAULT '' COMMENT '更新者',
+    `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+    PRIMARY KEY (`id`),
+    KEY `idx_model_type_target` (`model_code`,`type`,`target`),
+    KEY `idx_user_id` (`user_id`),
+    KEY `idx_role_id` (`role_id`),
+    KEY `idx_dept_id` (`dept_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='动态业务权限表'; 

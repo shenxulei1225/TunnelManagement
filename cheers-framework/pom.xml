@@ -1,1 +1,51 @@
- 
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>com.cheers.arch</groupId>
+        <artifactId>tunnel-management</artifactId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>cheers-framework</artifactId>
+    <packaging>pom</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>框架基础设施</description>
+
+    <modules>
+        <module>cheers-common</module>
+        <module>cheers-web</module>
+        <module>cheers-redis</module>
+        <module>cheers-security-core</module>
+        <module>cheers-mybatis</module>
+        <module>cheers-datasource</module>
+        <module>cheers-mq</module>
+        <module>cheers-translate</module>
+        <module>cheers-job</module>
+        <module>cheers-websocket</module>
+        <module>cheers-tenant</module>
+        <module>cheers-dict</module>
+        <module>cheers-excel</module>
+        <module>cheers-biz-ip</module>
+        <module>cheers-test</module>
+        <module>cheers-protection</module>
+        <module>cheers-biz-data-permission</module>
+        <module>cheers-monitor</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- 统一依赖管理 -->
+            <dependency>
+                <groupId>com.cheers.arch</groupId>
+                <artifactId>cheers-dependencies</artifactId>
+                <version>${revision}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project> 
