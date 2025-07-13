@@ -13,7 +13,7 @@ import static com.cheers.arch.framework.common.util.date.DateUtils.FORMAT_YEAR_M
 @Data
 public class FilePageReqVO extends PageParam {
 
-    @Schema(description = "文件路径，模糊匹配", example = "yudao")
+    @Schema(description = "文件路径，模糊匹配", example = "cheers")
     private String path;
 
     @Schema(description = "文件类型，模糊匹配", example = "jpg")

@@ -197,9 +197,9 @@ public class CodegenEngine {
     private Boolean jakartaEnable;
 
     /**
-     * 是否为 yudao-cloud 项目，用于解决 Boot 和 Cloud 的 api 模块兼容性问题
-     *
-     * true  - 需要有 yudao-module-xxx-api 模块
+      * 是否为 cheers-cloud 项目，用于解决 Boot 和 Cloud 的 api 模块兼容性问题
+ *
+ * true  - 需要有 cheers-module-xxx-api 模块
      * false - 不需要有，使用 api、enum 包即可
      */
     @Setter
@@ -472,8 +472,8 @@ public class CodegenEngine {
         // 如果是 Boot 项目，则不使用 api/server 模块
         if (Boolean.FALSE.equals(cloudEnable)) {
             SERVER_TEMPLATES.forEach((templatePath, filePath) -> {
-                filePath = StrUtil.replace(filePath, "/yudao-module-${table.moduleName}-api", "");
-                filePath = StrUtil.replace(filePath, "/yudao-module-${table.moduleName}-server", "");
+                        filePath = StrUtil.replace(filePath, "/cheers-module-${table.moduleName}-api", "");
+        filePath = StrUtil.replace(filePath, "/cheers-module-${table.moduleName}-server", "");
                 templates.put(templatePath, filePath);
             });
         }
@@ -549,14 +549,14 @@ public class CodegenEngine {
     }
 
     private static String javaModuleFilePath(String path, String module, String src) {
-        return "yudao-module-${table.moduleName}/" + // 顶级模块
-                "yudao-module-${table.moduleName}-" + module + "/" + // 子模块
+        return "cheers-module-${table.moduleName}/" + // 顶级模块
+                "cheers-module-${table.moduleName}-" + module + "/" + // 子模块
                 "src/" + src + "/java/${basePackage}/module/${table.moduleName}/" + path + ".java";
     }
 
     private static String mapperXmlFilePath() {
-        return "yudao-module-${table.moduleName}/" + // 顶级模块
-                "yudao-module-${table.moduleName}-server/" + // 子模块
+        return "cheers-module-${table.moduleName}/" + // 顶级模块
+                "cheers-module-${table.moduleName}-server/" + // 子模块
                 "src/main/resources/mapper/${table.businessName}/${table.className}Mapper.xml";
     }
 
@@ -565,7 +565,7 @@ public class CodegenEngine {
     }
 
     private static String vueFilePath(String path) {
-        return "yudao-ui-${sceneEnum.basePackage}-vue2/" + // 顶级目录
+        return "cheers-ui-${sceneEnum.basePackage}-vue2/" + // 顶级目录
                 "src/" + path;
     }
 
@@ -574,7 +574,7 @@ public class CodegenEngine {
     }
 
     private static String vue3FilePath(String path) {
-        return "yudao-ui-${sceneEnum.basePackage}-vue3/" + // 顶级目录
+        return "cheers-ui-${sceneEnum.basePackage}-vue3/" + // 顶级目录
                 "src/" + path;
     }
 

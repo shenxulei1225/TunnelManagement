@@ -1,0 +1,74 @@
+### 测试业务模型readonly字段API
+
+### 1. 获取业务模型列表
+GET http://localhost:48080/dynamic/model/page?pageNo=1&pageSize=10
+Authorization: Bearer {{token}}
+
+### 2. 创建业务模型（可编辑）
+POST http://localhost:48080/dynamic/model/create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "测试模型",
+  "code": "test_model",
+  "description": "这是一个测试模型",
+  "status": 1,
+  "modelType": 1,
+  "readonly": false
+}
+
+### 3. 创建业务模型（只读）
+POST http://localhost:48080/dynamic/model/create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "只读模型",
+  "code": "readonly_model",
+  "description": "这是一个只读模型",
+  "status": 0,
+  "modelType": 1,
+  "readonly": true
+}
+
+### 4. 创建系统类型模型（自动只读）
+POST http://localhost:48080/dynamic/model/create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "系统模型",
+  "code": "system_model",
+  "description": "这是一个系统模型",
+  "status": 1,
+  "modelType": 0,
+  "readonly": true
+}
+
+### 5. 更新业务模型
+PUT http://localhost:48080/dynamic/model/update
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "更新后的模型",
+  "code": "updated_model",
+  "description": "更新后的描述",
+  "status": 1,
+  "modelType": 1,
+  "readonly": false
+}
+
+### 6. 尝试删除只读模型（应该失败）
+DELETE http://localhost:48080/dynamic/model/delete?id=2
+Authorization: Bearer {{token}}
+
+### 7. 尝试删除系统模型（应该失败）
+DELETE http://localhost:48080/dynamic/model/delete?id=3
+Authorization: Bearer {{token}}
+
+### 8. 删除可编辑模型（应该成功）
+DELETE http://localhost:48080/dynamic/model/delete?id=1
+Authorization: Bearer {{token}} 

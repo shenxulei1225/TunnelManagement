@@ -1,0 +1,172 @@
+# 动态表管理
+
+## 概述
+
+动态业务模块支持根据业务模型配置自动创建和管理数据表结构。当用户创建业务模型、配置字段定义时，系统会自动生成对应的物理数据表，并支持表结构的动态变更。
+
+## 业务流程
+
+### 1. 新建业务模型
+- 用户在"业务模型管理"页面点击"新增"
+- 填写模型名称、模型编码、表名（可自动生成）、描述、状态等信息
+- 提交后创建业务模型
+- **后端自动创建对应的物理数据表**（如 `dynamic_test_model`）
+
+### 2. 配置字段定义
+- 用户在模型列表点击"字段管理"进入字段定义页面
+- 新增、编辑、删除字段（如：名称、类型、长度、是否必填、默认值等）
+- 每次字段变更后，后端自动同步更新物理表结构
+
+### 3. 配置视图（可选）
+- 用户可为模型配置表单视图、列表视图等
+- 配置页面布局、字段显示顺序、操作按钮等
+
+### 4. 配置权限（可选）
+- 用户可为模型、字段、数据配置权限
+- 设置哪些角色可见、可编辑、可删除等
+
+### 5. 业务数据操作
+- 用户在业务数据页面，基于模型和字段定义，进行数据的增删改查
+- 所有数据操作都落到动态生成的物理表
+
+## 字段变更时的数据处理策略
+
+### 删除字段时的数据处理
+
+**数据库层面：**
+- 通过 `ALTER TABLE ... DROP COLUMN ...` 删除字段时，数据库会直接把该字段及其所有数据从物理表中移除
+- **被删除字段的数据会永久丢失，无法恢复**，除非提前做了备份
+
+**业务层面：**
+- 如果前端页面、接口、报表等还引用了这个字段，删除后会导致报错或数据缺失
+- **最佳实践：**
+  - 删除字段前，提示用户该字段所有历史数据将被清空且不可恢复
+  - 可以先做逻辑删除（如字段状态设为"隐藏"或"禁用"），确认无误后再物理删除
+  - 重要数据建议先备份表结构和数据
+
+### 新增字段时的数据处理
+
+**数据库层面：**
+- 新增字段时，数据库会为所有已有记录自动加上这个新字段，**默认值为 NULL**（除非指定了默认值）
+- 例如：`ALTER TABLE ... ADD COLUMN new_col VARCHAR(255) DEFAULT 'abc'`，则已有数据 new_col 字段为 'abc'，否则为 NULL
+
+**业务层面：**
+- 如果业务代码（如前端表单、后端逻辑）对该字段有"非空"或"必填"要求，**已有数据会因为该字段为 NULL 而导致校验失败或显示异常**
+- **最佳实践：**
+  - 新增字段时，建议设置合理的默认值，或在新增后用 SQL 批量填充已有数据的该字段
+  - 前端展示时要兼容 NULL/空值，避免页面报错
+  - 后端校验时区分"新增数据"与"历史数据"，避免强制校验历史数据的新增字段
+
+## 技术实现
+
+### 动态表创建
+
+```java
+@Service
+public class DynamicTableServiceImpl implements DynamicTableService {
+    
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void createTable(BusinessModelDO model, List<FieldDefinitionDO> fields) {
+        // 校验表名
+        if (!databaseDialect.isValidTableName(model.getTableName())) {
+            throw new ServiceException(ErrorCodeConstants.TABLE_NAME_INVALID);
+        }
+
+        try {
+            // 生成建表SQL
+            String sql = databaseDialect.generateCreateTableSQL(model.getTableName(), fields);
+            log.info("[createTable][开始创建表({})，SQL语句为({})]", model.getTableName(), sql);
+
+            // 执行建表SQL
+            jdbcTemplate.execute(sql);
+        } catch (Exception e) {
+            log.error("[createTable][创建表({})失败]", model.getTableName(), e);
+            throw new ServiceException(ErrorCodeConstants.TABLE_OPERATION_FAILED);
+        }
+    }
+}
+```
+
+### 表结构更新
+
+```java
+@Override
+@Transactional(rollbackFor = Exception.class)
+public void updateTable(BusinessModelDO model, List<FieldDefinitionDO> fields, List<FieldDefinitionDO> oldFields) {
+    try {
+        // 1. 找出需要新增的字段
+        for (FieldDefinitionDO field : fields) {
+            if (oldFields.stream().noneMatch(old -> old.getCode().equals(field.getCode()))) {
+                String sql = databaseDialect.generateAddColumnSQL(model.getTableName(), field);
+                log.info("[updateTable][表({})新增字段，SQL语句为({})]", model.getTableName(), sql);
+                jdbcTemplate.execute(sql);
+            }
+        }
+
+        // 2. 找出需要修改的字段
+        for (FieldDefinitionDO field : fields) {
+            oldFields.stream()
+                    .filter(old -> old.getCode().equals(field.getCode()))
+                    .findFirst()
+                    .ifPresent(old -> {
+                        if (!isSameFieldDefinition(old, field)) {
+                            String sql = databaseDialect.generateModifyColumnSQL(model.getTableName(), field);
+                            log.info("[updateTable][表({})修改字段，SQL语句为({})]", model.getTableName(), sql);
+                            jdbcTemplate.execute(sql);
+                        }
+                    });
+        }
+
+        // 3. 找出需要删除的字段
+        for (FieldDefinitionDO old : oldFields) {
+            if (fields.stream().noneMatch(field -> field.getCode().equals(old.getCode()))) {
+                String sql = databaseDialect.generateDropColumnSQL(model.getTableName(), old.getCode());
+                log.info("[updateTable][表({})删除字段，SQL语句为({})]", model.getTableName(), sql);
+                jdbcTemplate.execute(sql);
+            }
+        }
+    } catch (Exception e) {
+        log.error("[updateTable][更新表({})结构失败]", model.getTableName(), e);
+        throw new ServiceException(ErrorCodeConstants.TABLE_OPERATION_FAILED);
+    }
+}
+```
+
+## 安全建议
+
+### 数据备份策略
+- 在进行字段删除操作前，建议先备份表结构和数据
+- 可以使用 `DynamicTableService.backupTable()` 方法进行表备份
+- 重要操作建议在测试环境验证后再在生产环境执行
+
+### 权限控制
+- 字段删除操作应该限制为管理员权限
+- 建议增加操作日志，记录字段变更历史
+- 可以考虑增加字段变更的审批流程
+
+### 数据一致性
+- 新增字段时，建议设置合理的默认值
+- 删除字段前，确保没有业务代码依赖该字段
+- 字段类型变更时，注意数据类型的兼容性
+
+## 常见问题
+
+### Q: 删除字段后数据丢失怎么办？
+A: 如果已经删除了字段，数据无法直接恢复。建议：
+1. 检查是否有数据库备份可以恢复
+2. 检查是否有其他表或日志记录了该字段的数据
+3. 联系数据库管理员尝试从数据库日志恢复
+
+### Q: 新增字段后，已有数据该字段为空怎么办？
+A: 可以通过以下方式处理：
+1. 设置字段默认值：`ALTER TABLE table_name ADD COLUMN new_field VARCHAR(255) DEFAULT 'default_value'`
+2. 批量更新已有数据：`UPDATE table_name SET new_field = 'value' WHERE new_field IS NULL`
+3. 在业务代码中兼容空值，避免强制校验
+
+### Q: 如何避免字段变更导致的问题？
+A: 建议采用以下策略：
+1. 新增字段时设置默认值
+2. 删除字段前先做逻辑删除（隐藏字段）
+3. 重要操作前先备份数据
+4. 在测试环境充分验证后再在生产环境执行 

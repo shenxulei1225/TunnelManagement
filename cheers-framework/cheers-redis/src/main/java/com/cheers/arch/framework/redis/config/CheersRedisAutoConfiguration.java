@@ -1,6 +1,7 @@
 package com.cheers.arch.framework.redis.config;
 
 import cn.hutool.core.util.ReflectUtil;
+import com.cheers.arch.framework.redis.core.RedisCache;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.redisson.spring.starter.RedissonAutoConfigurationV2;
@@ -40,6 +41,14 @@ public class CheersRedisAutoConfiguration {
         ObjectMapper objectMapper = (ObjectMapper) ReflectUtil.getFieldValue(json, "mapper");
         objectMapper.registerModules(new JavaTimeModule());
         return json;
+    }
+
+    /**
+     * 创建 RedisCache Bean
+     */
+    @Bean
+    public RedisCache redisCache(RedisTemplate<String, Object> redisTemplate) {
+        return new RedisCache(redisTemplate);
     }
 
 } 

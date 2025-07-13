@@ -16,7 +16,14 @@
     <description>动态业务模块</description>
 
     <dependencies>
-        <!-- 业务组件 -->
+        <!-- 通用目录服务 -->
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-directory</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- 通用工具 -->
         <dependency>
             <groupId>com.cheers.arch</groupId>
             <artifactId>cheers-common</artifactId>
@@ -36,6 +43,22 @@
         <dependency>
             <groupId>com.cheers.arch</groupId>
             <artifactId>cheers-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-dict</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-translate</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-excel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-tenant</artifactId>
         </dependency>
 
         <!-- 工具类相关 -->

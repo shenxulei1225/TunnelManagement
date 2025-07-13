@@ -645,6 +645,11 @@
             </dependency>
             <dependency>
                 <groupId>com.cheers.arch</groupId>
+                <artifactId>cheers-directory</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.cheers.arch</groupId>
                 <artifactId>cheers-framework-tree</artifactId>
                 <version>${revision}</version>
             </dependency>

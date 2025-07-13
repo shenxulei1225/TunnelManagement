@@ -33,7 +33,7 @@ public class JobRespVO {
     @ExcelProperty("处理器的名字")
     private String handlerName;
 
-    @Schema(description = "处理器的参数", example = "yudao")
+    @Schema(description = "处理器的参数", example = "cheers")
     @ExcelProperty("处理器的参数")
     private String handlerParam;
 

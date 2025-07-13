@@ -15,7 +15,7 @@ public class CodegenTableRespVO {
     @Schema(description = "生成场景，参见 CodegenSceneEnum 枚举", requiredMode = Schema.RequiredMode.REQUIRED, example = "1")
     private Integer scene;
 
-    @Schema(description = "表名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "yudao")
+    @Schema(description = "表名称", requiredMode = Schema.RequiredMode.REQUIRED, example = "cheers")
     private String tableName;
 
     @Schema(description = "表描述", requiredMode = Schema.RequiredMode.REQUIRED, example = "芋道")

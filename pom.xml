@@ -12,7 +12,7 @@
         <module>cheers-framework</module>
         <module>cheers-module-system</module>
         <module>cheers-module-uxdesigner</module>
-        <!-- <module>cheers-module-dynamic-business</module> -->
+        <module>cheers-module-dynamic-business</module>
         <module>cheers-module-infra</module>
         <module>cheers-server</module>
     </modules>

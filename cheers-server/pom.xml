@@ -35,6 +35,11 @@
             <artifactId>cheers-module-uxdesigner</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-module-dynamic-business</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
 
         <!-- spring boot 配置所需依赖 -->

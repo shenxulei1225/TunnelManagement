@@ -66,7 +66,7 @@ public class TenantDatabaseInterceptor implements TenantLineHandler {
     }
 
     private boolean computeIgnoreTable(String tableName) {
-        // 找不到的表，说明不是 yudao 项目里的，不进行拦截（忽略租户）
+        // 找不到的表，说明不是 cheers 项目里的，不进行拦截（忽略租户）
         TableInfo tableInfo = TableInfoHelper.getTableInfo(tableName);
         if (tableInfo == null) {
             return true;

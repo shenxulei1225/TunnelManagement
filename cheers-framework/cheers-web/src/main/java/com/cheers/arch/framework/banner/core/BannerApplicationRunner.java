@@ -28,18 +28,26 @@ public class BannerApplicationRunner implements ApplicationRunner {
             // 系统管理
             if (isNotPresent("com.cheers.arch.module.system.framework.web.config.SystemWebConfiguration")) {
                 System.out.println("[系统管理模块 cheers-module-system - 已禁用]");
+            } else {
+                System.out.println("[系统管理模块 cheers-module-system - 已启用]");
             }
             // 设备管理
             if (isNotPresent("com.cheers.arch.module.device.framework.web.config.DeviceWebConfiguration")) {
                 System.out.println("[设备管理模块 cheers-module-device - 已禁用]");
+            } else {
+                System.out.println("[设备管理模块 cheers-module-device - 已启用]");
             }
             // 动态业务
             if (isNotPresent("com.cheers.arch.module.dynamic.framework.web.config.DynamicWebConfiguration")) {
                 System.out.println("[动态业务模块 cheers-module-dynamic - 已禁用]");
+            } else {
+                System.out.println("[动态业务模块 cheers-module-dynamic - 已启用]");
             }
             // UX设计器
             if (isNotPresent("com.cheers.arch.module.uxdesigner.framework.web.config.UxDesignerWebConfiguration")) {
                 System.out.println("[UX设计器模块 cheers-module-uxdesigner - 已禁用]");
+            } else {
+                System.out.println("[UX设计器模块 cheers-module-uxdesigner - 已启用]");
             }
         });
     }

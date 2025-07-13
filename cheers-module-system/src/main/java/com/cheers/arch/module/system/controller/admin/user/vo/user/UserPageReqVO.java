@@ -19,10 +19,10 @@ import static com.cheers.arch.framework.common.util.date.DateUtils.FORMAT_YEAR_M
 @EqualsAndHashCode(callSuper = true)
 public class UserPageReqVO extends PageParam {
 
-    @Schema(description = "用户账号，模糊匹配", example = "yudao")
+    @Schema(description = "用户账号，模糊匹配", example = "cheers")
     private String username;
 
-    @Schema(description = "手机号码，模糊匹配", example = "yudao")
+    @Schema(description = "手机号码，模糊匹配", example = "cheers")
     private String mobile;
 
     @Schema(description = "展示状态，参见 CommonStatusEnum 枚举类", example = "1")
