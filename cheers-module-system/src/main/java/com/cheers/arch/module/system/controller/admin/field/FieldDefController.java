@@ -1,16 +1,26 @@
 package com.cheers.arch.module.system.controller.admin.field;
 
-import com.cheers.arch.framework.common.pojo.CommonResult;
-import com.cheers.arch.module.system.controller.admin.field.vo.*;
-import com.cheers.arch.module.system.dal.dataobject.field.FieldDefDO;
-import com.cheers.arch.module.system.service.field.FieldDefService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import static com.cheers.arch.framework.common.pojo.CommonResult.success;
 
 import java.util.List;
 
-import static com.cheers.arch.framework.common.pojo.CommonResult.success;
+import com.cheers.arch.framework.common.pojo.CommonResult;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldDefCreateReqVO;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldDefUpdateReqVO;
+import com.cheers.arch.module.system.dal.dataobject.field.FieldDefDO;
+import com.cheers.arch.module.system.service.field.FieldDefService;
+
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequestMapping("/system/field-def")
@@ -48,5 +58,30 @@ public class FieldDefController {
     @GetMapping({"/list-by-bizType", "/list-by-biz-type"})
     public CommonResult<List<FieldDefDO>> getFieldDefListByBizType(@RequestParam("bizType") String bizType) {
         return success(fieldDefService.getFieldDefListByBizType(bizType));
+    }
+
+    @GetMapping("/list-by-semantic-directory")
+    public CommonResult<List<FieldDefDO>> getFieldDefListBySemanticDirectory(
+            @RequestParam(value = "semanticDirectoryId", required = false) Long semanticDirectoryId) {
+        return success(fieldDefService.getFieldDefListBySemanticDirectory(semanticDirectoryId));
+    }
+
+    @PutMapping("/update-semantic-directory")
+    public CommonResult<Boolean> updateFieldSemanticDirectory(
+            @RequestParam("fieldId") Long fieldId,
+            @RequestParam(value = "semanticDirectoryId", required = false) Long semanticDirectoryId) {
+        return success(fieldDefService.updateFieldSemanticDirectory(fieldId, semanticDirectoryId));
+    }
+
+    @PutMapping("/batch-update-semantic-directory")
+    public CommonResult<Integer> batchUpdateFieldSemanticDirectory(
+            @RequestParam("fieldIds") List<Long> fieldIds,
+            @RequestParam(value = "semanticDirectoryId", required = false) Long semanticDirectoryId) {
+        return success(fieldDefService.batchUpdateFieldSemanticDirectory(fieldIds, semanticDirectoryId));
+    }
+
+    @GetMapping("/semantic-directories")
+    public CommonResult<List<Object>> getSemanticDirectories() {
+        return success(fieldDefService.getSemanticDirectories());
     }
 }

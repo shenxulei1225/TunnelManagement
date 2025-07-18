@@ -1,18 +1,21 @@
 package com.cheers.arch.module.system.service.region.impl;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.annotation.Resource;
+
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.cheers.arch.module.system.dal.dataobject.region.FieldCategoryDO;
 import com.cheers.arch.module.system.dal.mysql.region.FieldCategoryMapper;
 import com.cheers.arch.module.system.service.region.FieldCategoryService;
-import org.springframework.stereotype.Service;
-import cn.hutool.core.util.StrUtil;
 
-import jakarta.annotation.Resource;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
+
+import cn.hutool.core.util.StrUtil;
 
 @Service
 public class FieldCategoryServiceImpl implements FieldCategoryService {
