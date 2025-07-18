@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldDefCreateReqVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldDefUpdateReqVO;
-import com.cheers.arch.module.system.dal.dataobject.field.FieldDefDO;
+import com.cheers.arch.module.system.dal.dataobject.field.FieldDO;
 
 public interface FieldDefService {
 
@@ -14,21 +14,21 @@ public interface FieldDefService {
 
     boolean deleteFieldDef(Long id);
 
-    FieldDefDO getFieldDef(Long id);
+    FieldDO getFieldDef(Long id);
 
-    List<FieldDefDO> getFieldDefListByCategory(Long categoryId);
+    List<FieldDO> getFieldDefListByCategory(Long categoryId);
 
     /**
      * 按业务类型获取字段列表（包含共享字段）
      */
-    List<FieldDefDO> getFieldDefListByBizType(String bizType);
+    List<FieldDO> getFieldDefListByBizType(String bizType);
 
     /**
      * 根据语义目录获取字段列表
      * @param semanticDirectoryId 语义目录ID，如果为null则获取所有字段
      * @return 字段列表
      */
-    List<FieldDefDO> getFieldDefListBySemanticDirectory(Long semanticDirectoryId);
+    List<FieldDO> getFieldDefListBySemanticDirectory(Long semanticDirectoryId);
 
     /**
      * 更新字段的语义目录
