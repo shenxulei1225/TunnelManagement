@@ -1,0 +1,306 @@
+# 业务分组多级树形API使用指南
+
+## 接口列表
+
+### 1. 获取完整树形结构
+```http
+GET /dynamic-business/business-module/tree?bizType=optional
+```
+
+**响应格式：**
+```json
+{
+  "code": 0,
+  "data": [
+    {
+      "id": 1,
+      "parentId": 0,
+      "code": "INSPECTION",
+      "name": "巡检系统",
+      "treePath": "0",
+      "level": 1,
+      "sort": 1,
+      "readonly": false,
+      "createTime": "2025-01-27T10:00:00",
+      "children": [
+        {
+          "id": 2,
+          "parentId": 1,
+          "code": "DAILY_INSPECTION",
+          "name": "日常巡检",
+          "treePath": "0/1",
+          "level": 2,
+          "sort": 1,
+          "readonly": false,
+          "createTime": "2025-01-27T10:00:00",
+          "children": [
+            {
+              "id": 4,
+              "parentId": 2,
+              "code": "ROUTINE_CHECK",
+              "name": "例行检查",
+              "treePath": "0/1/2",
+              "level": 3,
+              "sort": 1,
+              "readonly": false,
+              "createTime": "2025-01-27T10:00:00",
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "msg": "操作成功"
+}
+```
+
+### 2. 获取指定节点下的子树
+```http
+GET /dynamic-business/business-module/sub-tree?parentId=1
+```
+
+**响应格式：** 同上，但只返回指定节点下的子树
+
+### 3. 拖拽调整树结构
+```http
+POST /dynamic-business/business-module/drag
+Content-Type: application/json
+
+{
+  "dragId": 4,
+  "targetParentId": 3,
+  "position": "inner",
+  "targetId": null
+}
+```
+
+**position 参数说明：**
+- `inner`: 拖拽到目标节点内部（作为子节点）
+- `before`: 拖拽到目标节点前面（同级）
+- `after`: 拖拽到目标节点后面（同级）
+
+## 前端使用示例
+
+### Element Plus Tree 组件
+```vue
+<template>
+  <el-tree
+    :data="treeData"
+    :props="defaultProps"
+    node-key="id"
+    draggable
+    @node-drop="handleDrop"
+  >
+    <template #default="{ node, data }">
+      <span class="custom-tree-node">
+        <span>{{ data.name }}</span>
+        <span v-if="data.code" class="code">({{ data.code }})</span>
+      </span>
+    </template>
+  </el-tree>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { getBusinessModuleTree, dragBusinessModule } from '@/api/business-module'
+
+const treeData = ref([])
+const defaultProps = {
+  children: 'children',
+  label: 'name'
+}
+
+// 获取树形数据
+const loadTreeData = async () => {
+  try {
+    const response = await getBusinessModuleTree()
+    treeData.value = response.data
+  } catch (error) {
+    console.error('加载树形数据失败:', error)
+  }
+}
+
+// 处理拖拽
+const handleDrop = async (draggingNode, dropNode, dropType, ev) => {
+  try {
+    const dragId = draggingNode.data.id
+    const targetParentId = dropType === 'inner' ? dropNode.data.id : dropNode.data.parentId
+    const position = dropType === 'inner' ? 'inner' : dropType === 'before' ? 'before' : 'after'
+    const targetId = dropType === 'inner' ? null : dropNode.data.id
+
+    await dragBusinessModule({
+      dragId,
+      targetParentId,
+      position,
+      targetId
+    })
+
+    // 重新加载数据
+    await loadTreeData()
+    ElMessage.success('拖拽成功')
+  } catch (error) {
+    console.error('拖拽失败:', error)
+    ElMessage.error('拖拽失败')
+  }
+}
+
+onMounted(() => {
+  loadTreeData()
+})
+</script>
+
+<style scoped>
+.custom-tree-node {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.code {
+  color: #909399;
+  font-size: 12px;
+}
+</style>
+```
+
+### 递归卡片组件
+```vue
+<template>
+  <div class="business-portal">
+    <div class="business-groups">
+      <BusinessModuleCard
+        v-for="module in treeData"
+        :key="module.id"
+        :module="module"
+        @click="handleModuleClick"
+      />
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { getBusinessModuleTree } from '@/api/business-module'
+import BusinessModuleCard from './BusinessModuleCard.vue'
+
+const treeData = ref([])
+
+const loadTreeData = async () => {
+  try {
+    const response = await getBusinessModuleTree()
+    treeData.value = response.data
+  } catch (error) {
+    console.error('加载业务分组数据失败:', error)
+  }
+}
+
+const handleModuleClick = (module) => {
+  console.log('点击业务分组:', module)
+  // 处理点击事件，如跳转到对应页面
+}
+
+onMounted(() => {
+  loadTreeData()
+})
+</script>
+```
+
+### API 封装
+```javascript
+// api/business-module.js
+import request from '@/utils/request'
+
+// 获取业务分组树
+export function getBusinessModuleTree(bizType) {
+  return request({
+    url: '/dynamic-business/business-module/tree',
+    method: 'get',
+    params: { bizType }
+  })
+}
+
+// 获取指定节点下的子树
+export function getBusinessModuleSubTree(parentId) {
+  return request({
+    url: '/dynamic-business/business-module/sub-tree',
+    method: 'get',
+    params: { parentId }
+  })
+}
+
+// 拖拽调整树结构
+export function dragBusinessModule(data) {
+  return request({
+    url: '/dynamic-business/business-module/drag',
+    method: 'post',
+    data
+  })
+}
+
+// 创建业务分组
+export function createBusinessModule(data) {
+  return request({
+    url: '/dynamic-business/business-module/create',
+    method: 'post',
+    data
+  })
+}
+
+// 更新业务分组
+export function updateBusinessModule(data) {
+  return request({
+    url: '/dynamic-business/business-module/update',
+    method: 'put',
+    data
+  })
+}
+
+// 删除业务分组
+export function deleteBusinessModule(id) {
+  return request({
+    url: '/dynamic-business/business-module/delete',
+    method: 'delete',
+    params: { id }
+  })
+}
+```
+
+## 菜单配置参数
+
+### 业务分组管理页面
+```json
+{
+  "name": "业务分组管理",
+  "path": "/business-module",
+  "component": "views/business-module/index",
+  "meta": {
+    "title": "业务分组管理",
+    "icon": "tree-table",
+    "noCache": true
+  }
+}
+```
+
+### 业务门户页面
+```json
+{
+  "name": "业务门户",
+  "path": "/business-portal",
+  "component": "views/business-portal/index",
+  "meta": {
+    "title": "业务门户",
+    "icon": "dashboard",
+    "noCache": true
+  }
+}
+```
+
+## 注意事项
+
+1. **拖拽限制**：不能拖拽到自己或自己的子节点
+2. **只读节点**：系统只读节点禁止删除和修改
+3. **树路径更新**：拖拽操作会自动更新所有子节点的树路径
+4. **排序优化**：使用间隔排序值（如5、10、15）便于后续插入
+5. **性能考虑**：大量数据时建议使用懒加载子树 

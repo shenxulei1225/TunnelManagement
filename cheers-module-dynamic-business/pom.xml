@@ -60,16 +60,14 @@
             <groupId>com.cheers.arch</groupId>
             <artifactId>cheers-tenant</artifactId>
         </dependency>
+        <!-- 树形结构支持 -->
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-trees</artifactId>
+        </dependency>
+
 
         <!-- 工具类相关 -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-        </dependency>
 
         <!-- Jakarta EE API -->
         <dependency>

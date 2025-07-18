@@ -4,7 +4,7 @@ import com.cheers.arch.framework.common.pojo.PageResult;
 import com.cheers.arch.module.dynamic.controller.admin.model.vo.DynamicModelCreateReqVO;
 import com.cheers.arch.module.dynamic.controller.admin.model.vo.DynamicModelRespVO;
 import com.cheers.arch.module.dynamic.controller.admin.model.vo.DynamicModelUpdateReqVO;
-import com.cheers.arch.module.dynamic.dal.dataobject.model.BusinessModelDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.model.DynamicBusinessModelDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -18,13 +18,13 @@ public interface DynamicModelConvert {
 
     DynamicModelConvert INSTANCE = Mappers.getMapper(DynamicModelConvert.class);
 
-    BusinessModelDO convert(DynamicModelCreateReqVO bean);
+    DynamicBusinessModelDO convert(DynamicModelCreateReqVO bean);
 
-    BusinessModelDO convert(DynamicModelUpdateReqVO bean);
+    DynamicBusinessModelDO convert(DynamicModelUpdateReqVO bean);
 
-    DynamicModelRespVO convert(BusinessModelDO bean);
+    DynamicModelRespVO convert(DynamicBusinessModelDO bean);
 
-    List<DynamicModelRespVO> convertList(List<BusinessModelDO> list);
+    List<DynamicModelRespVO> convertList(List<DynamicBusinessModelDO> list);
 
-    PageResult<DynamicModelRespVO> convertPage(PageResult<BusinessModelDO> page);
+    PageResult<DynamicModelRespVO> convertPage(PageResult<DynamicBusinessModelDO> page);
 } 

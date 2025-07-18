@@ -80,6 +80,15 @@
         </dependency>
         <dependency>
             <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-trees</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
+            <artifactId>cheers-directory</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.cheers.arch</groupId>
             <artifactId>cheers-test</artifactId>
             <scope>test</scope>
         </dependency>
@@ -100,14 +109,6 @@
         </dependency>
 
         <!-- 工具类相关 -->
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct-processor</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
@@ -143,5 +144,5 @@
             <id>maven-central</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
-    </repositories>
+        </repositories>
 </project>

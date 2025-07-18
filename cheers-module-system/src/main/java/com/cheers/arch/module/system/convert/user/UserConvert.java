@@ -1,5 +1,8 @@
 package com.cheers.arch.module.system.convert.user;
 
+import java.util.List;
+import java.util.Map;
+
 import com.cheers.arch.framework.common.util.collection.CollectionUtils;
 import com.cheers.arch.framework.common.util.collection.MapUtils;
 import com.cheers.arch.framework.common.util.object.BeanUtils;
@@ -13,11 +16,9 @@ import com.cheers.arch.module.system.dal.dataobject.dept.DeptDO;
 import com.cheers.arch.module.system.dal.dataobject.dept.PostDO;
 import com.cheers.arch.module.system.dal.dataobject.permission.RoleDO;
 import com.cheers.arch.module.system.dal.dataobject.user.AdminUserDO;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-
-import java.util.List;
-import java.util.Map;
 
 @Mapper
 public interface UserConvert {

@@ -14,11 +14,29 @@
         "cheers-framework",
         "cheers-module-system",
         "cheers-module-uxdesigner", 
-        "cheers-module-dynamic-business"
+        "cheers-module-dynamic-business",
+        "cheers-module-infra"
+    ],
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ],
+    "java.project.outputPath": "target/classes",
+    "java.project.generatedSourcePaths": [
+        "target/generated-sources/annotations"
     ],
     "maven.view": "flat",
     "java.configuration.maven.globalSettings": null,
     "files.exclude": {
         
-    }
+    },
+    "java.autobuild.enabled": true,
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.saveActions.organizeImports": true,
+    "java.completion.importOrder": [
+        "java",
+        "javax",
+        "jakarta",
+        "com",
+        "org"
+    ]
 }

@@ -4,7 +4,7 @@ import com.cheers.arch.framework.common.pojo.PageResult;
 import com.cheers.arch.module.dynamic.controller.admin.field.vo.DynamicFieldCreateReqVO;
 import com.cheers.arch.module.dynamic.controller.admin.field.vo.DynamicFieldRespVO;
 import com.cheers.arch.module.dynamic.controller.admin.field.vo.DynamicFieldUpdateReqVO;
-import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.field.DynamicFieldDefinitionDO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -13,7 +13,7 @@ import org.mapstruct.factory.Mappers;
 import java.util.List;
 
 /**
- * 动态业务字段 Convert
+ * 动态字段定义 Convert
  */
 @Mapper
 public interface DynamicFieldConvert {
@@ -22,19 +22,19 @@ public interface DynamicFieldConvert {
 
     @Mapping(target = "required", source = "required", qualifiedByName = "integerToBoolean")
     @Mapping(target = "modelCode", source = "modelId", qualifiedByName = "modelIdToModelCode")
-    FieldDefinitionDO convert(DynamicFieldCreateReqVO bean);
+    DynamicFieldDefinitionDO convert(DynamicFieldCreateReqVO bean);
 
     @Mapping(target = "required", source = "required", qualifiedByName = "integerToBoolean")
     @Mapping(target = "modelCode", source = "modelId", qualifiedByName = "modelIdToModelCode")
-    FieldDefinitionDO convert(DynamicFieldUpdateReqVO bean);
+    DynamicFieldDefinitionDO convert(DynamicFieldUpdateReqVO bean);
 
     @Mapping(target = "required", source = "required", qualifiedByName = "booleanToInteger")
     @Mapping(target = "modelId", source = "modelCode", qualifiedByName = "modelCodeToModelId")
-    DynamicFieldRespVO convert(FieldDefinitionDO bean);
+    DynamicFieldRespVO convert(DynamicFieldDefinitionDO bean);
 
-    List<DynamicFieldRespVO> convertList(List<FieldDefinitionDO> list);
+    List<DynamicFieldRespVO> convertList(List<DynamicFieldDefinitionDO> list);
 
-    PageResult<DynamicFieldRespVO> convertPage(PageResult<FieldDefinitionDO> page);
+    PageResult<DynamicFieldRespVO> convertPage(PageResult<DynamicFieldDefinitionDO> page);
 
     @Named("integerToBoolean")
     default Boolean integerToBoolean(Integer value) {

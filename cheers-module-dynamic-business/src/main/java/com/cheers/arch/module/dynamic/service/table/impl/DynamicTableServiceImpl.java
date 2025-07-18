@@ -1,8 +1,8 @@
 package com.cheers.arch.module.dynamic.service.table.impl;
 
 import com.cheers.arch.framework.common.exception.ServiceException;
-import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
-import com.cheers.arch.module.dynamic.dal.dataobject.model.BusinessModelDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.field.DynamicFieldDefinitionDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.model.DynamicBusinessModelDO;
 import com.cheers.arch.module.dynamic.enums.ErrorCodeConstants;
 import com.cheers.arch.module.dynamic.service.table.DynamicTableService;
 import com.cheers.arch.module.dynamic.service.table.dialect.DatabaseDialect;
@@ -36,7 +36,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void createTable(BusinessModelDO model, List<FieldDefinitionDO> fields) {
+    public void createTable(DynamicBusinessModelDO model, List<DynamicFieldDefinitionDO> fields) {
         // 校验表名
         if (!databaseDialect.isValidTableName(model.getTableName())) {
             throw new ServiceException(ErrorCodeConstants.TABLE_NAME_INVALID);
@@ -57,10 +57,10 @@ public class DynamicTableServiceImpl implements DynamicTableService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateTable(BusinessModelDO model, List<FieldDefinitionDO> fields, List<FieldDefinitionDO> oldFields) {
+    public void updateTable(DynamicBusinessModelDO model, List<DynamicFieldDefinitionDO> fields, List<DynamicFieldDefinitionDO> oldFields) {
         try {
             // 1. 找出需要新增的字段
-            for (FieldDefinitionDO field : fields) {
+            for (DynamicFieldDefinitionDO field : fields) {
                 if (oldFields.stream().noneMatch(old -> old.getCode().equals(field.getCode()))) {
                     String sql = databaseDialect.generateAddColumnSQL(model.getTableName(), field);
                     log.info("[updateTable][表({})新增字段，SQL语句为({})]", model.getTableName(), sql);
@@ -69,7 +69,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
             }
 
             // 2. 找出需要修改的字段
-            for (FieldDefinitionDO field : fields) {
+            for (DynamicFieldDefinitionDO field : fields) {
                 oldFields.stream()
                         .filter(old -> old.getCode().equals(field.getCode()))
                         .findFirst()
@@ -83,7 +83,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
             }
 
             // 3. 找出需要删除的字段
-            for (FieldDefinitionDO old : oldFields) {
+            for (DynamicFieldDefinitionDO old : oldFields) {
                 if (fields.stream().noneMatch(field -> field.getCode().equals(old.getCode()))) {
                     String sql = databaseDialect.generateDropColumnSQL(model.getTableName(), old.getCode());
                     log.info("[updateTable][表({})删除字段，SQL语句为({})]", model.getTableName(), sql);
@@ -98,7 +98,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void dropTable(BusinessModelDO model) {
+    public void dropTable(DynamicBusinessModelDO model) {
         try {
             String sql = databaseDialect.generateDropTableSQL(model.getTableName());
             log.info("[dropTable][开始删除表({})，SQL语句为({})]", model.getTableName(), sql);
@@ -111,7 +111,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void renameTable(BusinessModelDO model, String newTableName) {
+    public void renameTable(DynamicBusinessModelDO model, String newTableName) {
         // 校验新表名
         if (!databaseDialect.isValidTableName(newTableName)) {
             throw new ServiceException(ErrorCodeConstants.TABLE_NAME_INVALID);
@@ -128,7 +128,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
     }
 
     @Override
-    public String backupTable(BusinessModelDO model) {
+    public String backupTable(DynamicBusinessModelDO model) {
         try {
             // 生成备份表名
             String backupTableName = generateBackupTableName(model.getTableName());
@@ -150,7 +150,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void restoreTable(BusinessModelDO model, String backupPath) {
+    public void restoreTable(DynamicBusinessModelDO model, String backupPath) {
         try {
             String sql = databaseDialect.generateRestoreFromBackupSQL(model.getTableName(), backupPath);
             log.info("[restoreTable][开始恢复表({})，SQL语句为({})]", model.getTableName(), sql);
@@ -163,7 +163,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void migrateData(BusinessModelDO sourceModel, BusinessModelDO targetModel, String fieldMapping) {
+    public void migrateData(DynamicBusinessModelDO sourceModel, DynamicBusinessModelDO targetModel, String fieldMapping) {
         try {
             String sql = databaseDialect.generateDataMigrationSQL(
                     sourceModel.getTableName(), targetModel.getTableName(), fieldMapping);
@@ -178,12 +178,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
     }
 
     @Override
-    public boolean validateTableName(String tableName) {
-        return databaseDialect.isValidTableName(tableName);
-    }
-
-    @Override
-    public String getTableSchema(BusinessModelDO model) {
+    public String getTableSchema(DynamicBusinessModelDO model) {
         try {
             String sql = databaseDialect.generateShowTableSchemaSQL(model.getTableName());
             return jdbcTemplate.queryForObject(sql, String.class);
@@ -194,7 +189,7 @@ public class DynamicTableServiceImpl implements DynamicTableService {
     }
 
     @Override
-    public Long getTableSize(BusinessModelDO model) {
+    public Long getTableSize(DynamicBusinessModelDO model) {
         try {
             String sql = databaseDialect.generateTableSizeSQL(model.getTableName());
             return jdbcTemplate.queryForObject(sql, Long.class);
@@ -208,10 +203,9 @@ public class DynamicTableServiceImpl implements DynamicTableService {
         return tableName + "_backup_" + LocalDateTime.now().format(BACKUP_TIME_FORMATTER);
     }
 
-    private boolean isSameFieldDefinition(FieldDefinitionDO field1, FieldDefinitionDO field2) {
-        return field1.getType() == field2.getType() &&
+    private boolean isSameFieldDefinition(DynamicFieldDefinitionDO field1, DynamicFieldDefinitionDO field2) {
+        return field1.getType().equals(field2.getType()) &&
                field1.getLength().equals(field2.getLength()) &&
-               field1.getFieldPrecision().equals(field2.getFieldPrecision()) &&
                field1.getRequired().equals(field2.getRequired()) &&
                StringUtils.equals(field1.getDefaultValue(), field2.getDefaultValue());
     }

@@ -1,8 +1,8 @@
 package com.cheers.arch.module.dynamic.service.table.dialect;
 
-import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
-
 import java.util.List;
+
+import com.cheers.arch.module.dynamic.dal.dataobject.field.DynamicFieldDefinitionDO;
 
 /**
  * 数据库方言接口
@@ -22,17 +22,17 @@ public interface DatabaseDialect {
     /**
      * 生成建表SQL
      */
-    String generateCreateTableSQL(String tableName, List<FieldDefinitionDO> fields);
+    String generateCreateTableSQL(String tableName, List<DynamicFieldDefinitionDO> fields);
     
     /**
      * 生成添加字段SQL
      */
-    String generateAddColumnSQL(String tableName, FieldDefinitionDO field);
+    String generateAddColumnSQL(String tableName, DynamicFieldDefinitionDO field);
     
     /**
      * 生成修改字段SQL
      */
-    String generateModifyColumnSQL(String tableName, FieldDefinitionDO field);
+    String generateModifyColumnSQL(String tableName, DynamicFieldDefinitionDO field);
     
     /**
      * 生成删除字段SQL

@@ -650,7 +650,7 @@
             </dependency>
             <dependency>
                 <groupId>com.cheers.arch</groupId>
-                <artifactId>cheers-framework-tree</artifactId>
+                <artifactId>cheers-trees</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

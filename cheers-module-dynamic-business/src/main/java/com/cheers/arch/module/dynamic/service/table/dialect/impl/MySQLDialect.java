@@ -1,14 +1,14 @@
 package com.cheers.arch.module.dynamic.service.table.dialect.impl;
 
-import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
-import com.cheers.arch.module.dynamic.enums.field.FieldTypeEnum;
-import com.cheers.arch.module.dynamic.service.table.dialect.DatabaseDialect;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import com.cheers.arch.module.dynamic.dal.dataobject.field.DynamicFieldDefinitionDO;
+import com.cheers.arch.module.dynamic.enums.field.FieldTypeEnum;
+import com.cheers.arch.module.dynamic.service.table.dialect.DatabaseDialect;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 /**
  * MySQL方言实现
@@ -20,7 +20,7 @@ public class MySQLDialect implements DatabaseDialect {
     private static final int MAX_TABLE_NAME_LENGTH = 64;
 
     @Override
-    public String generateCreateTableSQL(String tableName, List<FieldDefinitionDO> fields) {
+    public String generateCreateTableSQL(String tableName, List<DynamicFieldDefinitionDO> fields) {
         StringBuilder sql = new StringBuilder();
         sql.append("CREATE TABLE ").append(tableName).append(" (\n");
         
@@ -28,7 +28,7 @@ public class MySQLDialect implements DatabaseDialect {
         sql.append("  id BIGINT NOT NULL AUTO_INCREMENT,\n");
         
         // 添加业务字段
-        for (FieldDefinitionDO field : fields) {
+        for (DynamicFieldDefinitionDO field : fields) {
             sql.append("  ").append(field.getCode())
                .append(" ").append(getColumnTypeSQL(field));
             
@@ -62,7 +62,7 @@ public class MySQLDialect implements DatabaseDialect {
     }
 
     @Override
-    public String generateAddColumnSQL(String tableName, FieldDefinitionDO field) {
+    public String generateAddColumnSQL(String tableName, DynamicFieldDefinitionDO field) {
         StringBuilder sql = new StringBuilder();
         sql.append("ALTER TABLE ").append(tableName)
            .append(" ADD COLUMN ").append(field.getCode())
@@ -80,7 +80,7 @@ public class MySQLDialect implements DatabaseDialect {
     }
 
     @Override
-    public String generateModifyColumnSQL(String tableName, FieldDefinitionDO field) {
+    public String generateModifyColumnSQL(String tableName, DynamicFieldDefinitionDO field) {
         StringBuilder sql = new StringBuilder();
         sql.append("ALTER TABLE ").append(tableName)
            .append(" MODIFY COLUMN ").append(field.getCode())
@@ -130,12 +130,20 @@ public class MySQLDialect implements DatabaseDialect {
         return "";
     }
 
-    private String getColumnTypeSQL(FieldDefinitionDO field) {
+    private String getColumnTypeSQL(DynamicFieldDefinitionDO field) {
         if (field.getType() == null) {
             return "VARCHAR(255)";
         }
         
-        switch (field.getType()) {
+        // 将字符串类型转换为枚举
+        FieldTypeEnum fieldType;
+        try {
+            fieldType = FieldTypeEnum.valueOf(field.getType().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            return "VARCHAR(255)";
+        }
+        
+        switch (fieldType) {
             case TEXT:
                 return field.getLength() != null && field.getLength() > 0 
                        ? "VARCHAR(" + field.getLength() + ")" 
@@ -145,8 +153,9 @@ public class MySQLDialect implements DatabaseDialect {
             case NUMBER:
                 return "INT";
             case DECIMAL:
-                return field.getFieldPrecision() != null 
-                       ? "DECIMAL(" + field.getLength() + "," + field.getFieldPrecision() + ")"
+                // 使用默认精度，因为没有精度字段
+                return field.getLength() != null 
+                       ? "DECIMAL(" + field.getLength() + ",2)"
                        : "DECIMAL(10,2)";
             case DATE:
                 return "DATE";
@@ -187,23 +196,23 @@ public class MySQLDialect implements DatabaseDialect {
         return "MySQL";
     }
 
-    private String formatDefaultValue(FieldDefinitionDO field) {
+    private String formatDefaultValue(DynamicFieldDefinitionDO field) {
         if (field.getDefaultValue() == null) {
             return null;
         }
 
         switch (field.getType()) {
-            case TEXT:
-            case TEXTAREA:
-            case TIME:
-            case RICH_TEXT:
+            case "text":
+            case "textarea":
+            case "time":
+            case "rich_text":
                 return "'" + field.getDefaultValue() + "'";
-            case DATE:
+            case "date":
                 return "'" + field.getDefaultValue() + "'";
-            case DATETIME:
+            case "datetime":
                 return "'" + field.getDefaultValue() + "'";
-            case NUMBER:
-            case DECIMAL:
+            case "number":
+            case "decimal":
                 return field.getDefaultValue();
             default:
                 return "'" + field.getDefaultValue() + "'";

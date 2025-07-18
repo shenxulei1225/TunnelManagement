@@ -2,10 +2,12 @@ package com.cheers.arch.module.dynamic.controller.admin.field;
 
 import com.cheers.arch.framework.common.pojo.CommonResult;
 import com.cheers.arch.framework.common.pojo.PageResult;
-import com.cheers.arch.module.dynamic.controller.admin.field.vo.*;
+import com.cheers.arch.module.dynamic.controller.admin.field.vo.DynamicFieldCreateReqVO;
+import com.cheers.arch.module.dynamic.controller.admin.field.vo.DynamicFieldRespVO;
+import com.cheers.arch.module.dynamic.controller.admin.field.vo.DynamicFieldUpdateReqVO;
 import com.cheers.arch.module.dynamic.convert.field.DynamicFieldConvert;
-import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
-import com.cheers.arch.module.dynamic.service.field.FieldDefinitionService;
+import com.cheers.arch.module.dynamic.dal.dataobject.field.DynamicFieldDefinitionDO;
+import com.cheers.arch.module.dynamic.service.field.DynamicFieldDefinitionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,66 +19,72 @@ import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
 import java.util.List;
 
-@Tag(name = "管理后台 - 动态业务字段")
+import static com.cheers.arch.framework.common.pojo.CommonResult.success;
+
+@Tag(name = "管理后台 - 动态字段定义")
 @RestController
-@RequestMapping("/dynamic/field")
+@RequestMapping("/dynamic-business/field")
 @Validated
 public class DynamicFieldController {
 
     @Resource
-    private FieldDefinitionService fieldDefinitionService;
+    private DynamicFieldDefinitionService dynamicFieldDefinitionService;
 
     @PostMapping("/create")
-    @Operation(summary = "创建动态业务字段")
-    @PreAuthorize("@ss.hasPermission('dynamic:field:create')")
-    public CommonResult<Long> createDynamicField(@Valid @RequestBody DynamicFieldCreateReqVO createReqVO) {
-        FieldDefinitionDO field = DynamicFieldConvert.INSTANCE.convert(createReqVO);
-        return CommonResult.success(fieldDefinitionService.createField(field));
+    @Operation(summary = "创建动态字段定义")
+    @PreAuthorize("@ss.hasPermission('dynamic-business:field:create')")
+    public CommonResult<Long> createField(@Valid @RequestBody DynamicFieldCreateReqVO createReqVO) {
+        DynamicFieldDefinitionDO field = DynamicFieldConvert.INSTANCE.convert(createReqVO);
+        return success(dynamicFieldDefinitionService.createField(field));
     }
 
     @PutMapping("/update")
-    @Operation(summary = "更新动态业务字段")
-    @PreAuthorize("@ss.hasPermission('dynamic:field:update')")
-    public CommonResult<Boolean> updateDynamicField(@Valid @RequestBody DynamicFieldUpdateReqVO updateReqVO) {
-        FieldDefinitionDO field = DynamicFieldConvert.INSTANCE.convert(updateReqVO);
-        fieldDefinitionService.updateField(field);
-        return CommonResult.success(true);
+    @Operation(summary = "更新动态字段定义")
+    @PreAuthorize("@ss.hasPermission('dynamic-business:field:update')")
+    public CommonResult<Boolean> updateField(@Valid @RequestBody DynamicFieldUpdateReqVO updateReqVO) {
+        DynamicFieldDefinitionDO field = DynamicFieldConvert.INSTANCE.convert(updateReqVO);
+        dynamicFieldDefinitionService.updateField(field);
+        return success(true);
     }
 
     @DeleteMapping("/delete")
-    @Operation(summary = "删除动态业务字段")
+    @Operation(summary = "删除动态字段定义")
     @Parameter(name = "id", description = "编号", required = true)
-    @PreAuthorize("@ss.hasPermission('dynamic:field:delete')")
-    public CommonResult<Boolean> deleteDynamicField(@RequestParam("id") Long id) {
-        fieldDefinitionService.deleteField(id);
-        return CommonResult.success(true);
+    @PreAuthorize("@ss.hasPermission('dynamic-business:field:delete')")
+    public CommonResult<Boolean> deleteField(@RequestParam("id") Long id) {
+        dynamicFieldDefinitionService.deleteField(id);
+        return success(true);
     }
 
     @GetMapping("/get")
-    @Operation(summary = "获得动态业务字段")
+    @Operation(summary = "获得动态字段定义")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
-    @PreAuthorize("@ss.hasPermission('dynamic:field:query')")
-    public CommonResult<DynamicFieldRespVO> getDynamicField(@RequestParam("id") Long id) {
-        FieldDefinitionDO field = fieldDefinitionService.getField(id);
-        return CommonResult.success(DynamicFieldConvert.INSTANCE.convert(field));
+    @PreAuthorize("@ss.hasPermission('dynamic-business:field:query')")
+    public CommonResult<DynamicFieldRespVO> getField(@RequestParam("id") Long id) {
+        DynamicFieldDefinitionDO field = dynamicFieldDefinitionService.getField(id);
+        return success(DynamicFieldConvert.INSTANCE.convert(field));
     }
 
     @GetMapping("/list")
-    @Operation(summary = "获得动态业务字段列表")
-    @Parameter(name = "ids", description = "编号列表", required = true, example = "1024,2048")
-    @PreAuthorize("@ss.hasPermission('dynamic:field:query')")
-    public CommonResult<List<DynamicFieldRespVO>> getDynamicFieldList(@RequestParam("ids") List<Long> ids) {
-        List<FieldDefinitionDO> list = fieldDefinitionService.getFieldList(ids);
-        return CommonResult.success(DynamicFieldConvert.INSTANCE.convertList(list));
+    @Operation(summary = "获得动态字段定义列表")
+    @Parameter(name = "ids", description = "编号列表", required = true, example = "[1024, 2048]")
+    @PreAuthorize("@ss.hasPermission('dynamic-business:field:query')")
+    public CommonResult<List<DynamicFieldRespVO>> getFieldList(@RequestParam("ids") List<Long> ids) {
+        List<DynamicFieldDefinitionDO> list = dynamicFieldDefinitionService.getFieldList(ids);
+        return success(DynamicFieldConvert.INSTANCE.convertList(list));
     }
 
     @GetMapping("/page")
-    @Operation(summary = "获得动态业务字段分页")
-    @PreAuthorize("@ss.hasPermission('dynamic:field:query')")
-    public CommonResult<PageResult<DynamicFieldRespVO>> getDynamicFieldPage(@Valid DynamicFieldPageReqVO pageVO) {
-        PageResult<FieldDefinitionDO> pageResult = fieldDefinitionService.getFieldPage(
-                pageVO.getPageNo(), pageVO.getPageSize(), pageVO.getName(), pageVO.getCode(),
-                pageVO.getType(), pageVO.getModelId());
-        return CommonResult.success(DynamicFieldConvert.INSTANCE.convertPage(pageResult));
+    @Operation(summary = "获得动态字段定义分页")
+    @PreAuthorize("@ss.hasPermission('dynamic-business:field:query')")
+    public CommonResult<PageResult<DynamicFieldRespVO>> getFieldPage(@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+                                                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                                                                    @RequestParam(value = "name", required = false) String name,
+                                                                    @RequestParam(value = "code", required = false) String code,
+                                                                    @RequestParam(value = "type", required = false) String type,
+                                                                    @RequestParam(value = "modelId", required = false) Long modelId) {
+        PageResult<DynamicFieldDefinitionDO> pageResult = dynamicFieldDefinitionService.getFieldPage(
+                pageNo, pageSize, name, code, type, modelId);
+        return success(DynamicFieldConvert.INSTANCE.convertPage(pageResult));
     }
 } 

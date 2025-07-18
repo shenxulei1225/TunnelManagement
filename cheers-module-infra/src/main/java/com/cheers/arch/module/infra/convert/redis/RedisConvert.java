@@ -1,12 +1,14 @@
 package com.cheers.arch.module.infra.convert.redis;
 
-import cn.hutool.core.util.StrUtil;
+import java.util.ArrayList;
+import java.util.Properties;
+
 import com.cheers.arch.module.infra.controller.admin.redis.vo.RedisMonitorRespVO;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
-import java.util.Properties;
+import cn.hutool.core.util.StrUtil;
 
 @Mapper
 public interface RedisConvert {

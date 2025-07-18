@@ -177,3 +177,137 @@ if (model.getModelType() != null && !Objects.equals(oldModel.getModelType(), mod
 - 模型类型可配置
 - 权限规则可配置
 - 状态流转可配置 
+
+## 用户引导与步骤指引设计
+
+### 设计背景
+
+在实际业务系统中，用户往往无法一次性考虑周全所有业务配置。为提升易用性和减少配置遗漏，系统应在新建业务模型时就通过步骤指引，让用户提前了解完整的业务配置流程，并允许用户逐步完善。
+
+### 步骤指引方案
+
+1. **新建弹窗顶部增加步骤指引**
+   - 在新建业务模型弹窗顶部，增加步骤进度条或步骤说明区域。
+   - 让用户一眼看到：新建模型只是第一步，后续还需完善字段、页面、权限等配置。
+
+   示例：
+   ```vue
+   <el-steps :active="1" finish-status="success" align-center>
+     <el-step title="新建模型" description="填写基础信息" />
+     <el-step title="添加字段" description="定义数据结构" />
+     <el-step title="配置页面" description="生成管理界面" />
+     <el-step title="设置权限" description="分配访问控制" />
+   </el-steps>
+   ```
+   或更简洁的说明：
+   ```html
+   <div class="step-guide">
+     <b>业务配置流程：</b>
+     1. 新建模型 → 2. 添加字段 → 3. 配置页面 → 4. 设置权限
+     <span class="tip">（每一步都可后续补充完善）</span>
+   </div>
+   ```
+
+2. **每一步都可跳过，支持后续补充**
+   - 步骤指引只做引导，不做强制校验，用户可只完成当前步骤，后续随时补充。
+   - 可在每一步下方加提示：“此步骤可后续在模型管理中继续完善。”
+
+3. **新建完成后再次提示下一步**
+   - 新建成功后，弹窗或通知再次提示“建议立即添加字段、配置页面、设置权限”，并提供快捷入口。
+
+4. **分步操作入口与进度提示**
+   - 在模型卡片或弹窗中，直接提供“去添加字段”“去配置页面”“去设置权限”等快捷按钮。
+   - 对未完成的步骤进行高亮或进度标识（如“未配置字段”“未生成页面”），提醒用户后续完善。
+
+### 用户体验价值
+
+- **全局认知**：让用户一开始就知道完整业务配置流程。
+- **降低焦虑**：用户不用担心遗漏，知道后续可随时补充。
+- **提升效率**：有明确指引，减少反复沟通和返工。
+
+### 交互流程示意
+
+```mermaid
+graph TD
+A[创建业务模型] --> B{创建成功弹窗}
+B --> C[去添加字段]
+B --> D[去配置页面]
+B --> E[去设置权限]
+C --> F[返回模型列表]
+D --> F
+E --> F
+F --> G[随时补充完善]
+```
+
+### 总结
+
+- 在新建业务模型弹窗顶部加入步骤指引，是提升业务系统易用性和专业度的最佳实践。
+- 分步引导让用户清楚每一步该做什么，降低出错率。
+- 允许逐步完善，提升灵活性和体验。
+- 进度提示和快捷入口让用户随时掌握业务配置状态，方便后续维护和扩展。 
+
+---
+
+## 多级业务分组与无代码动态建表设计补充（2024-07-03）
+
+### 1. 多级业务分组（business_module）设计
+- 业务系统/分组采用单表多级结构（parent_id树形），支持无限级嵌套。
+- 顶层节点为业务系统，下级为业务类型/分组，便于灵活扩展。
+- 业务模型（model）通过 business_module_id 归属到任意分组节点。
+
+#### 表结构示例
+```sql
+CREATE TABLE business_module (
+  id BIGINT PRIMARY KEY,
+  parent_id BIGINT,
+  name VARCHAR(100),
+  code VARCHAR(100),
+  description VARCHAR(255)
+);
+
+CREATE TABLE business_model (
+  id BIGINT PRIMARY KEY,
+  business_module_id BIGINT,  -- 关联到多级业务分组表
+  name VARCHAR(100),
+  code VARCHAR(100),
+  description VARCHAR(255),
+  table_name VARCHAR(100)
+);
+```
+
+### 2. 无代码动态建表方案
+- 用户在前端配置业务模型和字段，后端根据配置动态生成/变更物理表（CREATE/ALTER TABLE）。
+- 字段定义、分组、继承、权限等全部元数据驱动。
+- 表名建议统一用 dynamic_业务模型code 或 biz_业务模型id，避免冲突。
+
+### 3. 目录结构与命名规范
+- business_module 作为全局业务分组/系统管理页面，单独放在 views/business-module/ 下。
+- 动态业务模型管理页面继续放在 views/dynamic/model/ 下。
+- 命名统一用 business_module（业务分组/系统）、business_model（业务模型/表单），避免 module/model 混用。
+
+### 4. 前端实现建议
+- 新增 business-module 页面，左侧多级树（el-tree），右侧分组详情。
+- model 页面新增/编辑时可选择归属的 business_module。
+- 未来可在 model 页面增加“按业务分组筛选”功能，逐步引导用户使用多级分组。
+
+### 5. 典型业务场景
+- 巡检系统（business_module）
+  - 日常巡检（business_module）
+    - 日常巡检表单A（business_model）
+    - 日常巡检表单B（business_model）
+  - 重点巡检（business_module）
+    - 重点巡检表单A（business_model）
+
+### 6. 设计原则总结
+- 多级分组结构极简、灵活、易扩展。
+- 动态建表、字段变更、数据管理全部元数据驱动，适合无代码平台。
+- 命名、目录、接口、表结构前后一致，便于维护和扩展。
+
+### 7. 迁移与演进建议
+- 现有 category 可保留，复制迁移为 business_module，避免未来扩展受限。
+- 现有 model 命名建议统一为 business_model，弃用 module/model 混用。
+- 先实现多级分组管理页面，逐步引导用户迁移到多级结构。
+
+---
+
+本节内容为 2024-07-03 业务模型管理多级分组与无代码动态建表设计讨论记录，后续如有新决策请持续补充。 

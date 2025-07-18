@@ -1,12 +1,13 @@
 package com.cheers.arch.module.dynamic.service.table;
 
-import com.cheers.arch.module.dynamic.dal.dataobject.field.FieldDefinitionDO;
-import com.cheers.arch.module.dynamic.dal.dataobject.model.BusinessModelDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.field.DynamicFieldDefinitionDO;
+import com.cheers.arch.module.dynamic.dal.dataobject.model.DynamicBusinessModelDO;
 
 import java.util.List;
 
 /**
- * 动态表结构管理服务
+ * 动态表服务接口
+ * 负责动态创建、更新、删除数据库表
  */
 public interface DynamicTableService {
 
@@ -16,23 +17,23 @@ public interface DynamicTableService {
      * @param model 业务模型
      * @param fields 字段定义列表
      */
-    void createTable(BusinessModelDO model, List<FieldDefinitionDO> fields);
+    void createTable(DynamicBusinessModelDO model, List<DynamicFieldDefinitionDO> fields);
 
     /**
      * 更新数据表结构
      *
      * @param model 业务模型
-     * @param fields 字段定义列表
-     * @param oldFields 原字段定义列表
+     * @param fields 新的字段定义列表
+     * @param oldFields 旧的字段定义列表
      */
-    void updateTable(BusinessModelDO model, List<FieldDefinitionDO> fields, List<FieldDefinitionDO> oldFields);
+    void updateTable(DynamicBusinessModelDO model, List<DynamicFieldDefinitionDO> fields, List<DynamicFieldDefinitionDO> oldFields);
 
     /**
      * 删除数据表
      *
      * @param model 业务模型
      */
-    void dropTable(BusinessModelDO model);
+    void dropTable(DynamicBusinessModelDO model);
 
     /**
      * 重命名数据表
@@ -40,7 +41,7 @@ public interface DynamicTableService {
      * @param model 业务模型
      * @param newTableName 新表名
      */
-    void renameTable(BusinessModelDO model, String newTableName);
+    void renameTable(DynamicBusinessModelDO model, String newTableName);
 
     /**
      * 备份数据表
@@ -48,7 +49,7 @@ public interface DynamicTableService {
      * @param model 业务模型
      * @return 备份文件路径
      */
-    String backupTable(BusinessModelDO model);
+    String backupTable(DynamicBusinessModelDO model);
 
     /**
      * 恢复数据表
@@ -56,38 +57,30 @@ public interface DynamicTableService {
      * @param model 业务模型
      * @param backupPath 备份文件路径
      */
-    void restoreTable(BusinessModelDO model, String backupPath);
+    void restoreTable(DynamicBusinessModelDO model, String backupPath);
 
     /**
-     * 迁移数据
+     * 数据迁移
      *
      * @param sourceModel 源业务模型
      * @param targetModel 目标业务模型
-     * @param fieldMapping 字段映射
+     * @param fieldMapping 字段映射关系（JSON格式）
      */
-    void migrateData(BusinessModelDO sourceModel, BusinessModelDO targetModel, String fieldMapping);
-
-    /**
-     * 验证表名是否可用
-     *
-     * @param tableName 表名
-     * @return 是否可用
-     */
-    boolean validateTableName(String tableName);
+    void migrateData(DynamicBusinessModelDO sourceModel, DynamicBusinessModelDO targetModel, String fieldMapping);
 
     /**
      * 获取表结构信息
      *
      * @param model 业务模型
-     * @return 表结构信息
+     * @return 表结构信息（JSON格式）
      */
-    String getTableSchema(BusinessModelDO model);
+    String getTableSchema(DynamicBusinessModelDO model);
 
     /**
-     * 获取表大小信息
+     * 获取表大小
      *
      * @param model 业务模型
-     * @return 表大小（单位：字节）
+     * @return 表大小（字节）
      */
-    Long getTableSize(BusinessModelDO model);
+    Long getTableSize(DynamicBusinessModelDO model);
 } 

@@ -22,18 +22,24 @@ public interface ErrorCodeConstants {
     ErrorCode BUSINESS_MODEL_TABLE_NAME_INVALID = new ErrorCode(1002002006, "表名格式无效，必须以dynamic_开头");
     ErrorCode BUSINESS_MODEL_READONLY_CANNOT_DELETE = new ErrorCode(1002002007, "只读的业务模型不允许删除");
 
-    ErrorCode DYNAMIC_PERMISSION_NOT_EXISTS = new ErrorCode(1002003000, "动态权限不存在");
-    ErrorCode DYNAMIC_PERMISSION_DUPLICATE = new ErrorCode(1002003001, "动态权限重复");
-    ErrorCode DYNAMIC_PERMISSION_INVALID_LEVEL = new ErrorCode(1002003002, "动态权限级别无效");
+    ErrorCode BUSINESS_RECORD_NOT_EXISTS = new ErrorCode(1002003000, "业务记录不存在");
+    ErrorCode BUSINESS_RECORD_HAS_CHILDREN = new ErrorCode(1002003001, "业务记录存在子记录，无法删除");
+    ErrorCode BUSINESS_RECORD_INVALID_DATA = new ErrorCode(1002003002, "业务记录数据无效");
+    ErrorCode BUSINESS_RECORD_IMPORT_FAILED = new ErrorCode(1002003003, "业务记录导入失败");
+    ErrorCode BUSINESS_RECORD_EXPORT_FAILED = new ErrorCode(1002003004, "业务记录导出失败");
 
-    ErrorCode TABLE_NAME_INVALID = new ErrorCode(1002004000, "表名无效");
-    ErrorCode TABLE_NOT_EXISTS = new ErrorCode(1002004001, "表不存在");
-    ErrorCode TABLE_ALREADY_EXISTS = new ErrorCode(1002004002, "表已存在");
-    ErrorCode TABLE_OPERATION_FAILED = new ErrorCode(1002004003, "表操作失败");
-    ErrorCode TABLE_BACKUP_FAILED = new ErrorCode(1002004004, "表备份失败");
-    ErrorCode TABLE_RESTORE_FAILED = new ErrorCode(1002004005, "表恢复失败");
-    ErrorCode TABLE_MIGRATION_FAILED = new ErrorCode(1002004006, "表迁移失败");
-    ErrorCode TABLE_SCHEMA_INVALID = new ErrorCode(1002004007, "表结构无效");
+    ErrorCode DYNAMIC_PERMISSION_NOT_EXISTS = new ErrorCode(1002004000, "动态权限不存在");
+    ErrorCode DYNAMIC_PERMISSION_DUPLICATE = new ErrorCode(1002004001, "动态权限重复");
+    ErrorCode DYNAMIC_PERMISSION_INVALID_LEVEL = new ErrorCode(1002004002, "动态权限级别无效");
+
+    ErrorCode TABLE_NAME_INVALID = new ErrorCode(1002005000, "表名无效");
+    ErrorCode TABLE_NOT_EXISTS = new ErrorCode(1002005001, "表不存在");
+    ErrorCode TABLE_ALREADY_EXISTS = new ErrorCode(1002005002, "表已存在");
+    ErrorCode TABLE_OPERATION_FAILED = new ErrorCode(1002005003, "表操作失败");
+    ErrorCode TABLE_BACKUP_FAILED = new ErrorCode(1002005004, "表备份失败");
+    ErrorCode TABLE_RESTORE_FAILED = new ErrorCode(1002005005, "表恢复失败");
+    ErrorCode TABLE_MIGRATION_FAILED = new ErrorCode(1002005006, "表迁移失败");
+    ErrorCode TABLE_SCHEMA_INVALID = new ErrorCode(1002005007, "表结构无效");
 
     ErrorCode DIRECTORY_NOT_EXISTS = new ErrorCode(1002005000, "目录不存在");
     ErrorCode DIRECTORY_NAME_DUPLICATE = new ErrorCode(1002005001, "目录名称重复");

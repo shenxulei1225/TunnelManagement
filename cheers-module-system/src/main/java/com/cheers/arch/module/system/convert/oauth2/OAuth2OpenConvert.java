@@ -1,6 +1,9 @@
 package com.cheers.arch.module.system.convert.oauth2;
 
-import cn.hutool.core.date.LocalDateTimeUtil;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import com.cheers.arch.framework.common.core.KeyValue;
 import com.cheers.arch.framework.common.enums.UserTypeEnum;
 import com.cheers.arch.framework.common.util.collection.CollectionUtils;
@@ -13,12 +16,11 @@ import com.cheers.arch.module.system.dal.dataobject.oauth2.OAuth2AccessTokenDO;
 import com.cheers.arch.module.system.dal.dataobject.oauth2.OAuth2ApproveDO;
 import com.cheers.arch.module.system.dal.dataobject.oauth2.OAuth2ClientDO;
 import com.cheers.arch.module.system.util.oauth2.OAuth2Utils;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import cn.hutool.core.date.LocalDateTimeUtil;
 
 @Mapper
 public interface OAuth2OpenConvert {

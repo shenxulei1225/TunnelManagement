@@ -1,25 +1,34 @@
 package com.cheers.arch.module.system.convert.auth;
 
-import cn.hutool.core.collection.CollUtil;
+import static com.cheers.arch.framework.common.util.collection.CollectionUtils.convertSet;
+import static com.cheers.arch.framework.common.util.collection.CollectionUtils.filterList;
+import static com.cheers.arch.module.system.dal.dataobject.permission.MenuDO.ID_ROOT;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.cheers.arch.framework.common.util.object.BeanUtils;
 import com.cheers.arch.module.system.api.sms.dto.code.SmsCodeSendReqDTO;
 import com.cheers.arch.module.system.api.sms.dto.code.SmsCodeUseReqDTO;
-
-import com.cheers.arch.module.system.controller.admin.auth.vo.*;
+import com.cheers.arch.module.system.controller.admin.auth.vo.AuthLoginRespVO;
+import com.cheers.arch.module.system.controller.admin.auth.vo.AuthPermissionInfoRespVO;
+import com.cheers.arch.module.system.controller.admin.auth.vo.AuthSmsLoginReqVO;
+import com.cheers.arch.module.system.controller.admin.auth.vo.AuthSmsSendReqVO;
 import com.cheers.arch.module.system.dal.dataobject.oauth2.OAuth2AccessTokenDO;
 import com.cheers.arch.module.system.dal.dataobject.permission.MenuDO;
 import com.cheers.arch.module.system.dal.dataobject.permission.RoleDO;
 import com.cheers.arch.module.system.dal.dataobject.user.AdminUserDO;
 import com.cheers.arch.module.system.enums.permission.MenuTypeEnum;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-
-import static com.cheers.arch.framework.common.util.collection.CollectionUtils.convertSet;
-import static com.cheers.arch.framework.common.util.collection.CollectionUtils.filterList;
-import static com.cheers.arch.module.system.dal.dataobject.permission.MenuDO.ID_ROOT;
+import cn.hutool.core.collection.CollUtil;
 
 @Mapper
 public interface AuthConvert {

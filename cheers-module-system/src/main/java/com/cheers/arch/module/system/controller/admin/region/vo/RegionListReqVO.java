@@ -1,40 +1,31 @@
 package com.cheers.arch.module.system.controller.admin.region.vo;
 
-import lombok.*;
-import java.util.*;
 import io.swagger.v3.oas.annotations.media.Schema;
-import com.cheers.arch.framework.common.pojo.PageParam;
-import java.time.LocalDateTime;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 import static com.cheers.arch.framework.common.util.date.DateUtils.FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND;
 
-@Schema(description = "管理后台 - 区域分页 Request VO")
+@Schema(description = "管理后台 - 区域列表 Request VO")
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class RegionListReqVO extends PageParam {
+public class RegionListReqVO {
 
-    @Schema(description = "区域名称", example = "王五")
+    @Schema(description = "区域名称", example = "华东区")
     private String name;
 
-    @Schema(description = "父区域id", example = "27311")
+    @Schema(description = "父区域编号", example = "1024")
     private Long parentId;
 
-    @Schema(description = "显示顺序")
+    @Schema(description = "显示顺序", example = "1")
     private Integer sort;
 
-    @Schema(description = "区域负责人", example = "30178")
-    private Long leaderUserId;
-
-
-    @Schema(description = "区域状态（0正常 1停用）", example = "1")
+    @Schema(description = "区域状态", example = "1")
     private Integer status;
-
-
 
     @Schema(description = "创建时间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime[] createTime;
 
-}
+} 
