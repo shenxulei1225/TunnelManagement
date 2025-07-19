@@ -37,8 +37,6 @@
         <module>cheers-protection</module>
         <module>cheers-biz-data-permission</module>
         <module>cheers-monitor</module>
-        <module>cheers-directory</module>
-        <module>cheers-category</module>
         <module>cheers-trees</module>
     </modules>
 

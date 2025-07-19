@@ -9,10 +9,12 @@ import jakarta.validation.Valid;
 
 import com.cheers.arch.framework.common.pojo.CommonResult;
 import com.cheers.arch.framework.common.pojo.PageResult;
+import com.cheers.arch.framework.common.util.object.BeanUtils;
 import com.cheers.arch.framework.excel.core.util.ExcelUtils;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldCreateReqVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldExportReqVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldPageReqVO;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldRespVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldUpdateReqVO;
 import com.cheers.arch.module.system.dal.dataobject.field.FieldDO;
 import com.cheers.arch.module.system.service.field.FieldService;
@@ -69,26 +71,34 @@ public class FieldController {
     @Operation(summary = "获得字段")
     @Parameter(name = "id", description = "编号", required = true, example = "1024")
     @PreAuthorize("@ss.hasPermission('system:field:query')")
-    public CommonResult<FieldDO> getField(@RequestParam("id") Long id) {
+    public CommonResult<FieldRespVO> getField(@RequestParam("id") Long id) {
         FieldDO field = fieldService.getField(id);
-        return CommonResult.success(field);
+        return CommonResult.success(BeanUtils.toBean(field, FieldRespVO.class));
     }
 
     @GetMapping("/list")
     @Operation(summary = "获得字段列表")
     @Parameter(name = "ids", description = "编号列表", required = true, example = "1024,2048")
     @PreAuthorize("@ss.hasPermission('system:field:query')")
-    public CommonResult<List<FieldDO>> getFieldList(@RequestParam("ids") List<Long> ids) {
+    public CommonResult<List<FieldRespVO>> getFieldList(@RequestParam("ids") List<Long> ids) {
         List<FieldDO> list = fieldService.getFieldList(ids);
-        return CommonResult.success(list);
+        List<FieldRespVO> respList = list.stream()
+                .map(field -> BeanUtils.toBean(field, FieldRespVO.class))
+                .collect(java.util.stream.Collectors.toList());
+        return CommonResult.success(respList);
     }
 
     @GetMapping("/page")
     @Operation(summary = "获得字段分页")
     @PreAuthorize("@ss.hasPermission('system:field:query')")
-    public CommonResult<PageResult<FieldDO>> getFieldPage(@Valid FieldPageReqVO pageVO) {
+    public CommonResult<PageResult<FieldRespVO>> getFieldPage(@Valid FieldPageReqVO pageVO) {
         PageResult<FieldDO> pageResult = fieldService.getFieldPage(pageVO);
-        return CommonResult.success(pageResult);
+        PageResult<FieldRespVO> respPageResult = new PageResult<>();
+        respPageResult.setList(pageResult.getList().stream()
+                .map(field -> BeanUtils.toBean(field, FieldRespVO.class))
+                .collect(java.util.stream.Collectors.toList()));
+        respPageResult.setTotal(pageResult.getTotal());
+        return CommonResult.success(respPageResult);
     }
 
     @GetMapping("/export-excel")

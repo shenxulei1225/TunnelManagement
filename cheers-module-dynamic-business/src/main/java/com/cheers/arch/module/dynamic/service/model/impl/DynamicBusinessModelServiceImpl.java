@@ -5,8 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cheers.arch.framework.common.exception.ServiceException;
 import com.cheers.arch.framework.common.pojo.PageResult;
 import com.cheers.arch.framework.mybatis.core.query.LambdaQueryWrapperX;
-import com.cheers.arch.framework.directory.constants.DirectoryConstants;
-import com.cheers.arch.framework.directory.service.DirectoryService;
+import com.cheers.arch.module.system.service.directory.DirectoryService;
 import com.cheers.arch.module.dynamic.dal.dataobject.field.DynamicFieldDefinitionDO;
 import com.cheers.arch.module.dynamic.dal.dataobject.model.DynamicBusinessModelDO;
 import com.cheers.arch.module.dynamic.dal.mysql.model.DynamicBusinessModelMapper;
@@ -203,155 +202,22 @@ public class DynamicBusinessModelServiceImpl implements DynamicBusinessModelServ
         // 校验存在
         DynamicBusinessModelDO model = validateModelExists(id);
 
-        // 检查是否有业务记录
-        // TODO: 检查是否有业务记录使用此模型
-
         // 删除数据
         dynamicBusinessModelMapper.deleteById(id);
 
-        // 删除缓存
-        // deleteCache(model);
+        // 删除关联的字段定义
+        // TODO: 实现删除关联字段定义的方法
+        // dynamicFieldDefinitionService.deleteFieldDefinitionsByModelId(id);
+
+        // 删除数据表（可选，根据业务需求决定）
+        // dynamicTableService.dropTable(model.getTableName());
+
+        // 清除缓存
+        // clearCache(id);
     }
 
     @Override
     public DynamicBusinessModelDO getModel(Long id) {
-        // 先从缓存获取
-        // DynamicBusinessModelDO model = getModelFromCache(id);
-        // if (model != null) {
-        //     return model;
-        // }
-
-        // 从数据库获取
-        DynamicBusinessModelDO model = dynamicBusinessModelMapper.selectById(id);
-
-        // 更新缓存
-        // if (model != null) {
-        //     updateCache(model);
-        // }
-
-        return model;
-    }
-
-    @Override
-    public DynamicBusinessModelDO getModelByCode(String code) {
-        // 先从缓存获取
-        // DynamicBusinessModelDO model = getModelFromCacheByCode(code);
-        // if (model != null) {
-        //     return model;
-        // }
-
-        // 从数据库获取
-        DynamicBusinessModelDO model = dynamicBusinessModelMapper.selectOne(new LambdaQueryWrapper<DynamicBusinessModelDO>()
-                .eq(DynamicBusinessModelDO::getCode, code));
-
-        // 更新缓存
-        // if (model != null) {
-        //     updateCache(model);
-        // }
-
-        return model;
-    }
-
-    @Override
-    public List<DynamicBusinessModelDO> getModelList(List<Long> ids) {
-        if (ids == null || ids.isEmpty()) {
-            return List.of();
-        }
-        return dynamicBusinessModelMapper.selectBatchIds(ids);
-    }
-
-    @Override
-    public PageResult<DynamicBusinessModelDO> getModelPage(Integer pageNo, Integer pageSize, String name, Integer status) {
-        // 分页查询
-        Page<DynamicBusinessModelDO> page = dynamicBusinessModelMapper.selectPage(new Page<>(pageNo, pageSize),
-                new LambdaQueryWrapperX<DynamicBusinessModelDO>()
-                        .likeIfPresent(DynamicBusinessModelDO::getName, name)
-                        .eqIfPresent(DynamicBusinessModelDO::getStatus, status)
-                        .orderByAsc(DynamicBusinessModelDO::getSort));
-
-        // 返回分页结果
-        return new PageResult<>(page.getRecords(), page.getTotal());
-    }
-
-    @Override
-    public PageResult<DynamicBusinessModelDO> getModelPageByDirectory(Integer pageNo, Integer pageSize, String name, Integer status, Long directoryId) {
-        // 分页查询
-        Page<DynamicBusinessModelDO> page = dynamicBusinessModelMapper.selectPage(new Page<>(pageNo, pageSize),
-                new LambdaQueryWrapperX<DynamicBusinessModelDO>()
-                        .likeIfPresent(DynamicBusinessModelDO::getName, name)
-                        .eqIfPresent(DynamicBusinessModelDO::getStatus, status)
-                        .eqIfPresent(DynamicBusinessModelDO::getDirectoryId, directoryId)
-                        .orderByAsc(DynamicBusinessModelDO::getSort));
-
-        // 返回分页结果
-        return new PageResult<>(page.getRecords(), page.getTotal());
-    }
-
-    @Override
-    public boolean isCodeUnique(String code, Long excludeId) {
-        if (StringUtils.isEmpty(code)) {
-            return true;
-        }
-
-        // 查询编码是否存在
-        DynamicBusinessModelDO model = dynamicBusinessModelMapper.selectOne(new LambdaQueryWrapper<DynamicBusinessModelDO>()
-                .eq(DynamicBusinessModelDO::getCode, code)
-                .last("LIMIT 1"));
-
-        // 如果不存在，说明不重复
-        if (model == null) {
-            return true;
-        }
-
-        // 如果是更新操作，且查询到的是当前记录，说明不重复
-        return excludeId != null && Objects.equals(model.getId(), excludeId);
-    }
-
-    @Override
-    public List<DynamicBusinessModelDO> getModelListByTenant(Long tenantId) {
-        if (tenantId == null) {
-            return List.of();
-        }
-        return dynamicBusinessModelMapper.selectList(new LambdaQueryWrapper<DynamicBusinessModelDO>()
-                .eq(DynamicBusinessModelDO::getTenantId, tenantId));
-    }
-
-    @Override
-    public void initModelTable(DynamicBusinessModelDO model) {
-        // TODO: 实现动态表初始化
-        log.info("初始化模型表: {}", model.getTableName());
-    }
-
-    @Override
-    public void updateModelTable(DynamicBusinessModelDO model) {
-        // TODO: 实现动态表更新
-        log.info("更新模型表: {}", model.getTableName());
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void batchUpdateSort(List<Map<String, Object>> sortList) {
-        if (sortList == null || sortList.isEmpty()) {
-            return;
-        }
-
-        // 批量更新排序
-        for (Map<String, Object> sortItem : sortList) {
-            Long id = (Long) sortItem.get("id");
-            Integer sort = (Integer) sortItem.get("sort");
-            if (id != null && sort != null) {
-                DynamicBusinessModelDO model = new DynamicBusinessModelDO();
-                model.setId(id);
-                model.setSort(sort);
-                dynamicBusinessModelMapper.updateById(model);
-            }
-        }
-    }
-
-    /**
-     * 校验模型是否存在
-     */
-    private DynamicBusinessModelDO validateModelExists(Long id) {
         DynamicBusinessModelDO model = dynamicBusinessModelMapper.selectById(id);
         if (model == null) {
             throw new ServiceException(ErrorCodeConstants.BUSINESS_MODEL_NOT_EXISTS);
@@ -359,22 +225,98 @@ public class DynamicBusinessModelServiceImpl implements DynamicBusinessModelServ
         return model;
     }
 
-    // TODO: 实现缓存相关方法
-    // private DynamicBusinessModelDO getModelFromCache(Long id) {
-    //     return redisCache.get(CACHE_KEY_PREFIX + id);
-    // }
-    //
-    // private DynamicBusinessModelDO getModelFromCacheByCode(String code) {
-    //     return redisCache.get(CACHE_KEY_PREFIX + "code:" + code);
-    // }
-    //
-    // private void updateCache(DynamicBusinessModelDO model) {
-    //     redisCache.set(CACHE_KEY_PREFIX + model.getId(), model);
-    //     redisCache.set(CACHE_KEY_PREFIX + "code:" + model.getCode(), model);
-    // }
-    //
-    // private void deleteCache(DynamicBusinessModelDO model) {
-    //     redisCache.delete(CACHE_KEY_PREFIX + model.getId());
-    //     redisCache.delete(CACHE_KEY_PREFIX + "code:" + model.getCode());
-    // }
+    @Override
+    public DynamicBusinessModelDO getModelByCode(String code) {
+        DynamicBusinessModelDO model = dynamicBusinessModelMapper.selectOne(
+                new LambdaQueryWrapper<DynamicBusinessModelDO>()
+                        .eq(DynamicBusinessModelDO::getCode, code));
+        if (model == null) {
+            throw new ServiceException(ErrorCodeConstants.BUSINESS_MODEL_NOT_EXISTS);
+        }
+        return model;
+    }
+
+    @Override
+    public List<DynamicBusinessModelDO> getModelList(List<Long> ids) {
+        return dynamicBusinessModelMapper.selectList(
+                new LambdaQueryWrapper<DynamicBusinessModelDO>()
+                        .in(DynamicBusinessModelDO::getId, ids));
+    }
+
+    @Override
+    public PageResult<DynamicBusinessModelDO> getModelPage(Integer pageNo, Integer pageSize, String name, Integer status) {
+        Page<DynamicBusinessModelDO> page = new Page<>(pageNo, pageSize);
+        LambdaQueryWrapperX<DynamicBusinessModelDO> queryWrapper = new LambdaQueryWrapperX<>();
+        queryWrapper.likeIfPresent(DynamicBusinessModelDO::getName, name)
+                .eqIfPresent(DynamicBusinessModelDO::getStatus, status)
+                .orderByDesc(DynamicBusinessModelDO::getId);
+        
+        Page<DynamicBusinessModelDO> result = dynamicBusinessModelMapper.selectPage(page, queryWrapper);
+        return new PageResult<>(result.getRecords(), result.getTotal());
+    }
+
+    @Override
+    public PageResult<DynamicBusinessModelDO> getModelPageByDirectory(Integer pageNo, Integer pageSize, String name, Integer status, Long directoryId) {
+        Page<DynamicBusinessModelDO> page = new Page<>(pageNo, pageSize);
+        LambdaQueryWrapperX<DynamicBusinessModelDO> queryWrapper = new LambdaQueryWrapperX<>();
+        queryWrapper.likeIfPresent(DynamicBusinessModelDO::getName, name)
+                .eqIfPresent(DynamicBusinessModelDO::getStatus, status)
+                .eqIfPresent(DynamicBusinessModelDO::getDirectoryId, directoryId)
+                .orderByDesc(DynamicBusinessModelDO::getId);
+        
+        Page<DynamicBusinessModelDO> result = dynamicBusinessModelMapper.selectPage(page, queryWrapper);
+        return new PageResult<>(result.getRecords(), result.getTotal());
+    }
+
+    @Override
+    public boolean isCodeUnique(String code, Long excludeId) {
+        LambdaQueryWrapper<DynamicBusinessModelDO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(DynamicBusinessModelDO::getCode, code);
+        if (excludeId != null) {
+            queryWrapper.ne(DynamicBusinessModelDO::getId, excludeId);
+        }
+        return dynamicBusinessModelMapper.selectCount(queryWrapper) == 0;
+    }
+
+    @Override
+    public List<DynamicBusinessModelDO> getModelListByTenant(Long tenantId) {
+        return dynamicBusinessModelMapper.selectList(
+                new LambdaQueryWrapper<DynamicBusinessModelDO>()
+                        .eq(DynamicBusinessModelDO::getTenantId, tenantId));
+    }
+
+    @Override
+    public void initModelTable(DynamicBusinessModelDO model) {
+        // 这里可以调用动态表服务来创建表
+        // dynamicTableService.createTable(model);
+    }
+
+    @Override
+    public void updateModelTable(DynamicBusinessModelDO model) {
+        // 这里可以调用动态表服务来更新表结构
+        // dynamicTableService.updateTable(model);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void batchUpdateSort(List<Map<String, Object>> sortList) {
+        for (Map<String, Object> sortItem : sortList) {
+            Long id = Long.valueOf(sortItem.get("id").toString());
+            Integer sort = Integer.valueOf(sortItem.get("sort").toString());
+            
+            DynamicBusinessModelDO model = new DynamicBusinessModelDO();
+            model.setId(id);
+            model.setSort(sort);
+            
+            dynamicBusinessModelMapper.updateById(model);
+        }
+    }
+
+    private DynamicBusinessModelDO validateModelExists(Long id) {
+        DynamicBusinessModelDO model = dynamicBusinessModelMapper.selectById(id);
+        if (model == null) {
+            throw new ServiceException(ErrorCodeConstants.BUSINESS_MODEL_NOT_EXISTS);
+        }
+        return model;
+    }
 } 

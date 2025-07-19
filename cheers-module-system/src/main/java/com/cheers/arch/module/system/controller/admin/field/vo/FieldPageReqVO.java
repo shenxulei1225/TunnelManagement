@@ -19,17 +19,30 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class FieldPageReqVO extends PageParam {
 
-    @Schema(description = "字段键名", example = "field_key")
-    private String fieldKey;
+    @Schema(description = "字段编码", example = "field_code")
+    private String fieldCode;
 
-    @Schema(description = "字段标签", example = "字段标签")
-    private String fieldLabel;
+    @Schema(description = "字段名称", example = "字段名称")
+    private String fieldName;
 
-    @Schema(description = "值类型", example = "STRING")
-    private String valueType;
+    @Schema(description = "显示名称", example = "显示名称")
+    private String display;
 
-    @Schema(description = "创建时间")
+    @Schema(description = "字段类型", example = "STRING")
+    private String fieldType;
+
+    @Schema(description = "是否自定义字段", example = "true")
+    private Boolean isCustom;
+
+    @Schema(description = "状态（0正常 1停用）", example = "0")
+    private Integer status;
+
+    @Schema(description = "创建开始时间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
-    private LocalDateTime[] createTime;
+    private LocalDateTime createTimeBegin;
+
+    @Schema(description = "创建结束时间")
+    @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
+    private LocalDateTime createTimeEnd;
 
 } 

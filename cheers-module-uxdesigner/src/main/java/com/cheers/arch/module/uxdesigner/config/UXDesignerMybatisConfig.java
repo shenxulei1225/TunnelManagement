@@ -5,11 +5,11 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * UX Designer 模块的 MyBatis 配置
+ * UXDesigner 模块的 MyBatis 配置
  *
- * @author UX Designer
+ * @author 芋道源码
  */
 @Configuration
-@MapperScan(value = "com.cheers.arch.module.uxdesigner.dal.mysql", annotationClass = Mapper.class)
+// @MapperScan(value = "com.cheers.arch.module.uxdesigner.dal.mysql", annotationClass = Mapper.class)
 public class UXDesignerMybatisConfig {
 } 

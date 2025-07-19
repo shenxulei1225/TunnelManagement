@@ -7,7 +7,10 @@ import lombok.EqualsAndHashCode;
 /**
  * 拓展多租户的 BaseDO 基类
  *
- * @author 芋道源码
+ * 这个类在 BaseDO 基础上增加了多租户支持
+ * 适用于需要多租户功能的数据库实体对象
+ *
+ * @author cheers
  */
 @Data
 @EqualsAndHashCode(callSuper = true)

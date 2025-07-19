@@ -3,6 +3,7 @@ package com.cheers.arch.module.system.dal.dataobject.field;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.cheers.arch.framework.tenant.core.db.TenantBaseDO;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,20 +19,29 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("system_field")
-public class FieldDO extends com.cheers.arch.framework.mybatis.core.dataobject.BaseDO {
+public class FieldDO extends TenantBaseDO {
 
     /** 主键 */
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    /** 字段键名 */
-    private String fieldKey;
+    /** 字段编码 */
+    private String fieldCode;
 
-    /** 字段标签 */
-    private String fieldLabel;
+    /** 字段名称 */
+    private String fieldName;
 
-    /** 值类型 */
-    private String valueType;
+    /** 字段类型 */
+    private String fieldType;
+
+    /** 显示名称 */
+    private String display;
+
+    /** 字段描述 */
+    private String description;
+
+    /** 是否自定义字段 */
+    private Boolean isCustom;
 
     /** 单位 */
     private String unit;
@@ -53,4 +63,7 @@ public class FieldDO extends com.cheers.arch.framework.mybatis.core.dataobject.B
 
     /** 备注 */
     private String remark;
+
+    /** 状态（0正常 1停用） */
+    private Integer status;
 } 

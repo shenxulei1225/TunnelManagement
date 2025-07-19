@@ -10,6 +10,6 @@ import org.springframework.context.annotation.Configuration;
  * @author 芋道源码
  */
 @Configuration
-@MapperScan(value = "com.cheers.arch.module.system.dal.mysql", annotationClass = Mapper.class)
+// @MapperScan(value = "com.cheers.arch.module.system.dal.mysql", annotationClass = Mapper.class)
 public class SystemMybatisConfig {
 } 

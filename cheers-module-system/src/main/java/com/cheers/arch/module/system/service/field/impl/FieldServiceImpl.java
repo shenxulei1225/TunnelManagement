@@ -3,10 +3,11 @@ package com.cheers.arch.module.system.service.field.impl;
 import java.util.List;
 
 import jakarta.annotation.Resource;
+import com.cheers.arch.framework.mybatis.core.query.LambdaQueryWrapperX;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cheers.arch.framework.common.pojo.PageResult;
 import com.cheers.arch.framework.common.util.object.BeanUtils;
+import com.cheers.arch.framework.tenant.core.context.TenantContextHolder;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldCreateReqVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldExportReqVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldPageReqVO;
@@ -34,6 +35,7 @@ public class FieldServiceImpl implements FieldService {
     public Long createField(FieldCreateReqVO createReqVO) {
         // 1. 插入
         FieldDO field = BeanUtils.toBean(createReqVO, FieldDO.class);
+        field.setTenantId(TenantContextHolder.getTenantId()); // 从租户上下文获取
         fieldMapper.insert(field);
         // 2. 返回
         return field.getId();
@@ -65,37 +67,17 @@ public class FieldServiceImpl implements FieldService {
 
     @Override
     public List<FieldDO> getFieldList(List<Long> ids) {
-        return fieldMapper.selectBatchIds(ids);
+        return fieldMapper.selectFieldListByIds(ids);
     }
 
     @Override
     public PageResult<FieldDO> getFieldPage(FieldPageReqVO pageReqVO) {
-        // 1. 构建查询条件
-        LambdaQueryWrapper<FieldDO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(FieldDO::getFieldKey, pageReqVO.getFieldKey())
-                .like(FieldDO::getFieldLabel, pageReqVO.getFieldLabel())
-                .eq(FieldDO::getValueType, pageReqVO.getValueType())
-                .between(pageReqVO.getCreateTime() != null && pageReqVO.getCreateTime().length == 2, 
-                        FieldDO::getCreateTime, pageReqVO.getCreateTime()[0], pageReqVO.getCreateTime()[1])
-                .orderByDesc(FieldDO::getId);
-        
-        // 2. 执行分页查询
-        return fieldMapper.selectPage(pageReqVO, queryWrapper);
+        return fieldMapper.selectFieldPage(pageReqVO);
     }
 
     @Override
     public List<FieldDO> getFieldList(FieldExportReqVO exportReqVO) {
-        // 1. 构建查询条件
-        LambdaQueryWrapper<FieldDO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.like(FieldDO::getFieldKey, exportReqVO.getFieldKey())
-                .like(FieldDO::getFieldLabel, exportReqVO.getFieldLabel())
-                .eq(FieldDO::getValueType, exportReqVO.getValueType())
-                .between(exportReqVO.getCreateTime() != null && exportReqVO.getCreateTime().length == 2, 
-                        FieldDO::getCreateTime, exportReqVO.getCreateTime()[0], exportReqVO.getCreateTime()[1])
-                .orderByDesc(FieldDO::getId);
-        
-        // 2. 执行查询
-        return fieldMapper.selectList(queryWrapper);
+        return fieldMapper.selectFieldList(exportReqVO);
     }
 
     private void validateFieldExists(Long id) {

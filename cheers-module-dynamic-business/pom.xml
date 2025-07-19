@@ -16,10 +16,10 @@
     <description>动态业务模块</description>
 
     <dependencies>
-        <!-- 通用目录服务 -->
+        <!-- 系统模块依赖 -->
         <dependency>
             <groupId>com.cheers.arch</groupId>
-            <artifactId>cheers-directory</artifactId>
+            <artifactId>cheers-module-system</artifactId>
             <version>${revision}</version>
         </dependency>
 

@@ -2,8 +2,8 @@ package com.cheers.arch.module.dynamic.controller.admin.model;
 
 import com.cheers.arch.framework.common.pojo.CommonResult;
 import com.cheers.arch.framework.common.pojo.PageResult;
-import com.cheers.arch.framework.directory.constants.DirectoryConstants;
-import com.cheers.arch.framework.directory.service.DirectoryService;
+import com.cheers.arch.module.system.dal.dataobject.directory.DirectoryDO;
+import com.cheers.arch.module.system.service.directory.DirectoryService;
 import com.cheers.arch.module.dynamic.controller.admin.model.vo.*;
 import com.cheers.arch.module.dynamic.convert.model.DynamicModelConvert;
 import com.cheers.arch.module.dynamic.dal.dataobject.model.DynamicBusinessModelDO;
@@ -114,7 +114,7 @@ public class DynamicModelController {
     @GetMapping("/directory-tree")
     @Operation(summary = "获得动态业务模型目录树")
     @PreAuthorize("@ss.hasPermission('dynamic-business:model:query')")
-    public CommonResult<List<com.cheers.arch.framework.directory.dal.dataobject.DirectoryDO>> getDirectoryTree() {
-        return CommonResult.success(directoryService.getDirectoryTree(DirectoryConstants.BusinessType.DYNAMIC_MODEL));
+    public CommonResult<List<DirectoryDO>> getDirectoryTree() {
+        return CommonResult.success(directoryService.getDirectoryTree("dynamic_model"));
     }
 } 
