@@ -82,7 +82,6 @@
             <groupId>com.cheers.arch</groupId>
             <artifactId>cheers-trees</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.cheers.arch</groupId>
             <artifactId>cheers-test</artifactId>

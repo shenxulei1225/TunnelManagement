@@ -10,17 +10,17 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * 动态字段定义 DO
+ * 动态字段分组 DO
  */
-@TableName("dynamic_field_definition")
-@KeySequence("dynamic_field_definition_seq")
+@TableName("dynamic_field_group")
+@KeySequence("dynamic_field_group_seq")
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class DynamicFieldDefinitionDO extends TenantBaseDO {
+public class DynamicFieldGroupDO extends TenantBaseDO {
 
     /**
-     * 字段ID
+     * 分组ID
      */
     @TableId
     private Long id;
@@ -31,44 +31,34 @@ public class DynamicFieldDefinitionDO extends TenantBaseDO {
     private String modelCode;
 
     /**
-     * 字段编码
-     */
-    private String code;
-
-    /**
-     * 字段名称
+     * 分组名称
      */
     private String name;
 
     /**
-     * 字段类型
+     * 分组编码
      */
-    private String type;
+    private String code;
 
     /**
-     * 字段长度
-     */
-    private Integer length;
-
-    /**
-     * 是否必填
-     */
-    private Boolean required;
-
-    /**
-     * 默认值
-     */
-    private String defaultValue;
-
-    /**
-     * 验证规则（JSON格式）
-     */
-    private String validation;
-
-    /**
-     * 字段描述
+     * 分组描述
      */
     private String description;
+
+    /**
+     * 父分组ID
+     */
+    private Long parentId;
+
+    /**
+     * 分组路径
+     */
+    private String path;
+
+    /**
+     * 分组层级
+     */
+    private Integer level;
 
     /**
      * 排序号
@@ -81,22 +71,12 @@ public class DynamicFieldDefinitionDO extends TenantBaseDO {
     private Integer status;
 
     /**
-     * 是否只读
+     * 分组图标
      */
-    private Boolean readonly;
+    private String icon;
 
     /**
-     * 是否唯一
+     * 分组颜色
      */
-    private Boolean unique;
-
-    /**
-     * 是否索引
-     */
-    private Boolean indexed;
-
-    /**
-     * 字段配置（JSON格式）
-     */
-    private String config;
+    private String color;
 } 

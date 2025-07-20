@@ -3,7 +3,6 @@ package com.cheers.arch.module.system.service.field.impl;
 import java.util.List;
 
 import jakarta.annotation.Resource;
-import com.cheers.arch.framework.mybatis.core.query.LambdaQueryWrapperX;
 
 import com.cheers.arch.framework.common.pojo.PageResult;
 import com.cheers.arch.framework.common.util.object.BeanUtils;
@@ -68,6 +67,11 @@ public class FieldServiceImpl implements FieldService {
     @Override
     public List<FieldDO> getFieldList(List<Long> ids) {
         return fieldMapper.selectFieldListByIds(ids);
+    }
+
+    @Override
+    public List<FieldDO> getAllFieldList() {
+        return fieldMapper.selectList();
     }
 
     @Override

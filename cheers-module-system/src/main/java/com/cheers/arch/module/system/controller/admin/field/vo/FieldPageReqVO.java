@@ -37,6 +37,12 @@ public class FieldPageReqVO extends PageParam {
     @Schema(description = "状态（0正常 1停用）", example = "0")
     private Integer status;
 
+    @Schema(description = "分类ID", example = "1024")
+    private Long categoryId;
+
+    @Schema(description = "业务类型", example = "FIELD_CATEGORY")
+    private String businessType;
+
     @Schema(description = "创建开始时间")
     @DateTimeFormat(pattern = FORMAT_YEAR_MONTH_DAY_HOUR_MINUTE_SECOND)
     private LocalDateTime createTimeBegin;

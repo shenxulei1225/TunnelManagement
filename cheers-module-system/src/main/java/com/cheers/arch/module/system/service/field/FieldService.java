@@ -55,6 +55,13 @@ public interface FieldService {
     List<FieldDO> getFieldList(List<Long> ids);
 
     /**
+     * 获得所有字段列表
+     *
+     * @return 字段列表
+     */
+    List<FieldDO> getAllFieldList();
+
+    /**
      * 获得字段分页
      *
      * @param pageReqVO 分页查询

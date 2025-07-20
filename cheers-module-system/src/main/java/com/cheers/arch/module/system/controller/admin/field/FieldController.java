@@ -13,10 +13,15 @@ import com.cheers.arch.framework.common.util.object.BeanUtils;
 import com.cheers.arch.framework.excel.core.util.ExcelUtils;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldCreateReqVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldExportReqVO;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldHierarchyRelRespVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldPageReqVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldRespVO;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldUpdateHierarchiesReqVO;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldUpdateHierarchyReqVO;
 import com.cheers.arch.module.system.controller.admin.field.vo.FieldUpdateReqVO;
 import com.cheers.arch.module.system.dal.dataobject.field.FieldDO;
+import com.cheers.arch.module.system.dal.dataobject.field.FieldDefHierarchyRelDO;
+import com.cheers.arch.module.system.service.field.FieldDefHierarchyRelService;
 import com.cheers.arch.module.system.service.field.FieldService;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -42,6 +47,9 @@ public class FieldController {
 
     @Resource
     private FieldService fieldService;
+    
+    @Resource
+    private FieldDefHierarchyRelService fieldDefHierarchyRelService;
 
     @PostMapping("/create")
     @Operation(summary = "创建字段")
@@ -109,6 +117,33 @@ public class FieldController {
         List<FieldDO> list = fieldService.getFieldList(exportReqVO);
         // 导出 Excel
         ExcelUtils.write(response, "字段.xls", "数据", FieldDO.class, list);
+    }
+
+    @PutMapping("/update-hierarchy-group")
+    @Operation(summary = "更新字段分级组")
+    @PreAuthorize("@ss.hasPermission('system:field:update')")
+    public CommonResult<Boolean> updateFieldHierarchyGroup(@Valid @RequestBody FieldUpdateHierarchyReqVO reqVO) {
+        fieldDefHierarchyRelService.updateFieldDefHierarchyRel(reqVO.getFieldId(), reqVO.getHierarchyGroupId());
+        return CommonResult.success(true);
+    }
+
+    @PutMapping("/update-hierarchy-groups")
+    @Operation(summary = "批量更新字段分级组")
+    @PreAuthorize("@ss.hasPermission('system:field:update')")
+    public CommonResult<Boolean> updateFieldHierarchyGroups(@Valid @RequestBody FieldUpdateHierarchiesReqVO reqVO) {
+        fieldDefHierarchyRelService.updateFieldDefHierarchyRels(reqVO.getFieldId(), reqVO.getHierarchyGroupIds());
+        return CommonResult.success(true);
+    }
+
+    @GetMapping("/hierarchy-rels")
+    @Operation(summary = "获取字段分级组关联信息")
+    @PreAuthorize("@ss.hasPermission('system:field:query')")
+    public CommonResult<List<FieldHierarchyRelRespVO>> getFieldHierarchyRels(@RequestParam("fieldIds") String fieldIdsStr) {
+        List<Long> fieldIds = java.util.Arrays.stream(fieldIdsStr.split(","))
+                .map(Long::valueOf)
+                .toList();
+        List<FieldDefHierarchyRelDO> rels = fieldDefHierarchyRelService.getFieldDefHierarchyRelsByFieldDefIds(fieldIds);
+        return CommonResult.success(BeanUtils.toBean(rels, FieldHierarchyRelRespVO.class));
     }
 
 } 

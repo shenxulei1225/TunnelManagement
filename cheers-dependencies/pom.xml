@@ -643,16 +643,7 @@
                 <artifactId>cheers-monitor</artifactId>
                 <version>${revision}</version>
             </dependency>
-            <dependency>
-                <groupId>com.cheers.arch</groupId>
-                <artifactId>cheers-category</artifactId>
-                <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.cheers.arch</groupId>
-                <artifactId>cheers-directory</artifactId>
-                <version>${revision}</version>
-            </dependency>
+
             <dependency>
                 <groupId>com.cheers.arch</groupId>
                 <artifactId>cheers-trees</artifactId>
