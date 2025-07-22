@@ -162,4 +162,16 @@ public interface ErrorCodeConstants {
     ErrorCode DEVICE_PARENT_ERROR = new ErrorCode(1_002_029_003, "不能设置自己为父设备");
     ErrorCode DEVICE_EXITS_CHILDREN = new ErrorCode(1_002_029_004, "存在子设备，无法删除");
 
+    // ========== 测试树节点 1-002-030-000 ==========
+    ErrorCode TEST_TREE_NODE_NOT_EXISTS = new ErrorCode(1_002_030_000, "测试树节点不存在");
+
+    // ========== 页面配置 1-002-030-000 ==========
+    ErrorCode PAGE_CONFIG_NOT_EXISTS = new ErrorCode(1_002_030_000, "页面配置不存在");
+    ErrorCode PAGE_CONFIG_KEY_DUPLICATE = new ErrorCode(1_002_030_001, "已经存在配置键为【{}】的页面配置");
+
+    // ========== 字段相关 1-002-031-000 ==========
+    ErrorCode FIELD_NOT_EXISTS = new ErrorCode(1_002_031_000, "字段不存在");
+    ErrorCode FIELD_CATEGORY_REL_EXISTS = new ErrorCode(1_002_031_001, "字段分类关联已存在");
+    ErrorCode FIELD_CATEGORY_REL_NOT_EXISTS = new ErrorCode(1_002_031_002, "字段分类关联不存在");
+
 }

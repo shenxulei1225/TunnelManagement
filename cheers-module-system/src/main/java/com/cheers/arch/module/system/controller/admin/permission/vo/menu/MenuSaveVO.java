@@ -1,11 +1,13 @@
 package com.cheers.arch.module.system.controller.admin.permission.vo.menu;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Data;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Schema(description = "管理后台 - 菜单创建/修改 Request VO")
 @Data
@@ -62,4 +64,28 @@ public class MenuSaveVO {
     @Schema(description = "是否总是显示", example = "false")
     private Boolean alwaysShow;
 
+    @Schema(description = "动态路由配置", example = "{\"parameterName\":\"configId\",\"titleTemplate\":\"动态分类 - ${configId}\",\"enableMultiInstance\":true}")
+    private DynamicConfig dynamicConfig;
+
+    /**
+     * 动态路由配置内部类
+     */
+    @Schema(description = "动态路由配置")
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DynamicConfig {
+        
+        @Schema(description = "参数名称", example = "configId")
+        private String parameterName;
+        
+        @Schema(description = "参数类型", example = "string")
+        private String parameterType;
+        
+        @Schema(description = "标题模板", example = "动态分类 - ${configId}")
+        private String titleTemplate;
+        
+        @Schema(description = "是否启用多实例", example = "true")
+        private Boolean enableMultiInstance;
+    }
 }

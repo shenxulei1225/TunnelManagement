@@ -1,21 +1,26 @@
 package com.cheers.arch.module.system.dal.dataobject.permission;
 
+import com.baomidou.mybatisplus.annotation.KeySequence;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import com.cheers.arch.framework.common.enums.CommonStatusEnum;
 import com.cheers.arch.framework.mybatis.core.dataobject.BaseDO;
 import com.cheers.arch.framework.tenant.core.aop.TenantIgnore;
 import com.cheers.arch.module.system.enums.permission.MenuTypeEnum;
-import com.baomidou.mybatisplus.annotation.KeySequence;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 /**
  * 菜单 DO
  *
  * @author ruoyi
  */
-@TableName("system_menu")
+@TableName(value = "system_menu", autoResultMap = true)
 @KeySequence("system_menu_seq") // 用于 Oracle、PostgreSQL、Kingbase、DB2、H2 数据库的主键自增。如果是 MySQL 等数据库，可不写。
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -106,4 +111,46 @@ public class MenuDO extends BaseDO {
      */
     private Boolean alwaysShow;
 
+    /**
+     * 动态路由配置
+     * 
+     * 存储动态路由相关配置信息，JSON格式：
+     * {
+     *   "parameterName": "configId",
+     *   "parameterType": "string", 
+     *   "titleTemplate": "动态分类 - ${configId}",
+     *   "enableMultiInstance": true
+     * }
+     */
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private DynamicConfig dynamicConfig;
+
+    /**
+     * 动态路由配置内部类
+     */
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class DynamicConfig {
+        /**
+         * 参数名称
+         */
+        private String parameterName;
+        
+        /**
+         * 参数类型
+         */
+        private String parameterType;
+        
+        /**
+         * 标题模板，支持参数化
+         * 例如: "动态分类 - ${configId}"
+         */
+        private String titleTemplate;
+        
+        /**
+         * 是否启用多实例
+         */
+        private Boolean enableMultiInstance;
+    }
 }

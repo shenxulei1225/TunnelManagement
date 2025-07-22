@@ -176,6 +176,7 @@ logging:
     com.cheers.arch.module.pay.dal.mysql: debug
     com.cheers.arch.module.pay.dal.mysql.notify.PayNotifyTaskMapper: INFO # 配置 PayNotifyTaskMapper 的日志级别为 info
     com.cheers.arch.module.system.dal.mysql: debug
+    com.cheers.arch.module.system.dal.mysql.tree.TreeDataRelationMapper: debug
     com.cheers.arch.module.system.dal.mysql.sms.SmsChannelMapper: INFO # 配置 SmsChannelMapper 的日志级别为 info
     com.cheers.arch.module.tool.dal.mysql: debug
     com.cheers.arch.module.member.dal.mysql: debug
