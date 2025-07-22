@@ -248,66 +248,79 @@ F --> G[随时补充完善]
 
 ---
 
-## 多级业务分组与无代码动态建表设计补充（2024-07-03）
+## 通用树系统与无代码动态建表设计（2024-07-03 更新）
 
-### 1. 多级业务分组（business_module）设计
-- 业务系统/分组采用单表多级结构（parent_id树形），支持无限级嵌套。
-- 顶层节点为业务系统，下级为业务类型/分组，便于灵活扩展。
-- 业务模型（model）通过 business_module_id 归属到任意分组节点。
+### 1. 通用树系统设计
+- 采用 `system_tree_data_rel` 表为核心的通用树系统，支持任意类型数据的树形关联。
+- 通过 `system_tree_config` 和 `system_data_type_meta` 表实现完全动态的树形结构管理。
+- 业务模型（model）通过通用树系统归属到任意树节点，支持多层级嵌套。
 
 #### 表结构示例
 ```sql
-CREATE TABLE business_module (
+-- 通用树数据关联表
+CREATE TABLE system_tree_data_rel (
   id BIGINT PRIMARY KEY,
-  parent_id BIGINT,
-  name VARCHAR(100),
-  code VARCHAR(100),
-  description VARCHAR(255)
+  tree_type VARCHAR(50),      -- 树类型：field_category/hierarchy_group等
+  tree_node_id BIGINT,        -- 树节点ID
+  data_type VARCHAR(50),      -- 数据类型：field_def/device/region等
+  data_id BIGINT,             -- 数据ID
+  data_name VARCHAR(255),     -- 数据名称
+  metadata JSON               -- 扩展元数据
 );
 
-CREATE TABLE business_model (
+-- 树结构配置表
+CREATE TABLE system_tree_config (
   id BIGINT PRIMARY KEY,
-  business_module_id BIGINT,  -- 关联到多级业务分组表
-  name VARCHAR(100),
-  code VARCHAR(100),
-  description VARCHAR(255),
-  table_name VARCHAR(100)
+  tree_type VARCHAR(50),      -- 树类型编码
+  tree_name VARCHAR(100),     -- 树类型名称
+  allowed_data_types JSON,    -- 允许的数据类型列表
+  max_level INT               -- 最大层级
+);
+
+-- 数据类型元数据表
+CREATE TABLE system_data_type_meta (
+  id BIGINT PRIMARY KEY,
+  data_type VARCHAR(50),      -- 数据类型编码
+  data_name VARCHAR(100),     -- 数据类型名称
+  table_name VARCHAR(100),    -- 对应的数据表名
+  id_field VARCHAR(50),       -- ID字段名
+  name_field VARCHAR(50)      -- 名称字段名
 );
 ```
 
 ### 2. 无代码动态建表方案
 - 用户在前端配置业务模型和字段，后端根据配置动态生成/变更物理表（CREATE/ALTER TABLE）。
 - 字段定义、分组、继承、权限等全部元数据驱动。
-- 表名建议统一用 dynamic_业务模型code 或 biz_业务模型id，避免冲突。
+- 表名建议统一用 `dynamic_业务模型code` 或 `biz_业务模型id`，避免冲突。
 
 ### 3. 目录结构与命名规范
-- business_module 作为全局业务分组/系统管理页面，单独放在 views/business-module/ 下。
-- 动态业务模型管理页面继续放在 views/dynamic/model/ 下。
-- 命名统一用 business_module（业务分组/系统）、business_model（业务模型/表单），避免 module/model 混用。
+- 通用树管理页面放在 `views/system/universal-tree/` 下。
+- 动态业务模型管理页面继续放在 `views/dynamic/model/` 下。
+- 命名统一用 `universal_tree`（通用树系统）、`business_model`（业务模型/表单）。
 
 ### 4. 前端实现建议
-- 新增 business-module 页面，左侧多级树（el-tree），右侧分组详情。
-- model 页面新增/编辑时可选择归属的 business_module。
-- 未来可在 model 页面增加“按业务分组筛选”功能，逐步引导用户使用多级分组。
+- 使用 `UniversalTreeView.vue` 组件实现统一的树形管理界面。
+- model 页面新增/编辑时可选择归属的树节点。
+- 支持拖拽操作，实现数据在不同树节点间的移动。
 
 ### 5. 典型业务场景
-- 巡检系统（business_module）
-  - 日常巡检（business_module）
-    - 日常巡检表单A（business_model）
-    - 日常巡检表单B（business_model）
-  - 重点巡检（business_module）
-    - 重点巡检表单A（business_model）
+- 字段分类树（tree_type: field_category）
+  - 基础信息（tree_node）
+    - 设备名称字段（field_def）
+    - 设备编号字段（field_def）
+  - 位置信息（tree_node）
+    - 所在区域字段（field_def）
 
 ### 6. 设计原则总结
-- 多级分组结构极简、灵活、易扩展。
+- 通用树系统完全动态化，支持任意类型数据的树形关联。
 - 动态建表、字段变更、数据管理全部元数据驱动，适合无代码平台。
-- 命名、目录、接口、表结构前后一致，便于维护和扩展。
+- 统一的API接口和前端组件，便于维护和扩展。
 
 ### 7. 迁移与演进建议
-- 现有 category 可保留，复制迁移为 business_module，避免未来扩展受限。
-- 现有 model 命名建议统一为 business_model，弃用 module/model 混用。
-- 先实现多级分组管理页面，逐步引导用户迁移到多级结构。
+- 现有业务分组功能迁移到通用树系统。
+- 使用 `system_tree_data_rel` 表替代原有的专用树表。
+- 通过配置实现不同类型树的统一管理。
 
 ---
 
-本节内容为 2024-07-03 业务模型管理多级分组与无代码动态建表设计讨论记录，后续如有新决策请持续补充。 
+本节内容为 2024-07-03 业务模型管理通用树系统与无代码动态建表设计讨论记录，已更新为最新的通用树系统架构。 

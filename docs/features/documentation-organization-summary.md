@@ -9,7 +9,7 @@
 ### 1. 文档分散
 - 设计文档在 `docs/design/` 目录
 - 开发文档在 `docs/development/` 目录
-- 测试文档在 `docs/features/` 目录
+- 功能文档在 `docs/features/` 目录
 - 相关文档分散在不同位置，查找困难
 
 ### 2. 结构不清晰

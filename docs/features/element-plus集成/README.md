@@ -10,7 +10,7 @@
 
 ## 📁 模块文档
 
-- [Element Plus 使用规范](./usage-standards.md) - **🚨 强制执行标准**
+- [ElementPlus开发规范](./ElementPlus开发规范.md) - **🚨 强制执行标准**
 - [代码审查检查清单](./code-review-checklist.md) - 强制性检查项
 - [违规处理流程](./violation-handling.md) - 违规代码处理机制
 - [常见违规示例](./common-violations.md) - 错误示例和正确实现
@@ -33,7 +33,7 @@
 ## 🔧 快速开始
 
 ### 开发前准备
-1. **📖 阅读使用规范** - [Element Plus 使用规范](./usage-standards.md)
+1. **📖 阅读使用规范** - [ElementPlus开发规范](./ElementPlus开发规范.md)
 2. **📋 检查流程** - [开发前检查流程](./pre-development-checklist.md)
 3. **🔍 查阅官方文档** - 确认是否有对应的官方方法
 
@@ -58,5 +58,4 @@
 - **违规发现和处理时间**: 目标 24小时内
 
 ---
-
 **⚠️ 重要提醒**: 本模块的所有规范都是**强制执行标准**，违反规范的代码将被立即拒绝合并。
