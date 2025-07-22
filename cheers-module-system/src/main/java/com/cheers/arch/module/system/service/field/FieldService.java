@@ -77,4 +77,30 @@ public interface FieldService {
      */
     List<FieldDO> getFieldList(FieldExportReqVO exportReqVO);
 
+    /**
+     * 根据分类ID获取字段列表
+     *
+     * @param categoryId 分类ID
+     * @return 字段列表
+     */
+    List<FieldDO> getFieldsByCategory(Long categoryId);
+
+    /**
+     * 根据多个分类ID批量获取字段列表
+     *
+     * @param categoryIds 分类ID列表
+     * @return 字段列表
+     */
+    List<FieldDO> getFieldsByCategoryIds(List<Long> categoryIds);
+
+    /**
+     * 批量更新字段
+     * 用于分组删除或字段批量操作时调用
+     *
+     * @param fieldIds 字段ID列表
+     * @param updateAction 更新操作类型
+     * @param updateValue 更新值（可选）
+     */
+    void batchUpdateFields(List<Long> fieldIds, String updateAction, Object updateValue);
+
 } 

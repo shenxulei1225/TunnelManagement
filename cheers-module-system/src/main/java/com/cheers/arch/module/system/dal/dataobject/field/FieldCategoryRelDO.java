@@ -3,6 +3,7 @@ package com.cheers.arch.module.system.dal.dataobject.field;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.cheers.arch.framework.tenant.core.db.TenantBaseDO;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +19,7 @@ import lombok.experimental.Accessors;
 @NoArgsConstructor
 @Accessors(chain = true)
 @TableName("system_field_category_rel")
-public class FieldCategoryRelDO extends com.cheers.arch.framework.mybatis.core.dataobject.BaseDO {
+public class FieldCategoryRelDO extends TenantBaseDO {
 
     /** 主键 */
     @TableId(type = IdType.AUTO)
@@ -29,9 +30,6 @@ public class FieldCategoryRelDO extends com.cheers.arch.framework.mybatis.core.d
 
     /** 分类ID */
     private Long categoryId;
-
-    /** 是否必填 */
-    private Boolean required;
 
     /** 排序 */
     private Integer sort;

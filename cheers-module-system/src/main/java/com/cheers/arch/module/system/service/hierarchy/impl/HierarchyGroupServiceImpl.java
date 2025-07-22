@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import jakarta.annotation.Resource;
 
+import com.cheers.arch.framework.common.enums.CommonStatusEnum;
 import com.cheers.arch.framework.common.pojo.PageResult;
 import com.cheers.arch.framework.common.util.object.BeanUtils;
 import com.cheers.arch.framework.mybatis.core.query.LambdaQueryWrapperX;
@@ -22,6 +23,7 @@ import com.cheers.arch.module.system.dal.dataobject.hierarchy.HierarchyGroupDO;
 import com.cheers.arch.module.system.dal.dataobject.hierarchy.HierarchyGroupRelationDO;
 import com.cheers.arch.module.system.dal.mysql.hierarchy.HierarchyGroupMapper;
 import com.cheers.arch.module.system.dal.mysql.hierarchy.HierarchyGroupRelationMapper;
+import com.cheers.arch.module.system.service.field.FieldHierarchyRelService;
 import com.cheers.arch.module.system.service.hierarchy.HierarchyGroupService;
 
 import org.springframework.stereotype.Service;
@@ -41,6 +43,9 @@ public class HierarchyGroupServiceImpl implements HierarchyGroupService {
 
     @Resource
     private HierarchyGroupRelationMapper hierarchyGroupRelationMapper;
+
+    @Resource
+    private FieldHierarchyRelService fieldHierarchyRelService;
 
     @Override
     public Long createHierarchyGroup(HierarchyGroupCreateReqVO createReqVO) {
@@ -68,6 +73,8 @@ public class HierarchyGroupServiceImpl implements HierarchyGroupService {
         hierarchyGroupMapper.deleteById(id);
         // 删除关联关系
         hierarchyGroupRelationMapper.deleteByHierarchyGroupId(id);
+        // 删除字段层级关系
+        fieldHierarchyRelService.deleteFieldHierarchyRelsByGroupId(id);
     }
 
     private void validateHierarchyGroupExists(Long id) {
@@ -211,6 +218,70 @@ public class HierarchyGroupServiceImpl implements HierarchyGroupService {
         }
         
         return node;
+    }
+
+    @Override
+    public List<HierarchyGroupDO> getHierarchyGroupListByUsageType(String usageType) {
+        return hierarchyGroupMapper.selectList(
+            new LambdaQueryWrapperX<HierarchyGroupDO>()
+                .eq(HierarchyGroupDO::getUsageType, usageType)
+                .eq(HierarchyGroupDO::getStatus, CommonStatusEnum.ENABLE.getStatus())
+                .orderByAsc(HierarchyGroupDO::getSort)
+        );
+    }
+
+    @Override
+    public List<HierarchyGroupDO> getHierarchyGroupListByUsageTypeAndGroupType(String usageType, String groupType) {
+        return hierarchyGroupMapper.selectList(
+            new LambdaQueryWrapperX<HierarchyGroupDO>()
+                .eq(HierarchyGroupDO::getUsageType, usageType)
+                .eq(HierarchyGroupDO::getGroupType, groupType)
+                .eq(HierarchyGroupDO::getStatus, CommonStatusEnum.ENABLE.getStatus())
+                .orderByAsc(HierarchyGroupDO::getSort)
+        );
+    }
+
+    @Override
+    public HierarchyGroupTreeVO getHierarchyGroupTreeByUsageType(String usageType) {
+        // 获取指定用途类型的所有分级组
+        List<HierarchyGroupDO> hierarchyGroups = getHierarchyGroupListByUsageType(usageType);
+        
+        if (hierarchyGroups.isEmpty()) {
+            return new HierarchyGroupTreeVO();
+        }
+
+        // 构建父ID -> 子节点列表的映射
+        Map<Long, List<HierarchyGroupDO>> parentIdMap = hierarchyGroups.stream()
+                .collect(Collectors.groupingBy(hierarchyGroup -> 
+                        hierarchyGroup.getParentId() != null ? hierarchyGroup.getParentId() : 0L));
+
+        // 获取分级组关联对象数量映射
+        Map<Long, Long> hierarchyGroupCountMap = getHierarchyGroupCountMap();
+
+        // 找到根节点
+        List<HierarchyGroupDO> rootNodes = parentIdMap.getOrDefault(0L, new ArrayList<>());
+        
+        if (rootNodes.isEmpty()) {
+            return new HierarchyGroupTreeVO();
+        }
+
+        // 构建树形结构（取第一个根节点作为主根节点）
+        HierarchyGroupDO rootHierarchyGroup = rootNodes.get(0);
+        HierarchyGroupTreeVO rootNode = buildHierarchyGroupTreeNode(rootHierarchyGroup, parentIdMap, hierarchyGroupCountMap);
+        
+        // 如果有多个根节点，将其他根节点作为子节点添加
+        if (rootNodes.size() > 1) {
+            List<HierarchyGroupTreeVO> otherRootNodes = rootNodes.subList(1, rootNodes.size()).stream()
+                    .map(hierarchyGroup -> buildHierarchyGroupTreeNode(hierarchyGroup, parentIdMap, hierarchyGroupCountMap))
+                    .collect(Collectors.toList());
+            
+            if (rootNode.getChildren() == null) {
+                rootNode.setChildren(new ArrayList<>());
+            }
+            rootNode.getChildren().addAll(otherRootNodes);
+        }
+
+        return rootNode;
     }
 
 } 

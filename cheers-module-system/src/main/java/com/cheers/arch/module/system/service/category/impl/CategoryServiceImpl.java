@@ -5,25 +5,32 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import jakarta.annotation.Resource;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
-import com.cheers.arch.module.system.dal.dataobject.category.CategoryDO;
-import com.cheers.arch.module.system.dal.dataobject.category.CategoryBizTypeRelDO;
 import com.cheers.arch.framework.common.util.object.BeanUtils;
 import com.cheers.arch.framework.tenant.core.context.TenantContextHolder;
+import com.cheers.arch.framework.tenant.core.db.TenantBaseDO;
+import com.cheers.arch.framework.trees.service.AbstractTreeService;
 import com.cheers.arch.module.system.controller.admin.category.vo.CategoryCreateReqVO;
 import com.cheers.arch.module.system.controller.admin.category.vo.CategoryUpdateReqVO;
-import com.cheers.arch.module.system.dal.mysql.category.CategoryMapper;
+import com.cheers.arch.module.system.dal.dataobject.category.CategoryBizTypeRelDO;
+import com.cheers.arch.module.system.dal.dataobject.category.CategoryDO;
 import com.cheers.arch.module.system.dal.mysql.category.CategoryBizTypeRelMapper;
+import com.cheers.arch.module.system.dal.mysql.category.CategoryMapper;
 import com.cheers.arch.module.system.service.category.CategoryService;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import cn.hutool.core.util.StrUtil;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
-public class CategoryServiceImpl implements CategoryService {
+@Validated
+@Slf4j
+public class CategoryServiceImpl extends AbstractTreeService<CategoryMapper, CategoryDO, Long, TenantBaseDO> 
+        implements CategoryService {
 
     @Resource
     private CategoryMapper categoryMapper;
@@ -31,10 +38,28 @@ public class CategoryServiceImpl implements CategoryService {
     @Resource
     private CategoryBizTypeRelMapper categoryBizTypeRelMapper;
 
+    // ==================== AbstractTreeService 抽象方法实现 ====================
+
+    @Override
+    protected CategoryMapper getMapper() {
+        return categoryMapper;
+    }
+
+    @Override
+    protected String getTableName() {
+        return "system_category";
+    }
+
+    @Override
+    protected List<CategoryDO> getChildrenByParentId(Long parentId) {
+        return categoryMapper.selectByParentId(parentId != null ? parentId : 0L);
+    }
+
     @Override
     public List<CategoryDO> getCategoryTree() {
         // 确保有根节点
         ensureRoot();
+        // 获取所有节点并构建树结构
         LambdaQueryWrapper<CategoryDO> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(CategoryDO::getDeleted, false)
                 .orderByAsc(CategoryDO::getSort);
@@ -43,11 +68,8 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<CategoryDO> getCategoryListByParentId(Long parentId) {
-        LambdaQueryWrapper<CategoryDO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(CategoryDO::getDeleted, false)
-                .eq(CategoryDO::getParentId, parentId != null ? parentId : 0L)
-                .orderByAsc(CategoryDO::getSort);
-        return categoryMapper.selectList(wrapper);
+        // 使用框架方法获取子节点
+        return getChildren(parentId != null ? parentId : 0L);
     }
 
     @Override
@@ -80,7 +102,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long createCategory(CategoryCreateReqVO createReqVO) {
-        // 转换为 DO 并调用核心实现
+        // 转换为 DO 并调用框架实现
         CategoryDO category = BeanUtils.toBean(createReqVO, CategoryDO.class);
         return createCategory(category);
     }
@@ -88,12 +110,12 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateCategory(CategoryUpdateReqVO updateReqVO) {
-        // 转换为 DO 并调用核心实现
+        // 转换为 DO 并调用框架实现
         CategoryDO category = BeanUtils.toBean(updateReqVO, CategoryDO.class);
         updateCategory(category);
     }
 
-    // ========== 核心实现方法（内部使用） ==========
+    // ========== 核心实现方法（内部使用） - 使用TreeEntity框架 ==========
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -101,12 +123,11 @@ public class CategoryServiceImpl implements CategoryService {
         // 设置租户ID（安全保证）
         bean.setTenantId(TenantContextHolder.getTenantId());
         
-        fillTree(bean);
+        // 使用框架的创建方法，自动处理treePath和level
         if (StrUtil.isBlank(bean.getCode())) {
             bean.setCode(null);
         }
-        categoryMapper.insert(bean);
-        return bean.getId();
+        return createNode(bean);
     }
 
     @Override
@@ -117,11 +138,12 @@ public class CategoryServiceImpl implements CategoryService {
             throw new IllegalStateException("只读分类禁止修改");
         }
 
-        fillTree(bean);
+        // 使用框架的更新方法，自动处理treePath和level变更
         if (StrUtil.isBlank(bean.getCode())) {
             bean.setCode(null);
         }
-        return categoryMapper.updateById(bean) > 0;
+        updateNode(bean);
+        return true;
     }
 
     @Override
@@ -133,25 +155,8 @@ public class CategoryServiceImpl implements CategoryService {
             throw new IllegalStateException("系统只读分类禁止删除");
         }
 
-        // 2. 查找所有子节点
-        List<CategoryDO> children = categoryMapper.selectList(
-            new LambdaQueryWrapper<CategoryDO>()
-                .likeRight(CategoryDO::getTreePath, origin.getTreePath() + "/" + origin.getId())
-                .eq(CategoryDO::getDeleted, false)
-        );
-        
-        // 3. 软删除当前节点和所有子节点
-        List<Long> ids = new ArrayList<>();
-        ids.add(id);
-        if (!children.isEmpty()) {
-            ids.addAll(children.stream().map(CategoryDO::getId).collect(Collectors.toList()));
-        }
-        
-        categoryMapper.update(null,
-            new LambdaUpdateWrapper<CategoryDO>()
-                .set(CategoryDO::getDeleted, true)
-                .in(CategoryDO::getId, ids)
-        );
+        // 2. 使用框架的删除方法，自动处理子节点删除
+        deleteNode(id);
     }
 
     @Override
@@ -162,11 +167,9 @@ public class CategoryServiceImpl implements CategoryService {
             return false;
         }
         
-        // 检查是否有子节点
-        long childCount = categoryMapper.selectCount(new LambdaQueryWrapper<CategoryDO>()
-                .eq(CategoryDO::getParentId, id)
-                .eq(CategoryDO::getDeleted, false));
-        return childCount == 0;
+        // 使用框架方法检查是否有子节点
+        List<CategoryDO> children = getChildren(id);
+        return children.isEmpty();
     }
 
     @Override
@@ -227,21 +230,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.selectList(new LambdaQueryWrapper<CategoryDO>().in(CategoryDO::getId, categoryIds));
     }
 
-    /**
-     * 生成 treePath & level
-     */
-    private void fillTree(CategoryDO bean) {
-        if (bean.getParentId() == null) {
-            bean.setParentId(0L);
-        }
-        if (bean.getParentId() == 0L) {
-            bean.setTreePath("0");
-            bean.setLevel(1);
-        } else {
-            CategoryDO parent = categoryMapper.selectById(bean.getParentId());
-            String parentPath = parent != null ? parent.getTreePath() : "0";
-            bean.setTreePath(parentPath + "/" + bean.getParentId());
-            bean.setLevel(parent != null ? parent.getLevel() + 1 : 2);
-        }
-    }
+    // 注意：原来的fillTree方法已经被TreeEntity框架替代
+    // 框架会自动处理treePath和level的生成
 } 

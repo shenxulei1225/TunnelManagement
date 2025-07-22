@@ -107,4 +107,34 @@ public class HierarchyGroupController {
         return success(hierarchyGroup);
     }
 
+    @GetMapping("/list-by-usage-type")
+    @Operation(summary = "根据用途类型获得分组列表")
+    @Parameter(name = "usageType", description = "用途类型", required = true, example = "FIELD")
+    @PreAuthorize("@ss.hasPermission('system:hierarchy-group:query')")
+    public CommonResult<List<HierarchyGroupDO>> getHierarchyGroupListByUsageType(@RequestParam("usageType") String usageType) {
+        List<HierarchyGroupDO> list = hierarchyGroupService.getHierarchyGroupListByUsageType(usageType);
+        return success(list);
+    }
+
+    @GetMapping("/list-by-usage-and-group-type")
+    @Operation(summary = "根据用途类型和分组类型获得分组列表")
+    @Parameter(name = "usageType", description = "用途类型", required = true, example = "BUSINESS")
+    @Parameter(name = "groupType", description = "分组类型", required = true, example = "EQUIPMENT")
+    @PreAuthorize("@ss.hasPermission('system:hierarchy-group:query')")
+    public CommonResult<List<HierarchyGroupDO>> getHierarchyGroupListByUsageTypeAndGroupType(
+            @RequestParam("usageType") String usageType,
+            @RequestParam("groupType") String groupType) {
+        List<HierarchyGroupDO> list = hierarchyGroupService.getHierarchyGroupListByUsageTypeAndGroupType(usageType, groupType);
+        return success(list);
+    }
+
+    @GetMapping("/tree-by-usage-type")
+    @Operation(summary = "根据用途类型获得分组树形结构")
+    @Parameter(name = "usageType", description = "用途类型", required = true, example = "FIELD")
+    @PreAuthorize("@ss.hasPermission('system:hierarchy-group:query')")
+    public CommonResult<HierarchyGroupTreeVO> getHierarchyGroupTreeByUsageType(@RequestParam("usageType") String usageType) {
+        HierarchyGroupTreeVO tree = hierarchyGroupService.getHierarchyGroupTreeByUsageType(usageType);
+        return success(tree);
+    }
+
 } 

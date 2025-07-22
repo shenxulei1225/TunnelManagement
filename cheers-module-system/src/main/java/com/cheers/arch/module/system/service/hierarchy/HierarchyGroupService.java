@@ -105,4 +105,29 @@ public interface HierarchyGroupService {
      */
     List<HierarchyGroupFlatVO> getHierarchyGroupFlatList();
 
+    /**
+     * 根据用途类型获取分级组列表
+     *
+     * @param usageType 用途类型：FIELD(字段分组), BUSINESS(业务分组)
+     * @return 分级组列表
+     */
+    List<HierarchyGroupDO> getHierarchyGroupListByUsageType(String usageType);
+
+    /**
+     * 根据用途类型和分组类型获取分级组列表
+     *
+     * @param usageType 用途类型：FIELD(字段分组), BUSINESS(业务分组)
+     * @param groupType 分组类型：EQUIPMENT(设备), PERSONNEL(人员)等
+     * @return 分级组列表
+     */
+    List<HierarchyGroupDO> getHierarchyGroupListByUsageTypeAndGroupType(String usageType, String groupType);
+
+    /**
+     * 根据用途类型获取分级组树形数据
+     *
+     * @param usageType 用途类型：FIELD(字段分组), BUSINESS(业务分组)
+     * @return 分级组树形数据
+     */
+    HierarchyGroupTreeVO getHierarchyGroupTreeByUsageType(String usageType);
+
 } 

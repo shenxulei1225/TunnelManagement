@@ -3,7 +3,7 @@ package com.cheers.arch.module.system.dal.dataobject.hierarchy;
 import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cheers.arch.framework.mybatis.core.dataobject.BaseDO;
+import com.cheers.arch.framework.tenant.core.db.TenantBaseDO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,7 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HierarchyGroupDO extends BaseDO {
+public class HierarchyGroupDO extends TenantBaseDO {
 
     /**
      * 分级组ID
@@ -77,6 +77,16 @@ public class HierarchyGroupDO extends BaseDO {
      * 描述
      */
     private String description;
+
+    /**
+     * 分组类型：EQUIPMENT(设备), PERSONNEL(人员), LOCATION(位置), MANAGEMENT(管理), DISPLAY(展示), MEASUREMENT(度量), STRUCTURE(结构), ENVIRONMENT(环境), GENERAL(通用)
+     */
+    private String groupType;
+
+    /**
+     * 用途类型：FIELD(字段分组), BUSINESS(业务分组)
+     */
+    private String usageType;
 
     /**
      * 状态

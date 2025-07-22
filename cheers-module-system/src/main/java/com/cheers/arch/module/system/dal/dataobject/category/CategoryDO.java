@@ -3,13 +3,15 @@ package com.cheers.arch.module.system.dal.dataobject.category;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.cheers.arch.framework.trees.core.TreeEntity;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 分类 DO（树形）
+ * 分类 DO（树形）- 已迁移到TreeEntity框架
  * 对应表 system_category
  */
 @Data
@@ -17,7 +19,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("system_category")
-public class CategoryDO extends com.cheers.arch.framework.tenant.core.db.TenantBaseDO {
+public class CategoryDO extends com.cheers.arch.framework.tenant.core.db.TenantBaseDO implements TreeEntity<Long> {
 
     /** 主键 */
     @TableId(type = IdType.AUTO)
@@ -52,4 +54,30 @@ public class CategoryDO extends com.cheers.arch.framework.tenant.core.db.TenantB
 
     /** 分类描述 */
     private String description;
+
+    // ==================== TreeEntity接口实现 ====================
+
+    @Override
+    public CategoryDO setParentId(Long parentId) {
+        this.parentId = parentId;
+        return this;
+    }
+
+    @Override
+    public CategoryDO setTreePath(String treePath) {
+        this.treePath = treePath;
+        return this;
+    }
+
+    @Override
+    public CategoryDO setLevel(Integer level) {
+        this.level = level;
+        return this;
+    }
+
+    @Override
+    public CategoryDO setSort(Integer sort) {
+        this.sort = sort;
+        return this;
+    }
 } 

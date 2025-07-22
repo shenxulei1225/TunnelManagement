@@ -12,8 +12,8 @@ public class FieldHierarchyRelRespVO {
     @Schema(description = "关联 ID", example = "1024")
     private Long id;
 
-    @Schema(description = "字段定义 ID", example = "2048")
-    private Long fieldDefId;
+    @Schema(description = "字段 ID", example = "2048")
+    private Long fieldId;
 
     @Schema(description = "分级组 ID", example = "3072")
     private Long hierarchyGroupId;

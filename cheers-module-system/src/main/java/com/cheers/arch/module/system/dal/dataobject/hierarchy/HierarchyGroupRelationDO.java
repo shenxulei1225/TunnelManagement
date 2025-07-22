@@ -3,7 +3,7 @@ package com.cheers.arch.module.system.dal.dataobject.hierarchy;
 import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.cheers.arch.framework.mybatis.core.dataobject.BaseDO;
+import com.cheers.arch.framework.tenant.core.db.TenantBaseDO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,7 @@ import lombok.ToString;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HierarchyGroupRelationDO extends BaseDO {
+public class HierarchyGroupRelationDO extends TenantBaseDO {
 
     /**
      * 关系ID
