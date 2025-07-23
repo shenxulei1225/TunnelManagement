@@ -97,7 +97,7 @@ public class TreeNodeServiceImpl extends AbstractTreeService<TreeNodeMapper, Tre
     public boolean dragNode(DragOperation.DragRequest<Long> request) {
         // 实现拖拽逻辑
         try {
-            moveNode(request.getSourceId(), request.getTargetId());
+            moveNode(request.getDragId(), request.getTargetId());
             return true;
         } catch (Exception e) {
             log.error("拖拽节点失败: {}", e.getMessage(), e);

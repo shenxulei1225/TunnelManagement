@@ -1,9 +1,9 @@
 package com.cheers.arch.module.system.controller.admin.category.vo;
 
+import java.time.LocalDateTime;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
-import java.time.LocalDateTime;
 
 @Schema(description = "管理后台 - 分类 Response VO")
 @Data
@@ -47,6 +47,15 @@ public class CategoryRespVO {
 
     @Schema(description = "创建时间", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime createTime;
+
+    @Schema(description = "子分类列表")
+    private java.util.List<CategoryRespVO> children;
+
+    @Schema(description = "字段数量", example = "5")
+    private Long fieldCount;
+
+    @Schema(description = "字段标签列表")
+    private java.util.List<String> fieldLabels;
 
     @Schema(description = "更新时间", requiredMode = Schema.RequiredMode.REQUIRED)
     private LocalDateTime updateTime;
