@@ -46,4 +46,11 @@ public interface CategoryMapper extends BaseMapperX<CategoryDO> {
      * @return 子节点数量
      */
     Long selectCountByParentId(@Param("parentId") Long parentId);
+
+    /**
+     * 通过字段分类关联表获取分类ID列表
+     *
+     * @return 分类ID列表
+     */
+    List<Long> selectCategoryIdsByFieldCategoryRel();
 } 

@@ -1,11 +1,16 @@
 package com.cheers.arch.module.system.dal.dataobject.field;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
-import java.time.LocalDateTime;
+import com.cheers.arch.framework.tenant.core.db.TenantBaseDO;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 通用动态字段值 DO
@@ -18,33 +23,59 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FieldValueDO {
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
+public class FieldValueDO extends TenantBaseDO {
 
     /** 主键 */
     @TableId(type = IdType.AUTO)
     private Long id;
 
-    /** 业务类型，如 'pipeline' */
+    /** 业务类型，如 'device', 'product', 'user' */
     private String bizType;
 
-    /** 业务记录 ID */
+    /** 业务ID */
     private Long bizId;
 
-    /** 字段定义 ID */
+    /** 字段定义ID */
     private Long fieldId;
 
-    /** 租户编号 */
-    @TableField("tenant_id")
-    private Long tenantId;
-
-    /** 值 JSON */
+    /** 字段值（JSON格式） */
     private String valueJson;
 
-    /** 创建时间 */
-    @TableField("create_time")
-    private LocalDateTime createTime;
+    /**
+     * 获取字段值（支持类型转换）
+     */
+    public <T> T getFieldValue(Class<T> targetType) {
+        if (valueJson == null) {
+            return null;
+        }
+        
+        // 根据目标类型进行转换
+        if (targetType == String.class) {
+            return (T) valueJson;
+        } else if (targetType == Integer.class) {
+            return (T) Integer.valueOf(valueJson);
+        } else if (targetType == Long.class) {
+            return (T) Long.valueOf(valueJson);
+        } else if (targetType == Double.class) {
+            return (T) Double.valueOf(valueJson);
+        } else if (targetType == Boolean.class) {
+            return (T) Boolean.valueOf(valueJson);
+        }
+        
+        // 其他类型可以扩展
+        return null;
+    }
 
-    /** 更新时间 */
-    @TableField("update_time")
-    private LocalDateTime updateTime;
+    /**
+     * 设置字段值
+     */
+    public void setFieldValue(Object value) {
+        if (value == null) {
+            this.valueJson = null;
+        } else {
+            this.valueJson = value.toString();
+        }
+    }
 }

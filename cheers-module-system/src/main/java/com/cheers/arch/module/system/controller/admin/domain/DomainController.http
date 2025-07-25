@@ -1,0 +1,251 @@
+### 新增领域模型
+POST {{baseUrl}}/system/domain/create
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "测试领域",
+  "code": "test_domain",
+  "parentId": 0,
+  "description": "这是一个测试领域",
+  "type": "test",
+  "status": 1,
+  "sort": 10,
+  "remark": "测试备注"
+}
+
+### 更新领域模型
+PUT {{baseUrl}}/system/domain/update
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "更新的领域",
+  "code": "updated_domain",
+  "parentId": 0,
+  "description": "这是一个更新的领域",
+  "type": "business",
+  "status": 1,
+  "sort": 5,
+  "remark": "更新的备注"
+}
+
+### 获得领域模型详情
+GET {{baseUrl}}/system/domain/get?id=1
+Authorization: Bearer {{token}}
+
+### 获得领域模型分页
+GET {{baseUrl}}/system/domain/page?pageNo=1&pageSize=10&name=测试
+Authorization: Bearer {{token}}
+
+### 删除领域模型
+DELETE {{baseUrl}}/system/domain/delete?id=1
+Authorization: Bearer {{token}}
+
+### 获得领域模型列表（树形结构）
+GET {{baseUrl}}/system/domain/list?parentId=0
+Authorization: Bearer {{token}}
+
+### 获得领域模型列表（带统计信息）
+GET {{baseUrl}}/system/domain/list-with-statistics?parentId=0
+Authorization: Bearer {{token}}
+
+### 获得领域模型树形结构（Element Plus Tree格式）
+GET {{baseUrl}}/system/domain/tree
+Authorization: Bearer {{token}}
+
+### ================ 对标Category的批量关联功能测试 ================
+
+### 批量创建字段领域关联
+POST {{baseUrl}}/system/domain/field-relations/batch-create?fieldId=1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+[1, 2]
+
+### 批量创建字段领域关联（带配置）
+POST {{baseUrl}}/system/domain/field-relations/batch-create-with-config?fieldId=2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "1": {
+    "required": true,
+    "sort": 1,
+    "remark": "重要字段"
+  },
+  "2": {
+    "required": false,
+    "sort": 2,
+    "remark": "可选字段"
+  }
+}
+
+### 检查字段领域关联是否存在
+GET {{baseUrl}}/system/domain/field-relations/exists?fieldId=1&domainId=1
+Authorization: Bearer {{token}}
+
+### ================ 对标Category的高级查询功能测试 ================
+
+### 根据层级获取领域列表
+GET {{baseUrl}}/system/domain/by-level?level=1
+Authorization: Bearer {{token}}
+
+### 获取只读领域列表
+GET {{baseUrl}}/system/domain/readonly
+Authorization: Bearer {{token}}
+
+### 更新领域的树形路径信息
+POST {{baseUrl}}/system/domain/tree-info/update?domainId=1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{}
+
+### 导出领域模型 Excel
+GET {{baseUrl}}/system/domain/export-excel
+Authorization: Bearer {{token}}
+
+### 添加领域字段关联
+POST {{baseUrl}}/system/domain/field-rel/add?domainId=1&fieldId=1&required=true&sort=1&remark=测试关联
+Authorization: Bearer {{token}}
+
+### 重复添加同一个字段关联（测试不报错）
+POST {{baseUrl}}/system/domain/field-rel/add?domainId=1&fieldId=1&required=false&sort=2&remark=重复关联测试
+Authorization: Bearer {{token}}
+
+### 删除领域字段关联
+DELETE {{baseUrl}}/system/domain/field-rel/remove?domainId=1&fieldId=1
+Authorization: Bearer {{token}}
+
+### 获得领域字段关联列表
+GET {{baseUrl}}/system/domain/field-rel/list?domainId=1
+Authorization: Bearer {{token}}
+
+### 拖拽移动领域
+POST {{baseUrl}}/system/domain/move
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 3,
+  "targetParentId": 2,
+  "targetSort": 1
+}
+
+### 批量更新领域排序
+POST {{baseUrl}}/system/domain/batch-sort?parentId=0
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "1": 2,
+  "2": 1
+}
+
+### 拖拽移动领域
+POST {{baseUrl}}/system/domain/move
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 3,
+  "targetParentId": 2,
+  "targetSort": 1
+}
+
+### 批量更新领域排序
+POST {{baseUrl}}/system/domain/batch-sort?parentId=0
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "1": 2,
+  "2": 1
+}
+
+### ===== 级联删除测试 =====
+
+### 测试删除Domain（会自动删除所有关联的Field关系，但不删除Field实体）
+DELETE {{baseUrl}}/system/domain/delete?id=1
+Authorization: Bearer {{token}}
+
+### 验证：查看Field是否仍然存在（应该存在）
+GET {{baseUrl}}/system/field/get?id=1
+Authorization: Bearer {{token}}
+
+### 验证：查看Domain-Field关联是否已删除（应该为空）
+GET {{baseUrl}}/system/domain/field-rel/list?domainId=1
+Authorization: Bearer {{token}}
+
+### ===== Field移动测试 =====
+
+### 移动字段到其他领域
+POST {{baseUrl}}/system/domain/field-move
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "fieldId": 1,
+  "sourceDomainId": 1,
+  "targetDomainId": 2,
+  "required": true,
+  "sort": 1,
+  "remark": "从建筑领域移动到设备领域"
+}
+
+### 验证：查看源领域字段列表（应该不包含移动的字段）
+GET {{baseUrl}}/system/domain/field-rel/list?domainId=1
+Authorization: Bearer {{token}}
+
+### 验证：查看目标领域字段列表（应该包含移动的字段）
+GET {{baseUrl}}/system/domain/field-rel/list?domainId=2
+Authorization: Bearer {{token}}
+
+### ===== 查询功能测试 =====
+
+### 查看指定领域下的字段列表（带字段详情）
+GET {{baseUrl}}/system/domain/fields?domainId=1
+Authorization: Bearer {{token}}
+
+### 查看指定字段关联的领域列表（带领域详情）
+GET {{baseUrl}}/system/domain/domains-by-field?fieldId=1
+Authorization: Bearer {{token}}
+
+### 查看另一个领域的字段列表
+GET {{baseUrl}}/system/domain/fields?domainId=2
+Authorization: Bearer {{token}}
+
+### 查看另一个字段的领域列表
+GET {{baseUrl}}/system/domain/domains-by-field?fieldId=2
+Authorization: Bearer {{token}}
+
+### ===== 统计功能测试 =====
+
+### 获取单个领域的统计信息
+GET {{baseUrl}}/system/domain/statistics?domainId=1
+Authorization: Bearer {{token}}
+
+### 批量获取多个领域的统计信息
+POST {{baseUrl}}/system/domain/statistics/batch
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+[1, 2, 3]
+
+### ===== 批量处理功能测试 =====
+
+### 批量删除领域
+POST {{baseUrl}}/system/domain/delete/batch
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+[4, 5]
+
+### 批量删除字段的所有领域关联关系
+POST {{baseUrl}}/system/domain/field-relations/remove/batch
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+[1, 2, 3]

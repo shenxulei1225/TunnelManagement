@@ -162,6 +162,11 @@ public interface ErrorCodeConstants {
     ErrorCode DEVICE_PARENT_ERROR = new ErrorCode(1_002_029_003, "不能设置自己为父设备");
     ErrorCode DEVICE_EXITS_CHILDREN = new ErrorCode(1_002_029_004, "存在子设备，无法删除");
 
+    // ========== 系统数据项 1-002-030-000 ==========
+    ErrorCode SYSTEM_ITEM_NOT_EXISTS = new ErrorCode(1_002_030_000, "系统数据项不存在");
+    ErrorCode SYSTEM_ITEM_CODE_EXISTS = new ErrorCode(1_002_030_001, "已经存在编码为【{}】的系统数据项");
+    ErrorCode SYSTEM_ITEM_TYPE_INVALID = new ErrorCode(1_002_030_002, "数据项类型【{}】不合法");
+
     // ========== 测试树节点 1-002-030-000 ==========
     ErrorCode TEST_TREE_NODE_NOT_EXISTS = new ErrorCode(1_002_030_000, "测试树节点不存在");
 
@@ -173,5 +178,15 @@ public interface ErrorCodeConstants {
     ErrorCode FIELD_NOT_EXISTS = new ErrorCode(1_002_031_000, "字段不存在");
     ErrorCode FIELD_CATEGORY_REL_EXISTS = new ErrorCode(1_002_031_001, "字段分类关联已存在");
     ErrorCode FIELD_CATEGORY_REL_NOT_EXISTS = new ErrorCode(1_002_031_002, "字段分类关联不存在");
+
+    // ========== 领域模型 1-002-032-000 ==========
+    ErrorCode DOMAIN_NOT_EXISTS = new ErrorCode(1_002_032_000, "领域模型不存在");
+    ErrorCode DOMAIN_CODE_DUPLICATE = new ErrorCode(1_002_032_001, "已经存在编码为【{}】的领域模型");
+    ErrorCode DOMAIN_NAME_DUPLICATE = new ErrorCode(1_002_032_002, "已经存在名称为【{}】的领域模型");
+    ErrorCode DOMAIN_PARENT_ERROR = new ErrorCode(1_002_032_003, "不能设置自己为父领域");
+    ErrorCode DOMAIN_PARENT_NOT_EXISTS = new ErrorCode(1_002_032_004, "父领域不存在");
+    ErrorCode DOMAIN_PARENT_IS_CHILD = new ErrorCode(1_002_032_005, "不能设置自己的子领域为父领域");
+    ErrorCode DOMAIN_EXISTS_CHILDREN = new ErrorCode(1_002_032_006, "存在子领域，无法删除");
+    ErrorCode DOMAIN_FIELD_MOVE_SAME_DOMAIN = new ErrorCode(1_002_032_007, "源领域和目标领域不能相同");
 
 }

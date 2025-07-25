@@ -17,6 +17,7 @@ import com.cheers.arch.module.system.dal.dataobject.category.CategoryBizTypeRelD
 import com.cheers.arch.module.system.dal.dataobject.category.CategoryDO;
 import com.cheers.arch.module.system.dal.mysql.category.CategoryBizTypeRelMapper;
 import com.cheers.arch.module.system.dal.mysql.category.CategoryMapper;
+import com.cheers.arch.module.system.service.business.BusinessTypeService;
 import com.cheers.arch.module.system.service.category.CategoryService;
 
 import org.springframework.stereotype.Service;
@@ -37,6 +38,9 @@ public class CategoryServiceImpl extends AbstractTreeService<CategoryMapper, Cat
 
     @Resource
     private CategoryBizTypeRelMapper categoryBizTypeRelMapper;
+
+    @Resource
+    private BusinessTypeService businessTypeService;
 
     // ==================== AbstractTreeService 抽象方法实现 ====================
 
@@ -102,37 +106,32 @@ public class CategoryServiceImpl extends AbstractTreeService<CategoryMapper, Cat
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long createCategory(CategoryCreateReqVO createReqVO) {
-        // 转换为 DO 并调用框架实现
-        CategoryDO category = BeanUtils.toBean(createReqVO, CategoryDO.class);
-        return createCategory(category);
+        CategoryDO bean = BeanUtils.toBean(createReqVO, CategoryDO.class);
+        return createCategory(bean);
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void updateCategory(CategoryUpdateReqVO updateReqVO) {
-        // 转换为 DO 并调用框架实现
-        CategoryDO category = BeanUtils.toBean(updateReqVO, CategoryDO.class);
-        updateCategory(category);
+        CategoryDO bean = BeanUtils.toBean(updateReqVO, CategoryDO.class);
+        updateCategory(bean);
     }
-
-    // ========== 核心实现方法（内部使用） - 使用TreeEntity框架 ==========
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Long createCategory(CategoryDO bean) {
-        // 设置租户ID（安全保证）
-        bean.setTenantId(TenantContextHolder.getTenantId());
-        
-        // 使用框架的创建方法，自动处理treePath和level
+        // 使用框架的创建方法，自动处理treePath和level生成
         if (StrUtil.isBlank(bean.getCode())) {
             bean.setCode(null);
         }
-        return createNode(bean);
+        createNode(bean);
+        return bean.getId();
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean updateCategory(CategoryDO bean) {
+        // 1. 检查是否为只读节点
         CategoryDO origin = categoryMapper.selectById(bean.getId());
         if (origin != null && Boolean.TRUE.equals(origin.getReadonly())) {
             throw new IllegalStateException("只读分类禁止修改");
@@ -181,12 +180,16 @@ public class CategoryServiceImpl extends AbstractTreeService<CategoryMapper, Cat
     }
 
     @Override
-    public Long createCategoryBizTypeRel(Long categoryId, String businessType, Long businessId, String relType, Integer sort, Boolean required) {
+    public Long createCategoryBizTypeRel(Long categoryId, String businessType, Long businessId, Integer sort, Boolean required) {
+        // 验证业务类型是否存在
+        if (!businessTypeService.existsByTypeCode(businessType)) {
+            throw new IllegalArgumentException("业务类型不存在: " + businessType);
+        }
+        
         CategoryBizTypeRelDO rel = new CategoryBizTypeRelDO();
         rel.setCategoryId(categoryId);
         rel.setBusinessType(businessType);
         rel.setBusinessId(businessId);
-        rel.setRelType(relType);
         rel.setSort(sort != null ? sort : 0);
         rel.setRequired(required != null ? required : false);
         rel.setTenantId(TenantContextHolder.getTenantId());
@@ -211,6 +214,12 @@ public class CategoryServiceImpl extends AbstractTreeService<CategoryMapper, Cat
 
     @Override
     public List<CategoryDO> getCategoryTreeByBusinessType(String businessType) {
+        // 验证业务类型是否存在
+        if (!businessTypeService.existsByTypeCode(businessType)) {
+            log.warn("业务类型不存在: {}", businessType);
+            return new ArrayList<>();
+        }
+        
         // 通过关联关系获取该业务类型下的分类
         List<CategoryBizTypeRelDO> rels = categoryBizTypeRelMapper.selectList(
             new LambdaQueryWrapper<CategoryBizTypeRelDO>()

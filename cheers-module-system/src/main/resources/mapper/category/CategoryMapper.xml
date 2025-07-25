@@ -34,4 +34,11 @@
         AND parent_id = #{parentId}
     </select>
 
+    <!-- 通过字段分类关联表获取分类ID列表 -->
+    <select id="selectCategoryIdsByFieldCategoryRel" resultType="java.lang.Long">
+        SELECT DISTINCT category_id 
+        FROM system_field_category_rel 
+        WHERE deleted = 0
+    </select>
+
 </mapper> 

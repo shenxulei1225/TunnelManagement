@@ -1,29 +1,36 @@
 package com.cheers.arch.module.system.service.field.impl;
 
-import cn.hutool.core.collection.CollUtil;
+import static com.cheers.arch.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static com.cheers.arch.module.system.enums.ErrorCodeConstants.FIELD_NOT_EXISTS;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import jakarta.annotation.Resource;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.cheers.arch.framework.common.enums.CommonStatusEnum;
 import com.cheers.arch.framework.common.pojo.PageResult;
 import com.cheers.arch.framework.common.util.object.BeanUtils;
 import com.cheers.arch.framework.mybatis.core.query.LambdaQueryWrapperX;
 import com.cheers.arch.framework.tenant.core.context.TenantContextHolder;
-import com.cheers.arch.module.system.controller.admin.field.vo.*;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldCreateReqVO;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldExportReqVO;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldPageReqVO;
+import com.cheers.arch.module.system.controller.admin.field.vo.FieldUpdateReqVO;
 import com.cheers.arch.module.system.dal.dataobject.field.FieldCategoryRelDO;
 import com.cheers.arch.module.system.dal.dataobject.field.FieldDO;
 import com.cheers.arch.module.system.dal.mysql.field.FieldCategoryRelMapper;
 import com.cheers.arch.module.system.dal.mysql.field.FieldMapper;
+import com.cheers.arch.module.system.dal.mysql.domain.DomainFieldRelMapper;
 import com.cheers.arch.module.system.service.field.FieldService;
-import jakarta.annotation.Resource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static com.cheers.arch.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static com.cheers.arch.module.system.enums.ErrorCodeConstants.FIELD_NOT_EXISTS;
+import cn.hutool.core.collection.CollUtil;
 
 /**
  * 字段 Service 实现类
@@ -39,6 +46,9 @@ public class FieldServiceImpl implements FieldService {
 
     @Resource
     private FieldCategoryRelMapper fieldCategoryRelMapper;
+
+    @Resource
+    private DomainFieldRelMapper domainFieldRelMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -64,7 +74,14 @@ public class FieldServiceImpl implements FieldService {
     public void deleteField(Long id) {
         // 校验存在
         validateFieldExists(id);
-        // 删除
+        
+        // 删除Field与Domain的关联关系（不删除Domain实体）
+        domainFieldRelMapper.deleteByFieldId(id);
+        
+        // 删除Field与Category的关联关系（如果存在）
+        // fieldCategoryRelMapper.deleteByFieldId(id); // 如果需要
+        
+        // 删除Field实体
         fieldMapper.deleteById(id);
     }
 
