@@ -3,6 +3,7 @@ package com.cheers.arch.module.system.controller.admin.hierarchy;
 import static com.cheers.arch.framework.common.pojo.CommonResult.success;
 
 import java.util.List;
+import java.util.Map;
 
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
@@ -135,6 +136,35 @@ public class HierarchyGroupController {
     public CommonResult<HierarchyGroupTreeVO> getHierarchyGroupTreeByUsageType(@RequestParam("usageType") String usageType) {
         HierarchyGroupTreeVO tree = hierarchyGroupService.getHierarchyGroupTreeByUsageType(usageType);
         return success(tree);
+    }
+
+    @PutMapping("/move")
+    @Operation(summary = "移动分组（拖拽排序）")
+    @PreAuthorize("@ss.hasPermission('system:hierarchy-group:update')")
+    public CommonResult<Boolean> moveHierarchyGroup(
+            @Parameter(description = "分组ID", required = true) @RequestParam("hierarchyId") Long hierarchyId,
+            @Parameter(description = "目标父分组ID", required = true) @RequestParam("targetParentId") Long targetParentId,
+            @Parameter(description = "目标排序", required = true) @RequestParam("targetSort") Integer targetSort) {
+        hierarchyGroupService.moveHierarchyGroup(hierarchyId, targetParentId, targetSort);
+        return success(true);
+    }
+
+    @PutMapping("/sort")
+    @Operation(summary = "批量更新分组排序")
+    @PreAuthorize("@ss.hasPermission('system:hierarchy-group:update')")
+    public CommonResult<Boolean> sortHierarchyGroups(@RequestBody List<Map<String, Object>> sortList) {
+        hierarchyGroupService.sortHierarchyGroups(sortList);
+        return success(true);
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "搜索分组")
+    @PreAuthorize("@ss.hasPermission('system:hierarchy-group:query')")
+    public CommonResult<List<HierarchyGroupDO>> searchHierarchyGroups(
+            @Parameter(description = "搜索关键词", required = true) @RequestParam("keyword") String keyword,
+            @Parameter(description = "用途类型", required = false) @RequestParam(value = "usageType", required = false) String usageType) {
+        List<HierarchyGroupDO> result = hierarchyGroupService.searchHierarchyGroups(keyword, usageType);
+        return success(result);
     }
 
 } 

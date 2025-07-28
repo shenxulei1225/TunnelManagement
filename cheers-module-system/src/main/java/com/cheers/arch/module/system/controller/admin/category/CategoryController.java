@@ -3,6 +3,7 @@ package com.cheers.arch.module.system.controller.admin.category;
 import static com.cheers.arch.framework.common.pojo.CommonResult.success;
 
 import java.util.List;
+import java.util.Map;
 
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;
@@ -144,4 +145,45 @@ public class CategoryController {
                 .collect(java.util.stream.Collectors.toList());
         return success(respList);
     }
+
+    @PutMapping("/move")
+    @Operation(summary = "移动分类（拖拽排序）")
+    @PreAuthorize("@ss.hasPermission('system:category:update')")
+    public CommonResult<Boolean> moveCategory(
+            @Parameter(description = "分类ID", required = true) @RequestParam("categoryId") Long categoryId,
+            @Parameter(description = "目标父分类ID", required = true) @RequestParam("targetParentId") Long targetParentId,
+            @Parameter(description = "目标排序", required = true) @RequestParam("targetSort") Integer targetSort) {
+        categoryService.moveCategory(categoryId, targetParentId, targetSort);
+        return success(true);
+    }
+
+    @PutMapping("/sort")
+    @Operation(summary = "批量更新分类排序")
+    @PreAuthorize("@ss.hasPermission('system:category:update')")
+    public CommonResult<Boolean> sortCategories(@RequestBody List<Map<String, Object>> sortList) {
+        categoryService.sortCategories(sortList);
+        return success(true);
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "搜索分类")
+    @PreAuthorize("@ss.hasPermission('system:category:query')")
+    public CommonResult<List<CategoryDO>> searchCategories(
+            @Parameter(description = "搜索关键词", required = true) @RequestParam("keyword") String keyword,
+            @Parameter(description = "业务类型", required = false) @RequestParam(value = "businessType", required = false) String businessType) {
+        List<CategoryDO> result = categoryService.searchCategories(keyword, businessType);
+        return success(result);
+    }
+
+    @PostMapping("/batch")
+    @Operation(summary = "批量操作分类")
+    @PreAuthorize("@ss.hasPermission('system:category:update')")
+    public CommonResult<Boolean> batchOperateCategories(
+            @Parameter(description = "操作类型", required = true) @RequestParam("operation") String operation,
+            @Parameter(description = "分类ID列表", required = true) @RequestParam("categoryIds") List<Long> categoryIds,
+            @RequestBody(required = false) Map<String, Object> params) {
+        categoryService.batchOperateCategories(operation, categoryIds, params);
+        return success(true);
+    }
+
 } 

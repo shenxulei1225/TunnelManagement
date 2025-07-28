@@ -1,7 +1,11 @@
 package com.cheers.arch.module.system.service.category;
 
 import java.util.List;
+import java.util.Map;
 
+import jakarta.validation.Valid;
+
+import com.cheers.arch.framework.trees.service.TreeService;
 import com.cheers.arch.module.system.controller.admin.category.vo.CategoryCreateReqVO;
 import com.cheers.arch.module.system.controller.admin.category.vo.CategoryUpdateReqVO;
 import com.cheers.arch.module.system.dal.dataobject.category.CategoryBizTypeRelDO;
@@ -9,8 +13,10 @@ import com.cheers.arch.module.system.dal.dataobject.category.CategoryDO;
 
 /**
  * 分类 Service 接口
+ * 
+ * @author cheers
  */
-public interface CategoryService {
+public interface CategoryService extends TreeService<CategoryDO> {
 
     /**
      * 创建分类（推荐使用，安全）
@@ -128,5 +134,39 @@ public interface CategoryService {
      * @return 分类树
      */
     List<CategoryDO> getCategoryTreeByBusinessType(String businessType);
+
+    /**
+     * 移动分类（拖拽排序）
+     *
+     * @param categoryId 分类ID
+     * @param targetParentId 目标父分类ID
+     * @param targetSort 目标排序
+     */
+    void moveCategory(Long categoryId, Long targetParentId, Integer targetSort);
+
+    /**
+     * 批量更新分类排序
+     *
+     * @param sortList 排序列表，包含id和sort字段
+     */
+    void sortCategories(List<Map<String, Object>> sortList);
+
+    /**
+     * 搜索分类
+     *
+     * @param keyword 搜索关键词
+     * @param businessType 业务类型（可选）
+     * @return 搜索结果
+     */
+    List<CategoryDO> searchCategories(String keyword, String businessType);
+
+    /**
+     * 批量操作分类
+     *
+     * @param operation 操作类型（enable/disable/delete等）
+     * @param categoryIds 分类ID列表
+     * @param params 操作参数
+     */
+    void batchOperateCategories(String operation, List<Long> categoryIds, Map<String, Object> params);
 
 } 

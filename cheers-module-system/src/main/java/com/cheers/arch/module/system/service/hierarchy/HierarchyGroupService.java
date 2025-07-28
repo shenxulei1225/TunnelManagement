@@ -1,6 +1,7 @@
 package com.cheers.arch.module.system.service.hierarchy;
 
 import java.util.List;
+import java.util.Map;
 
 import jakarta.validation.Valid;
 
@@ -129,5 +130,30 @@ public interface HierarchyGroupService {
      * @return 分级组树形数据
      */
     HierarchyGroupTreeVO getHierarchyGroupTreeByUsageType(String usageType);
+
+    /**
+     * 移动分级组（拖拽排序）
+     *
+     * @param hierarchyId 分组ID
+     * @param targetParentId 目标父分组ID
+     * @param targetSort 目标排序
+     */
+    void moveHierarchyGroup(Long hierarchyId, Long targetParentId, Integer targetSort);
+
+    /**
+     * 批量更新分组排序
+     *
+     * @param sortList 排序列表，包含id和sort字段
+     */
+    void sortHierarchyGroups(List<Map<String, Object>> sortList);
+
+    /**
+     * 搜索分级组
+     *
+     * @param keyword 搜索关键词
+     * @param usageType 用途类型（可选）
+     * @return 搜索结果
+     */
+    List<HierarchyGroupDO> searchHierarchyGroups(String keyword, String usageType);
 
 } 

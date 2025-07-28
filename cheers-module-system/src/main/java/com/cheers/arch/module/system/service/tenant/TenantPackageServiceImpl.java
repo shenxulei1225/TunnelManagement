@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import jakarta.annotation.Resource;
+import java.util.HashSet;
 import java.util.List;
 
 import static com.cheers.arch.framework.common.exception.util.ServiceExceptionUtil.exception;
@@ -62,7 +63,7 @@ public class TenantPackageServiceImpl implements TenantPackageService {
         // 如果菜单发生变化，则修改每个租户的菜单
         if (!CollUtil.isEqualList(tenantPackage.getMenuIds(), updateReqVO.getMenuIds())) {
             List<TenantDO> tenants = tenantService.getTenantListByPackageId(tenantPackage.getId());
-            tenants.forEach(tenant -> tenantService.updateTenantRoleMenu(tenant.getId(), updateReqVO.getMenuIds()));
+            tenants.forEach(tenant -> tenantService.updateTenantRoleMenu(tenant.getId(), new HashSet<>(updateReqVO.getMenuIds())));
         }
     }
 

@@ -45,26 +45,8 @@ src/main/java/com/cheers/system/
 
 ### 1. Controller层规范
 
-```java
-@Tag(name = "管理后台 - 用户")
-@RestController
-@RequestMapping("/system/user")
-@Validated
-public class UserController {
-    
-    @Resource
-    private UserService userService;
-
-    @PostMapping("/create")
-    @Operation(summary = "创建用户")
-    @PreAuthorize("@ss.hasPermission('system:user:create')")
-    public Long createUser(@Valid @RequestBody UserCreateReqVO createReqVO) {
-        return userService.createUser(UserConvert.INSTANCE.convert(createReqVO));
-    }
-}
-```
-
 关键点：
+
 - 使用@Tag标注接口分类
 - 使用@Operation标注接口说明
 - 使用@PreAuthorize进行权限控制
@@ -72,38 +54,6 @@ public class UserController {
 - 统一的URL命名规范
 
 ### 2. Service层规范
-
-```java
-@Service
-@Validated
-public class UserServiceImpl implements UserService {
-    
-    @Resource
-    private UserMapper userMapper;
-    
-    @Override
-    public Long createUser(UserDO user) {
-        // 1. 业务校验
-        validateUserNameUnique(user.getUsername(), null);
-        
-        // 2. 设置默认值
-        initUserDefaults(user);
-        
-        // 3. 插入数据
-        userMapper.insert(user);
-        return user.getId();
-    }
-    
-    private void validateUserNameUnique(String username, Long id) {
-        UserDO user = userMapper.selectOne(new LambdaQueryWrapperX<UserDO>()
-                .eq(UserDO::getUsername, username)
-                .neIfPresent(UserDO::getId, id));
-        if (user != null) {
-            throw new ServiceException(USER_NAME_DUPLICATE);
-        }
-    }
-}
-```
 
 关键点：
 - 实现接口定义的方法
@@ -113,13 +63,9 @@ public class UserServiceImpl implements UserService {
 
 ### 3. Mapper层规范
 
-```java
-@Mapper
-public interface UserMapper extends BaseMapperX<UserDO> {
-    // 继承BaseMapperX获取增强功能
-    // 只需要定义特殊的查询方法
-}
-```
+- 继承BaseMapperX获取增强功能
+- 只需要定义特殊的查询方法
+
 
 ## 三、业务校验规范
 
@@ -174,6 +120,7 @@ public interface ErrorCodeConstants {
 ```
 
 ### 2. 错误提示规范
+
 - 使用中文，简洁清晰
 - 说明具体错误原因
 - 适当给出处理建议
@@ -240,6 +187,7 @@ new LambdaQueryWrapperX<UserDO>()
 ```
 
 ### 2. 接口文档工具
+
 必须添加的Swagger注解：
 - @Tag: 接口分类
 - @Operation: 接口说明
