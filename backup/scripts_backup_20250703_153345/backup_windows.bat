@@ -11,19 +11,21 @@ echo.
 echo 1. Full Backup (Database + Files)
 echo 2. Database Only
 echo 3. Files Only  
-echo 4. Test Configuration
-echo 5. View Logs
-echo 6. Help
+echo 4. Mac-Compatible Database Backup
+echo 5. Test Configuration
+echo 6. View Logs
+echo 7. Help
 echo 0. Exit
 echo.
-set /p choice=Enter option (0-6): 
+set /p choice=Enter option (0-7): 
 
 if "%choice%"=="1" goto full_backup
 if "%choice%"=="2" goto database_backup
 if "%choice%"=="3" goto files_backup
-if "%choice%"=="4" goto test_config
-if "%choice%"=="5" goto view_logs
-if "%choice%"=="6" goto help
+if "%choice%"=="4" goto mac_backup
+if "%choice%"=="5" goto test_config
+if "%choice%"=="6" goto view_logs
+if "%choice%"=="7" goto help
 if "%choice%"=="0" goto exit
 goto invalid_choice
 
@@ -43,6 +45,12 @@ goto end
 echo.
 echo Starting files backup...
 powershell -ExecutionPolicy Bypass -File "%~dp0backup_data_windows.ps1" -BackupType files
+goto end
+
+:mac_backup
+echo.
+echo Starting Mac-compatible database backup...
+call "%~dp0backup_mac_compatible.bat"
 goto end
 
 :test_config
@@ -79,7 +87,7 @@ goto menu
 
 :invalid_choice
 echo.
-echo Invalid option. Please enter a number between 0-6.
+echo Invalid option. Please enter a number between 0-7.
 echo.
 pause
 goto menu
