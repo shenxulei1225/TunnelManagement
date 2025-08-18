@@ -218,12 +218,14 @@ SET FOREIGN_KEY_CHECKS = 1;
                 $compressedSize = (Get-Item $compressedFile).Length / 1MB
                 Write-Log "Compressed file created: $compressedFile (Size: $([math]::Round($compressedSize, 2)) MB)" "SUCCESS"
                 
-                # 创建符号链接到最新备份
+                # 复制到最新备份文件（避免符号链接权限问题）
                 $latestLink = Join-Path $MacBackupDir "latest_mac_backup.sql.gz"
-                if (Test-Path $latestLink) {
-                    Remove-Item $latestLink -Force
+                try {
+                    Copy-Item -Path $compressedFile -Destination $latestLink -Force
+                    Write-Log "Created latest backup copy: $latestLink" "SUCCESS"
+                } catch {
+                    Write-Log "Could not create latest backup copy (non-critical): $_" "WARN"
                 }
-                New-Item -ItemType SymbolicLink -Path $latestLink -Target $compressedFile -Force | Out-Null
                 
                 # 可选：删除未压缩的文件
                 # Remove-Item -Path $BackupFilePath -Force
