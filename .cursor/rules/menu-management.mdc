@@ -1,7 +1,5 @@
 ---
-description: 
-globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 你检查一下项目的菜单管理功能，了解一下手动创建菜单需要填写的参数.
 所有页面的添加均通过菜单管理, 请为每个新增页面提供菜单管理创建时需要的手工配置参数

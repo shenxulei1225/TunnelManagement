@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+文件超过500行必须拆分
+组件需要将方法全部放到composables目录下
